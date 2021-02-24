@@ -1,13 +1,12 @@
 #include <iostream>
+#include "../bloomFilter.hpp"
 using namespace std;
 
-
 int main(){
-  string test= "hello!";
-  if(test == "hello"){
-    cout << "yes" << endl;
-  }else{
-    cout << "no" << endl;
-  }
+
+  bloomFilter t(2);
+  t.insert(6);
+  cout << t.is_inside(6) << endl;
+
 	return 0;
 }
