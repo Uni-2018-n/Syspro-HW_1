@@ -41,13 +41,19 @@ int main(int argc, char* argv[]){
         }
       }
       temp[i] = word;
-      citizenRecord*  temp_record = new citizenRecord(temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]);
-      if(temp_record->check_error()){
-        cout << "ERROR" << endl << endl;
-      }else{
-        temp_record->testPrint();
+      citizenRecord*  temp_citizen = new citizenRecord(temp[0], temp[1], temp[2], temp[3], temp[4]);
+      if(temp_citizen->check_error()){
+        cout << "ERROR citizen" << endl << endl;
       }
-      delete temp_record;
+
+      vaccinateRecord* temp_vaccinate = new vaccinateRecord(temp_citizen, temp[5], temp[6], temp[7]);
+      if(temp_vaccinate->check_error()){
+        cout << "ERROR vaccinate" << endl << endl;
+      }else{
+        temp_vaccinate->testPrint();
+      }
+
+      delete temp_vaccinate;
     }
   }
 
