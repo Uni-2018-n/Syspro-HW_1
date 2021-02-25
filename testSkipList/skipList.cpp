@@ -63,7 +63,7 @@ listHeader* listHeader::forNextLayer(){
   listHeader* to_return = new listHeader();
   List* temp = start;
   while(temp != NULL){
-    if((random() % 100 + 0) < 70){
+    if((random() % 100 + 0) < 70){//might also need to make it more flip a coin like
       to_return->insertItem(temp->item);
     }
     temp = temp->next;
