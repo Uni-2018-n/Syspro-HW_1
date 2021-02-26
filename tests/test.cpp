@@ -1,17 +1,33 @@
 #include <iostream>
-#include <time.h>
 using namespace std;
 
-int main(){
-  srand(time(NULL));
-  int t=0;
-  for(int i=0;i<100;i++){
-    if((random() % 100 + 0) > 50){
-      t++;
-    }
+class temp{
+public:
+  int* t;
+  temp(int* f){
+    t= f;
   }
+  ~temp(){
+    delete t;
+  }
+  void testprint(){
+    cout << *t << endl;
+  }
+  void set(int i){
+    *t=i;
+  }
+};
 
-  cout << t << endl;
+int main(){
+  int* k =new int(5);
+  temp* z = new temp(k);
+  z->testprint();
+  z->set(4);
+  cout << *k << endl;
 
+  temp* f =new temp(k);
+  f->testprint();
+  delete z;
+  delete f;
 	return 0;
 }

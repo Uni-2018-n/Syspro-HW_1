@@ -4,18 +4,24 @@
 using namespace std;
 
 
-List::List(int i){
+List::List(int* i){
   item = i;
   next = NULL;
 }
 
-List::List(int i, List* n){
+List::List(int* i, List* n){
   item = i;
   next = n;
 }
 
+List::~List(){
+  if(item != NULL){
+    delete item;
+  }
+}
+
 void List::testPrint(){
-  cout << item << endl;
+  cout << *item << " ";
 }
 
 //////////////////////////// listHeader
@@ -25,19 +31,33 @@ listHeader::listHeader(){
   pl =0;
 }
 
-void listHeader::insertItem(int i){
+listHeader::~listHeader(){
+  List* temp = start;
+  if(temp == NULL){
+    return;
+  }
+  List* tmp = NULL;
+  while(temp->next != NULL){
+    tmp = temp->next;
+    delete temp;
+    temp= tmp;
+  }
+    delete temp;
+}
+
+void listHeader::insertItem(int* i){
   if(start == NULL){
     List *new_item = new List(i);
     start = new_item;
     pl++;
-  }else if(start->item > i){
+  }else if(*(start->item) > *i){
     List *new_item = new List(i, start);
     start = new_item;
     pl++;
   }else{
     List* temp = start;
     while(temp->next != NULL){
-      if(i < temp->next->item){
+      if(*i < *(temp->next->item)){
         List *new_item = new List(i, temp->next);
         temp->next = new_item;
         pl++;
@@ -74,7 +94,7 @@ listHeader* listHeader::forNextLayer(){
 
 
 
-////////////////////////////////////////
+//////////////////////////////////////// skipNode
 skipNode::skipNode(listHeader* i){
   item = i;
   next = NULL;
@@ -90,6 +110,10 @@ skipNode::skipNode(listHeader* i, skipNode* n){
   next = n;
 }
 
+skipNode::~skipNode(){
+  delete item;
+}
+
 void skipNode::testPrint(){
   item->testPrint();
 }
@@ -101,7 +125,6 @@ skipHeader::skipHeader(listHeader* i){
   end = temp;
   lvlnum = 1;
   max_lvl = log(i->pl)+1; //TODO might need to change here something
-  cout << max_lvl << endl;
   for(int i=0;i<max_lvl;i++){
     addLayer();
   }
@@ -115,13 +138,24 @@ skipHeader::skipHeader(listHeader* i){
   }
 }
 
+skipHeader::~skipHeader(){
+  skipNode* temp = start;
+  skipNode* tmp = NULL;
+  while(temp->next != NULL){
+    tmp = temp->next;
+    delete temp;
+    temp = tmp;
+  }
+  delete temp;
+}
+
 void skipHeader::addLayer(){
   skipNode* temp = new skipNode();
   end->next = temp;
   end = end->next;
 }
 
-void skipHeader::insertItem(int i){
+void skipHeader::insertItem(int* i){
 
 }
 
@@ -130,7 +164,7 @@ void skipHeader::testPrint(){
   while(temp != NULL){
     temp->item->testPrint();
     temp = temp->next;
-    cout << "next layer:" << endl;
+    cout << endl;
   }
 }
 

@@ -5,10 +5,11 @@
 
 class List{
 public:
-  int item;
+  int* item;
   List* next;
-  List(int i);
-  List(int i, List* n);
+  List(int* i);
+  List(int* i, List* n);
+  ~List();
   void testPrint();
 };
 
@@ -17,7 +18,8 @@ class listHeader{
 public:
   int pl;
   listHeader();
-  void insertItem(int i);
+  ~listHeader();
+  void insertItem(int* i);
   void testPrint();
   listHeader* forNextLayer();
 };
@@ -29,6 +31,7 @@ public:
   skipNode(listHeader* i);
   skipNode();
   skipNode(listHeader* i, skipNode* n);
+  ~skipNode();
   void testPrint();
 };
 
@@ -40,7 +43,8 @@ class skipHeader{
   void addLayer();
 public:
   skipHeader(listHeader* i);
-  void insertItem(int i);
+  ~skipHeader();
+  void insertItem(int* i);
   void testPrint();
 };
 
