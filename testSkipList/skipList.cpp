@@ -6,7 +6,19 @@ using namespace std;
 
 List::List(int* i){
   item = i;
+  lower_level = NULL;
   next = NULL;
+}
+
+List::List(List* i){
+  item = i->item;
+  lower_level = i;
+  next = NULL;
+}
+
+List::List(List* i, List* n){
+  item = i->item;
+  next = n;
 }
 
 List::List(int* i, List* n){
@@ -15,9 +27,6 @@ List::List(int* i, List* n){
 }
 
 List::~List(){
-  if(item != NULL){
-    delete item;
-  }
 }
 
 void List::testPrint(){
@@ -33,16 +42,12 @@ listHeader::listHeader(){
 
 listHeader::~listHeader(){
   List* temp = start;
-  if(temp == NULL){
-    return;
-  }
   List* tmp = NULL;
-  while(temp->next != NULL){
+  while(temp != NULL){
     tmp = temp->next;
     delete temp;
     temp= tmp;
   }
-    delete temp;
 }
 
 void listHeader::insertItem(int* i){
@@ -71,6 +76,32 @@ void listHeader::insertItem(int* i){
   }
 }
 
+void listHeader::insertItem(List* i){
+  if(start == NULL){
+    List *new_item = new List(i);
+    start = new_item;
+    pl++;
+  }else if(*(start->item) > *(i->item)){
+    List *new_item = new List(i, start);
+    start = new_item;
+    pl++;
+  }else{
+    List* temp = start;
+    while(temp->next != NULL){
+      if(*(i->item) < *(temp->next->item)){
+        List *new_item = new List(i, temp->next);
+        temp->next = new_item;
+        pl++;
+        return;
+      }
+      temp = temp->next;
+    }
+    List *new_item = new List(i);
+    temp->next = new_item;
+    pl++;
+  }
+}
+
 void listHeader::testPrint(){
   List* temp = start;
   while(temp != NULL){
@@ -84,7 +115,7 @@ listHeader* listHeader::forNextLayer(){
   List* temp = start;
   while(temp != NULL){
     if((random() % 100 + 0) < 70){//might also need to make it more flip a coin like
-      to_return->insertItem(temp->item);
+      to_return->insertItem(temp);
     }
     temp = temp->next;
   }
@@ -101,7 +132,8 @@ skipNode::skipNode(listHeader* i){
 }
 
 skipNode::skipNode(){
-  item = new listHeader();
+  // item = new listHeader();
+  item =NULL;
   next= NULL;
 }
 
@@ -125,6 +157,7 @@ skipHeader::skipHeader(listHeader* i){
   end = temp;
   lvlnum = 1;
   max_lvl = log(i->pl)+1; //TODO might need to change here something
+  // max_lvl = 1;// TODO fix this
   for(int i=0;i<max_lvl;i++){
     addLayer();
   }
@@ -141,12 +174,11 @@ skipHeader::skipHeader(listHeader* i){
 skipHeader::~skipHeader(){
   skipNode* temp = start;
   skipNode* tmp = NULL;
-  while(temp->next != NULL){
+  while(temp != NULL){
     tmp = temp->next;
     delete temp;
     temp = tmp;
   }
-  delete temp;
 }
 
 void skipHeader::addLayer(){

@@ -6,9 +6,13 @@
 class List{
 public:
   int* item;
+  List* lower_level;
   List* next;
   List(int* i);
+  List(List* i);
+  List(List* i, List* n);
   List(int* i, List* n);
+
   ~List();
   void testPrint();
 };
@@ -20,6 +24,7 @@ public:
   listHeader();
   ~listHeader();
   void insertItem(int* i);
+  void insertItem(List* i);
   void testPrint();
   listHeader* forNextLayer();
 };
@@ -42,7 +47,7 @@ class skipHeader{
   int max_lvl;
   void addLayer();
 public:
-  skipHeader(listHeader* i);
+  skipHeader(listHeader*);
   ~skipHeader();
   void insertItem(int* i);
   void testPrint();

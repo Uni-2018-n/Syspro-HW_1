@@ -1,5 +1,5 @@
 FLAGS = -std=c++11 -Wall -g -o
-SOURCE = test.cpp ../bloomFilter.cpp
+SOURCE = test.cpp func.cpp
 ITEM = test
 
 run : compile

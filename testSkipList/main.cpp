@@ -4,30 +4,32 @@
 
 int main(){
   srand(time(NULL));
-	listHeader* t = new listHeader();
-  int* num = new int(5);
-  t->insertItem(num);
-  num = new int(2);
-  t->insertItem(num);
-  num = new int(7);
-  t->insertItem(num);
-  num = new int(1);
-  t->insertItem(num);
-  num = new int(4);
-  t->insertItem(num);
-  num = new int(6);
-  t->insertItem(num);
-  num = new int(20);
-  t->insertItem(num);
-  num = new int(22);
-  t->insertItem(num);
-  num = new int(3);
-  t->insertItem(num);
-  num = new int(0);
-  t->insertItem(num);
+  listHeader* t = new listHeader();
+  int numa= 5;
+  t->insertItem(&numa);
+  int numb= 6;
+  t->insertItem(&numb);
+  int numc= 8;
+  t->insertItem(&numc);
+  int numd= 2;
+  t->insertItem(&numd);
+  int nume= 1;
+  t->insertItem(&nume);
+  int numf= 22;
+  t->insertItem(&numf);
+  int numg= 0;
+  t->insertItem(&numg);
+  int numh= 3;
+  t->insertItem(&numh);
+  int numi= 40;
+  t->insertItem(&numi);
+  int numj= 4;
+  t->insertItem(&numj);
 
   skipHeader* s= new skipHeader(t);
   s->testPrint();
+
+
   delete s;
 	return 0;
 }
