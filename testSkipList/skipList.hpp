@@ -32,6 +32,7 @@ public:
 class skipNode{
 public:
   listHeader* item;
+  skipNode* prev;
   skipNode* next;
   skipNode(listHeader* i);
   skipNode();

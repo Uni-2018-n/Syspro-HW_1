@@ -24,6 +24,7 @@ List::List(List* i, List* n){
 List::List(int* i, List* n){
   item = i;
   next = n;
+  lower_level = NULL;
 }
 
 List::~List(){
@@ -31,6 +32,9 @@ List::~List(){
 
 void List::testPrint(){
   cout << *item << " ";
+  // if(lower_level != NULL){
+    // cout << *(lower_level->item) << " ";
+  // }
 }
 
 //////////////////////////// listHeader
@@ -123,16 +127,14 @@ listHeader* listHeader::forNextLayer(){
 }
 
 
-
-
 //////////////////////////////////////// skipNode
 skipNode::skipNode(listHeader* i){
   item = i;
   next = NULL;
+  prev= NULL;
 }
 
 skipNode::skipNode(){
-  // item = new listHeader();
   item =NULL;
   next= NULL;
 }
@@ -183,6 +185,7 @@ skipHeader::~skipHeader(){
 
 void skipHeader::addLayer(){
   skipNode* temp = new skipNode();
+  temp->prev= end;
   end->next = temp;
   end = end->next;
 }
@@ -192,10 +195,10 @@ void skipHeader::insertItem(int* i){
 }
 
 void skipHeader::testPrint(){
-  skipNode* temp = start;
+  skipNode* temp = end;
   while(temp != NULL){
     temp->item->testPrint();
-    temp = temp->next;
+    temp = temp->prev;
     cout << endl;
   }
 }
