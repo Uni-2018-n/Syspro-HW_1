@@ -106,6 +106,51 @@ void listHeader::insertItem(List* i){
   }
 }
 
+List* listHeader::searchItem(int i){
+  List* temp = start;
+  if(*(temp->item) == i){
+    while(temp->lower_level != NULL){
+      temp= temp->lower_level;
+    }
+    return temp;
+  }else if(*(temp->item) > i){
+    return temp;
+  }
+  if(temp->next == NULL){
+    if(*(temp->item) < i){
+      while(temp->next == NULL){
+        temp = temp->lower_level;
+      }
+    }
+  }
+
+  while(temp->next != NULL){
+    if(*(temp->next->item) == i){
+      temp = temp->next;
+      while(temp->lower_level != NULL){
+        temp = temp->lower_level;
+      }
+      return temp;
+    }
+    if(*(temp->next->item) > i){
+      if(temp->lower_level == NULL){
+        return NULL;
+      }
+      temp = temp->lower_level;
+      continue;
+    }
+    if(*(temp->next->item) < i){
+      temp= temp->next;
+      while(temp->next == NULL){
+        if(temp->lower_level == NULL){
+          return NULL;
+        }
+        temp =temp->lower_level;
+      }
+    }
+  }
+}
+
 void listHeader::testPrint(){
   List* temp = start;
   while(temp != NULL){
@@ -118,7 +163,7 @@ listHeader* listHeader::forNextLayer(){
   listHeader* to_return = new listHeader();
   List* temp = start;
   while(temp != NULL){
-    if((random() % 100 + 0) < 70){//might also need to make it more flip a coin like
+    if((random() % 100 + 0) > 35){//might also need to make it more flip a coin like
       to_return->insertItem(temp);
     }
     temp = temp->next;
@@ -189,6 +234,26 @@ void skipHeader::addLayer(){
   end->next = temp;
   end = end->next;
 }
+
+bool skipHeader::searchItem(int i){
+  skipNode* temp = end;
+  while(temp->item->pl == 0){
+    temp = temp->prev;
+  }
+  List* tmp = temp->item->searchItem(i);
+  if(tmp != NULL){
+      while(*(tmp->item) > i){
+        temp = temp->prev;
+        tmp = temp->item->searchItem(i);
+      }
+      cout << "FOUND" << endl;
+      return true;
+  }else{
+    cout << "NOT FOUND" << endl;
+    return false;
+  }
+}
+
 
 void skipHeader::insertItem(int* i){
 

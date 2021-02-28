@@ -29,6 +29,12 @@ int main(){
   skipHeader* s= new skipHeader(t);
   s->testPrint();
 
+  for(int i=0;i<10;i++){
+    int t= rand() % 41 +0;
+    std::cout << t << std::endl;
+    s->searchItem(t);
+  }
+  // s->searchItem(8);
 
   delete s;
 	return 0;

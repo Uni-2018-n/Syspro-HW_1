@@ -25,8 +25,12 @@ public:
   ~listHeader();
   void insertItem(int* i);
   void insertItem(List* i);
+  List* searchItem(int i);
   void testPrint();
   listHeader* forNextLayer();
+  int returnFirst(){
+    return *(start->item);
+  }
 };
 /////////////////////////////////////
 class skipNode{
@@ -50,6 +54,7 @@ class skipHeader{
 public:
   skipHeader(listHeader*);
   ~skipHeader();
+  bool searchItem(int i);
   void insertItem(int* i);
   void testPrint();
 };
