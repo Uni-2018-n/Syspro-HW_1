@@ -23,8 +23,9 @@ public:
   int pl;
   listHeader();
   ~listHeader();
-  void insertItem(int* i);
+  void insertItemTemp(int* i);
   void insertItem(List* i);
+  List* insertItem(int* i);
   List* searchItem(int i);
   void testPrint();
   listHeader* forNextLayer();
@@ -55,7 +56,7 @@ public:
   skipHeader(listHeader*);
   ~skipHeader();
   bool searchItem(int i);
-  void insertItem(int* i);
+  bool insertItem(int* i);
   void testPrint();
 };
 

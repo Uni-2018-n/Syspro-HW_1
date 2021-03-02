@@ -19,6 +19,7 @@ List::List(List* i){
 List::List(List* i, List* n){
   item = i->item;
   next = n;
+  lower_level= NULL;
 }
 
 List::List(int* i, List* n){
@@ -54,7 +55,7 @@ listHeader::~listHeader(){
   }
 }
 
-void listHeader::insertItem(int* i){
+void listHeader::insertItemTemp(int* i){
   if(start == NULL){
     List *new_item = new List(i);
     start = new_item;
@@ -112,9 +113,9 @@ List* listHeader::searchItem(int i){
     while(temp->lower_level != NULL){
       temp= temp->lower_level;
     }
-    return temp;
+    return temp;//found
   }else if(*(temp->item) > i){
-    return temp;
+    return temp;//cant found this from this level
   }
   if(temp->next == NULL){
     if(*(temp->item) < i){
@@ -130,11 +131,11 @@ List* listHeader::searchItem(int i){
       while(temp->lower_level != NULL){
         temp = temp->lower_level;
       }
-      return temp;
+      return temp;//found
     }
     if(*(temp->next->item) > i){
       if(temp->lower_level == NULL){
-        return NULL;
+        return NULL;//dosent exist
       }
       temp = temp->lower_level;
       continue;
@@ -143,7 +144,58 @@ List* listHeader::searchItem(int i){
       temp= temp->next;
       while(temp->next == NULL){
         if(temp->lower_level == NULL){
-          return NULL;
+          return NULL;//dosent exist
+        }
+        temp =temp->lower_level;
+      }
+    }
+  }
+}
+
+List* listHeader::insertItem(int* i){
+  List* temp = start;
+  if(*(temp->item) == *i){
+    while(temp->lower_level != NULL){
+      temp= temp->lower_level;
+    }
+    return NULL;//found
+  }else if(*(temp->item) > *i){
+    return temp;//cant found this from this level
+  }
+  if(temp->next == NULL){
+    if(*(temp->item) < *i){
+      while(temp->next == NULL){
+        temp = temp->lower_level;
+      }
+    }
+  }
+
+  while(temp->next != NULL){
+    if(*(temp->next->item) == *i){
+      temp = temp->next;
+      while(temp->lower_level != NULL){
+        temp = temp->lower_level;
+      }
+      return NULL;//found
+    }
+    if(*(temp->next->item) > *i){
+      if(temp->lower_level == NULL){
+        // return NULL;//dosent exist
+        List* new_node = new List(i, temp->next);
+        temp->next = new_node;
+        return new_node;
+      }
+      temp = temp->lower_level;
+      continue;
+    }
+    if(*(temp->next->item) < *i){
+      temp= temp->next;
+      while(temp->next == NULL){
+        if(temp->lower_level == NULL){
+          // return NULL;//dosent exist, case: last item in list.
+          List* new_node = new List(i);
+          temp->next = new_node;
+          return new_node;
         }
         temp =temp->lower_level;
       }
@@ -241,7 +293,7 @@ bool skipHeader::searchItem(int i){
     temp = temp->prev;
   }
   List* tmp = temp->item->searchItem(i);
-  if(tmp != NULL){
+  if(tmp != NULL){ //TODO: re-check the not found from if != NULL
       while(*(tmp->item) > i){
         temp = temp->prev;
         tmp = temp->item->searchItem(i);
@@ -255,8 +307,27 @@ bool skipHeader::searchItem(int i){
 }
 
 
-void skipHeader::insertItem(int* i){
-
+bool skipHeader::insertItem(int* i){
+  skipNode* temp = end;
+  while(temp->item->pl == 0){
+    temp = temp->prev;
+  }
+  List* tmp = temp->item->insertItem(i);
+  if(tmp != NULL){ //TODO: re-check the not found from if != NULL
+    if(*(tmp->item) == *i){//case inserted
+      return true;
+    }
+    while(*(tmp->item) > *i){//case first first's level is >i
+      temp = temp->prev;
+      tmp = temp->item->insertItem(i);
+      if(tmp == NULL){
+        return false;
+      }
+    }
+    return true;
+  }else{
+    return false;
+  }
 }
 
 void skipHeader::testPrint(){

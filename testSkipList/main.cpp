@@ -6,25 +6,25 @@ int main(){
   srand(time(NULL));
   listHeader* t = new listHeader();
   int numa= 5;
-  t->insertItem(&numa);
+  t->insertItemTemp(&numa);
   int numb= 6;
-  t->insertItem(&numb);
+  t->insertItemTemp(&numb);
   int numc= 8;
-  t->insertItem(&numc);
+  t->insertItemTemp(&numc);
   int numd= 2;
-  t->insertItem(&numd);
+  t->insertItemTemp(&numd);
   int nume= 1;
-  t->insertItem(&nume);
+  t->insertItemTemp(&nume);
   int numf= 22;
-  t->insertItem(&numf);
+  t->insertItemTemp(&numf);
   int numg= 0;
-  t->insertItem(&numg);
+  t->insertItemTemp(&numg);
   int numh= 3;
-  t->insertItem(&numh);
+  t->insertItemTemp(&numh);
   int numi= 40;
-  t->insertItem(&numi);
+  t->insertItemTemp(&numi);
   int numj= 4;
-  t->insertItem(&numj);
+  t->insertItemTemp(&numj);
 
   skipHeader* s= new skipHeader(t);
   s->testPrint();
@@ -34,7 +34,15 @@ int main(){
     std::cout << t << std::endl;
     s->searchItem(t);
   }
-  // s->searchItem(8);
+
+  std::cout << "INSERTS: " << std::endl;
+  int numk = 0;
+  if(s->insertItem(&numk)){
+    std::cout << "inserted!" << std::endl;
+  }else{
+    std::cout << "already exists!" << std::endl;
+  }
+  s->testPrint();
 
   delete s;
 	return 0;
