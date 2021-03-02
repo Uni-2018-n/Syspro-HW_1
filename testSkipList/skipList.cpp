@@ -104,6 +104,12 @@ void listHeader::insertItem(List* i){
   }
 }
 
+List* listHeader::insertAtStart(List* i){
+  List* new_item = new List(i, start);
+  start = new_item;
+  return new_item;
+}
+
 List* listHeader::searchItem(int i){
   List* temp = start;
   if(*(temp->item) == i){
@@ -157,8 +163,10 @@ List* listHeader::insertItem(int* i, int top_lvl){
     while(temp->lower_level != NULL){
       temp= temp->lower_level;
     }
+    delete level_array;
     return NULL;//found
   }else if(*(temp->item) > *i){
+    delete level_array;
     return temp;//cant found this from this level
   }
   if(temp->next == NULL){
@@ -175,6 +183,7 @@ List* listHeader::insertItem(int* i, int top_lvl){
       while(temp->lower_level != NULL){
         temp = temp->lower_level;
       }
+      delete level_array;
       return NULL;//found
     }
     if(*(temp->next->item) > *i){
@@ -183,15 +192,15 @@ List* listHeader::insertItem(int* i, int top_lvl){
         List* new_node = new List(i, temp->next);
         temp->next = new_node;
         {
-          // cout << "here1" << endl;
           while(lvl_counter> 0 && top_lvl > 0){
             lvl_counter--;
             List* tmp = new List(new_node, level_array[lvl_counter]->next);
-            // cout << "test" << endl;
             level_array[lvl_counter]->next = tmp;
+            new_node = tmp;
             top_lvl--;
           }
         }
+        delete level_array;
         return new_node;
       }
       level_array[lvl_counter] = temp;
@@ -207,14 +216,15 @@ List* listHeader::insertItem(int* i, int top_lvl){
           List* new_node = new List(i);
           temp->next = new_node;
           {
-            // cout << "here2" << endl;
             while(lvl_counter> 0 && top_lvl>0){
               lvl_counter--;
               List* tmp = new List(new_node, level_array[lvl_counter]->next);
               level_array[lvl_counter]->next = tmp;
+              new_node = tmp;
               top_lvl--;
             }
           }
+          delete level_array;
           return new_node;
         }
         level_array[lvl_counter] = temp;
@@ -261,6 +271,10 @@ skipNode::skipNode(){
 skipNode::skipNode(listHeader* i, skipNode* n){
   item = i;
   next = n;
+}
+
+List* skipNode::insertAtStart(List* i){
+  return item->insertAtStart(i);
 }
 
 skipNode::~skipNode(){
@@ -331,9 +345,12 @@ bool skipHeader::searchItem(int i){
 
 bool skipHeader::insertItem(int* i){
   int top_lvl = rand() % max_lvl + 0;
+  cout << "top_lvl: " << top_lvl << endl;
+  int skiped_layers =0;
   skipNode* temp = end;
   while(temp->item->pl == 0){
     temp = temp->prev;
+    skiped_layers++;
   }
   List* tmp = temp->item->insertItem(i, top_lvl);
   bool final;
@@ -344,6 +361,7 @@ bool skipHeader::insertItem(int* i){
       final= true;
     }
     while(*(tmp->item) > *i){//case first first's level is >i
+      skiped_layers++;
       temp = temp->prev;
       tmp = temp->item->insertItem(i, top_lvl);
       if(tmp == NULL){
@@ -362,19 +380,13 @@ bool skipHeader::insertItem(int* i){
     final = false;
   }
   if(final){
-
-    // int to_levels= random() % max_lvl + 0;
-    // to_levels = max_lvl - to_levels;
-    // skipNode* temp= end;
-    // while(to_levels >0){
-    //   temp = temp->prev;
-    //   to_levels--;
-    // }
-    //
-    // while(temp != NULL){
-    //
-    // }
-
+    int t= max_lvl-skiped_layers;
+    t= top_lvl-t;
+    while(t>0 && temp->next != NULL){
+      temp = temp->next;
+      tmp = temp->insertAtStart(tmp);
+      t--;
+    }
     return true;
   }else{
     return false;

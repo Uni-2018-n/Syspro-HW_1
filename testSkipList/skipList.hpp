@@ -27,6 +27,7 @@ public:
   void insertItem(List* i);
   List* insertItem(int* i, int top_lvl);
   List* searchItem(int i);
+  List* insertAtStart(List* i);
   void testPrint();
   listHeader* forNextLayer();
   int returnFirst(){
@@ -42,6 +43,7 @@ public:
   skipNode(listHeader* i);
   skipNode();
   skipNode(listHeader* i, skipNode* n);
+  List* insertAtStart(List* i);
   ~skipNode();
   void testPrint();
 };

@@ -44,6 +44,8 @@ int main(){
   }
   s->testPrint();
 
+  s->searchItem(10);
+
   delete s;
 	return 0;
 }
