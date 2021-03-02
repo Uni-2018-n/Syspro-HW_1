@@ -4,7 +4,7 @@
 using namespace std;
 
 
-List::List(int* i){//only copy i
+List::List(int* i){//initialize i
   item = i;
   lower_level = NULL;
   next = NULL;
@@ -16,13 +16,13 @@ List::List(List* i){//copy i and set lower_level
   next = NULL;
 }
 
-List::List(List* i, List* n){//copy
+List::List(List* i, List* n){//copy i and set it to lower lever also add next node
   item = i->item;
   next = n;
   lower_level= i;
 }
 
-List::List(int* i, List* n){
+List::List(int* i, List* n){//initialize i and set next node
   item = i;
   next = n;
   lower_level = NULL;
@@ -141,9 +141,7 @@ List* listHeader::searchItem(int i){
         return NULL;//dosent exist
       }
       temp = temp->lower_level;
-      continue;
-    }
-    if(*(temp->next->item) < i){
+    }else if(*(temp->next->item) < i){
       temp= temp->next;
       while(temp->next == NULL){
         if(temp->lower_level == NULL){
@@ -153,6 +151,8 @@ List* listHeader::searchItem(int i){
       }
     }
   }
+  cout << "listheader::searchItem gone here im illegal" << endl; //TODO: remove this
+  return NULL;
 }
 
 List* listHeader::insertItem(int* i, int top_lvl){
@@ -163,10 +163,17 @@ List* listHeader::insertItem(int* i, int top_lvl){
     while(temp->lower_level != NULL){
       temp= temp->lower_level;
     }
-    delete level_array;
+    delete[] level_array;
     return NULL;//found
   }else if(*(temp->item) > *i){
-    delete level_array;
+    if(temp->lower_level == NULL && *(temp->item) > *i){//case this is needs to be the first node of last layer
+      List* new_node = new List(i, start);
+      start = new_node;
+      delete[] level_array;
+      return new_node;
+    }
+
+    delete[] level_array;
     return temp;//cant found this from this level
   }
   if(temp->next == NULL){
@@ -183,12 +190,12 @@ List* listHeader::insertItem(int* i, int top_lvl){
       while(temp->lower_level != NULL){
         temp = temp->lower_level;
       }
-      delete level_array;
+      delete[] level_array;
       return NULL;//found
     }
     if(*(temp->next->item) > *i){
       if(temp->lower_level == NULL){
-        // return NULL;//dosent exist
+        //dosent exist
         List* new_node = new List(i, temp->next);
         temp->next = new_node;
         {
@@ -200,19 +207,17 @@ List* listHeader::insertItem(int* i, int top_lvl){
             top_lvl--;
           }
         }
-        delete level_array;
+        delete[] level_array;
         return new_node;
       }
       level_array[lvl_counter] = temp;
       lvl_counter++;
       temp = temp->lower_level;
-      continue;
-    }
-    if(*(temp->next->item) < *i){
+    }else if(*(temp->next->item) < *i){
       temp= temp->next;
       while(temp->next == NULL){
         if(temp->lower_level == NULL){
-          // return NULL;//dosent exist, case: last item in list.
+          //dosent exist, case: last item in list.
           List* new_node = new List(i);
           temp->next = new_node;
           {
@@ -224,7 +229,7 @@ List* listHeader::insertItem(int* i, int top_lvl){
               top_lvl--;
             }
           }
-          delete level_array;
+          delete[] level_array;
           return new_node;
         }
         level_array[lvl_counter] = temp;
@@ -233,6 +238,8 @@ List* listHeader::insertItem(int* i, int top_lvl){
       }
     }
   }
+  cout << "listheader::insertItem gone here im illegal" << endl; //TODO: remove this
+  return NULL;
 }
 
 void listHeader::testPrint(){
@@ -330,14 +337,24 @@ bool skipHeader::searchItem(int i){
   }
   List* tmp = temp->item->searchItem(i);
   if(tmp != NULL){ //TODO: re-check the not found from if != NULL
-      while(*(tmp->item) > i){
+      while(*(tmp->item) > i && temp->prev != NULL){//
         temp = temp->prev;
         tmp = temp->item->searchItem(i);
+        if(tmp == NULL){
+          break;
+        }
       }
-      cout << "FOUND" << endl;
+      if(temp->prev == NULL && tmp != NULL && *(tmp->item) != i){
+        tmp = NULL;
+      }
+      if(tmp == NULL){
+        // cout << "NOT FOUND" << endl;
+        return false;
+      }
+      // cout << "FOUND" << endl;
       return true;
   }else{
-    cout << "NOT FOUND" << endl;
+    // cout << "NOT FOUND" << endl;
     return false;
   }
 }
@@ -345,7 +362,6 @@ bool skipHeader::searchItem(int i){
 
 bool skipHeader::insertItem(int* i){
   int top_lvl = rand() % max_lvl + 0;
-  cout << "top_lvl: " << top_lvl << endl;
   int skiped_layers =0;
   skipNode* temp = end;
   while(temp->item->pl == 0){
@@ -360,7 +376,7 @@ bool skipHeader::insertItem(int* i){
       // return true;
       final= true;
     }
-    while(*(tmp->item) > *i){//case first first's level is >i
+    while(*(tmp->item) > *i && temp->prev != NULL){//case first first's level is >i
       skiped_layers++;
       temp = temp->prev;
       tmp = temp->item->insertItem(i, top_lvl);
@@ -371,6 +387,7 @@ bool skipHeader::insertItem(int* i){
         break;
       }
     }
+
     // return true;
     if(!final_tmp){
       final = true;
