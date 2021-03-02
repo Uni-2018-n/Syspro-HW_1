@@ -4,22 +4,22 @@
 using namespace std;
 
 
-List::List(int* i){
+List::List(int* i){//only copy i
   item = i;
   lower_level = NULL;
   next = NULL;
 }
 
-List::List(List* i){
+List::List(List* i){//copy i and set lower_level
   item = i->item;
   lower_level = i;
   next = NULL;
 }
 
-List::List(List* i, List* n){
+List::List(List* i, List* n){//copy
   item = i->item;
   next = n;
-  lower_level= NULL;
+  lower_level= i;
 }
 
 List::List(int* i, List* n){
@@ -33,9 +33,6 @@ List::~List(){
 
 void List::testPrint(){
   cout << *item << " ";
-  // if(lower_level != NULL){
-    // cout << *(lower_level->item) << " ";
-  // }
 }
 
 //////////////////////////// listHeader
@@ -152,7 +149,9 @@ List* listHeader::searchItem(int i){
   }
 }
 
-List* listHeader::insertItem(int* i){
+List* listHeader::insertItem(int* i, int top_lvl){
+  List** level_array = new List*[3];//TODO: set this as max_lvl
+  int lvl_counter=0;
   List* temp = start;
   if(*(temp->item) == *i){
     while(temp->lower_level != NULL){
@@ -183,8 +182,20 @@ List* listHeader::insertItem(int* i){
         // return NULL;//dosent exist
         List* new_node = new List(i, temp->next);
         temp->next = new_node;
+        {
+          // cout << "here1" << endl;
+          while(lvl_counter> 0 && top_lvl > 0){
+            lvl_counter--;
+            List* tmp = new List(new_node, level_array[lvl_counter]->next);
+            // cout << "test" << endl;
+            level_array[lvl_counter]->next = tmp;
+            top_lvl--;
+          }
+        }
         return new_node;
       }
+      level_array[lvl_counter] = temp;
+      lvl_counter++;
       temp = temp->lower_level;
       continue;
     }
@@ -195,8 +206,19 @@ List* listHeader::insertItem(int* i){
           // return NULL;//dosent exist, case: last item in list.
           List* new_node = new List(i);
           temp->next = new_node;
+          {
+            // cout << "here2" << endl;
+            while(lvl_counter> 0 && top_lvl>0){
+              lvl_counter--;
+              List* tmp = new List(new_node, level_array[lvl_counter]->next);
+              level_array[lvl_counter]->next = tmp;
+              top_lvl--;
+            }
+          }
           return new_node;
         }
+        level_array[lvl_counter] = temp;
+        lvl_counter++;
         temp =temp->lower_level;
       }
     }
@@ -308,22 +330,51 @@ bool skipHeader::searchItem(int i){
 
 
 bool skipHeader::insertItem(int* i){
+  int top_lvl = rand() % max_lvl + 0;
   skipNode* temp = end;
   while(temp->item->pl == 0){
     temp = temp->prev;
   }
-  List* tmp = temp->item->insertItem(i);
+  List* tmp = temp->item->insertItem(i, top_lvl);
+  bool final;
+  bool final_tmp= false;
   if(tmp != NULL){ //TODO: re-check the not found from if != NULL
     if(*(tmp->item) == *i){//case inserted
-      return true;
+      // return true;
+      final= true;
     }
     while(*(tmp->item) > *i){//case first first's level is >i
       temp = temp->prev;
-      tmp = temp->item->insertItem(i);
+      tmp = temp->item->insertItem(i, top_lvl);
       if(tmp == NULL){
-        return false;
+        // return false;
+        final = false;
+        final_tmp = true;
+        break;
       }
     }
+    // return true;
+    if(!final_tmp){
+      final = true;
+    }
+  }else{
+    // return false;
+    final = false;
+  }
+  if(final){
+
+    // int to_levels= random() % max_lvl + 0;
+    // to_levels = max_lvl - to_levels;
+    // skipNode* temp= end;
+    // while(to_levels >0){
+    //   temp = temp->prev;
+    //   to_levels--;
+    // }
+    //
+    // while(temp != NULL){
+    //
+    // }
+
     return true;
   }else{
     return false;

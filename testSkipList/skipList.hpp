@@ -25,7 +25,7 @@ public:
   ~listHeader();
   void insertItemTemp(int* i);
   void insertItem(List* i);
-  List* insertItem(int* i);
+  List* insertItem(int* i, int top_lvl);
   List* searchItem(int i);
   void testPrint();
   listHeader* forNextLayer();

@@ -36,7 +36,7 @@ int main(){
   }
 
   std::cout << "INSERTS: " << std::endl;
-  int numk = 0;
+  int numk = 10;
   if(s->insertItem(&numk)){
     std::cout << "inserted!" << std::endl;
   }else{
