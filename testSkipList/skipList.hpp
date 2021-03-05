@@ -4,41 +4,74 @@
 #define MAXIMUM 3
 
 class List{//nodes
-public:
   int* item;
-  List* lower_level;
   List* next;
-
+  List* lower_level;
+public:
   List(int* i);
   List(List* i);
   List(List* i, List* n);
   List(int* i, List* n);
   ~List();
+
+  int getItem(){
+    return *item;
+  }
+  List* getNext(){
+    return next;
+  }
+  void setNext(List* n){
+    next = n;
+  }
+  List* getLowerLevel(){
+    return lower_level;
+  }
+
   void testPrint();
 };
 
 class listHeader{//list
   List* start;
-public:
   int pl;
-
+public:
   listHeader();
   ~listHeader();
   List* insertAtStart(List* i);
   List* insertItem(int* i, int top_lvl);
   List* searchItem(int i);
+
+  int getPl(){
+    return pl;
+  }
+
   void testPrint();
 };
 /////////////////////////////////////
 class skipNode{//nodes of lists
-public:
-  listHeader* item;
   skipNode* prev;
   skipNode* next;
-
+  listHeader* item;
+public:
   skipNode();
   ~skipNode();
   List* insertAtStart(List* i);
+  
+  skipNode* getNext(){
+    return next;
+  }
+  skipNode* getPrev(){
+    return prev;
+  }
+  listHeader* getItem(){
+    return item;
+  }
+  void setNext(skipNode* n){
+    next = n;
+  }
+  void setPrev(skipNode* p){
+    prev = p;
+  }
+
   void testPrint();
 };
 
