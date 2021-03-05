@@ -305,7 +305,19 @@ bool skipHeader::searchItem(int i){
 }
 
 bool skipHeader::insertItem(int* i){
-  int top_lvl = rand() % max_lvl + 0;//calculate in how many levels the item will go to
+  // int top_lvl = rand() % max_lvl + 0;
+  int top_lvl =0;//calculate in how many levels the item will go to
+  {
+    int f=1;
+    while(f && top_lvl < max_lvl){
+      if((rand() % 2 + 1) == 1){
+        top_lvl++;
+      }else{
+        f=0;
+      }
+    }
+
+  }
   // cout << "top level: " << top_lvl << endl; //TODO: clean
   int skiped_layers =0;//used to see how many layers was skiped because first item is > i
   skipNode* temp = end;//use of dual linked list, start == list with all the items. with that in mind, we start our search with the list with the less amount of items
