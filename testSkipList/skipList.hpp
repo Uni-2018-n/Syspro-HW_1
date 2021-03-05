@@ -1,7 +1,7 @@
 #ifndef _SKIPLIST_HPP_
 #define _SKIPLIST_HPP_
 
-
+#define MAXIMUM 3
 
 class List{
 public:
@@ -40,7 +40,7 @@ public:
   listHeader* item;
   skipNode* prev;
   skipNode* next;
-  skipNode(listHeader* i);
+  // skipNode(listHeader* i);
   skipNode();
   skipNode(listHeader* i, skipNode* n);
   List* insertAtStart(List* i);
@@ -55,7 +55,7 @@ class skipHeader{
   int max_lvl;
   void addLayer();
 public:
-  skipHeader(listHeader*);
+  skipHeader();
   ~skipHeader();
   bool searchItem(int i);
   bool insertItem(int* i);

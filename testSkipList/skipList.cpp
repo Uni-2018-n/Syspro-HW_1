@@ -107,11 +107,15 @@ void listHeader::insertItem(List* i){
 List* listHeader::insertAtStart(List* i){
   List* new_item = new List(i, start);
   start = new_item;
+  pl++;
   return new_item;
 }
 
 List* listHeader::searchItem(int i){
   List* temp = start;
+  if(temp == NULL){
+    return NULL;
+  }
   if(*(temp->item) == i){
     while(temp->lower_level != NULL){
       temp= temp->lower_level;
@@ -159,6 +163,13 @@ List* listHeader::insertItem(int* i, int top_lvl){
   List** level_array = new List*[3];//TODO: set this as max_lvl
   int lvl_counter=0;
   List* temp = start;
+  if(temp == NULL){
+    List* new_node = new List(i, start);
+    start = new_node;
+    pl++;
+    delete[] level_array;
+    return new_node;
+  }
   if(*(temp->item) == *i){
     while(temp->lower_level != NULL){
       temp= temp->lower_level;
@@ -169,6 +180,7 @@ List* listHeader::insertItem(int* i, int top_lvl){
     if(temp->lower_level == NULL && *(temp->item) > *i){//case this is needs to be the first node of last layer
       List* new_node = new List(i, start);
       start = new_node;
+      pl++;
       delete[] level_array;
       return new_node;
     }
@@ -179,6 +191,24 @@ List* listHeader::insertItem(int* i, int top_lvl){
   if(temp->next == NULL){
     if(*(temp->item) < *i){
       while(temp->next == NULL){
+        if(temp->lower_level == NULL){//case we are in lowest level and the item needs to be in the end
+          List* new_node = new List(i, NULL);
+          temp->next= new_node;
+          {
+            while(lvl_counter> 0 && top_lvl>0){
+              lvl_counter--;
+              List* tmp = new List(new_node, level_array[lvl_counter]->next);
+              level_array[lvl_counter]->next = tmp;
+              new_node = tmp;
+              top_lvl--;
+            }
+          }
+          pl++;
+          delete[] level_array;
+          return new_node;
+        }
+        level_array[lvl_counter] = temp;
+        lvl_counter++;
         temp = temp->lower_level;
       }
     }
@@ -207,6 +237,7 @@ List* listHeader::insertItem(int* i, int top_lvl){
             top_lvl--;
           }
         }
+        pl++;
         delete[] level_array;
         return new_node;
       }
@@ -229,6 +260,7 @@ List* listHeader::insertItem(int* i, int top_lvl){
               top_lvl--;
             }
           }
+          pl++;
           delete[] level_array;
           return new_node;
         }
@@ -264,20 +296,22 @@ listHeader* listHeader::forNextLayer(){
 
 
 //////////////////////////////////////// skipNode
-skipNode::skipNode(listHeader* i){
-  item = i;
-  next = NULL;
+// skipNode::skipNode(listHeader* i){
+//   item= i;
+//   next= NULL;
+//   prev= NULL;
+// }
+
+skipNode::skipNode(){
+  item= new listHeader();
+  next= NULL;
   prev= NULL;
 }
 
-skipNode::skipNode(){
-  item =NULL;
-  next= NULL;
-}
-
 skipNode::skipNode(listHeader* i, skipNode* n){
-  item = i;
-  next = n;
+  item= i;
+  next= n;
+  prev= NULL;
 }
 
 List* skipNode::insertAtStart(List* i){
@@ -293,13 +327,12 @@ void skipNode::testPrint(){
 }
 
 ///////////////////////////////////// skipHeader
-skipHeader::skipHeader(listHeader* i){
-  skipNode* temp = new skipNode(i);
+skipHeader::skipHeader(){
+  skipNode* temp = new skipNode();
   start = temp;
   end = temp;
   lvlnum = 1;
-  max_lvl = log(i->pl)+1; //TODO might need to change here something
-  // max_lvl = 1;// TODO fix this
+  max_lvl = MAXIMUM; //TODO might need to change here something
   for(int i=0;i<max_lvl;i++){
     addLayer();
   }
@@ -334,6 +367,9 @@ bool skipHeader::searchItem(int i){
   skipNode* temp = end;
   while(temp->item->pl == 0){
     temp = temp->prev;
+    if(temp == NULL){
+      return false;
+    }
   }
   List* tmp = temp->item->searchItem(i);
   if(tmp != NULL){ //TODO: re-check the not found from if != NULL
@@ -362,9 +398,13 @@ bool skipHeader::searchItem(int i){
 
 bool skipHeader::insertItem(int* i){
   int top_lvl = rand() % max_lvl + 0;
+  // cout << "top level: " << top_lvl << endl;
   int skiped_layers =0;
   skipNode* temp = end;
   while(temp->item->pl == 0){
+    if(temp->prev == NULL){
+      break;
+    }
     temp = temp->prev;
     skiped_layers++;
   }
