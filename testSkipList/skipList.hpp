@@ -3,52 +3,46 @@
 
 #define MAXIMUM 3
 
-class List{
+class List{//nodes
 public:
   int* item;
   List* lower_level;
   List* next;
+
   List(int* i);
   List(List* i);
   List(List* i, List* n);
   List(int* i, List* n);
-
   ~List();
   void testPrint();
 };
 
-class listHeader{
+class listHeader{//list
   List* start;
 public:
   int pl;
+
   listHeader();
   ~listHeader();
-  void insertItemTemp(int* i);
-  void insertItem(List* i);
+  List* insertAtStart(List* i);
   List* insertItem(int* i, int top_lvl);
   List* searchItem(int i);
-  List* insertAtStart(List* i);
   void testPrint();
-  listHeader* forNextLayer();
-  int returnFirst(){
-    return *(start->item);
-  }
 };
 /////////////////////////////////////
-class skipNode{
+class skipNode{//nodes of lists
 public:
   listHeader* item;
   skipNode* prev;
   skipNode* next;
-  // skipNode(listHeader* i);
+
   skipNode();
-  skipNode(listHeader* i, skipNode* n);
-  List* insertAtStart(List* i);
   ~skipNode();
+  List* insertAtStart(List* i);
   void testPrint();
 };
 
-class skipHeader{
+class skipHeader{//list of lists
   skipNode* start;
   skipNode* end;
   int lvlnum;
@@ -61,5 +55,4 @@ public:
   bool insertItem(int* i);
   void testPrint();
 };
-
 #endif

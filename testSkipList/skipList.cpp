@@ -3,7 +3,7 @@
 #include <math.h>
 using namespace std;
 
-
+//////////////////////////// List
 List::List(int* i){//initialize i
   item = i;
   lower_level = NULL;
@@ -29,6 +29,7 @@ List::List(int* i, List* n){//initialize i and set next node
 }
 
 List::~List(){
+  //dont need to free anything cause we are taking things from stack
 }
 
 void List::testPrint(){
@@ -36,7 +37,6 @@ void List::testPrint(){
 }
 
 //////////////////////////// listHeader
-
 listHeader::listHeader(){
   start = NULL;
   pl =0;
@@ -49,58 +49,6 @@ listHeader::~listHeader(){
     tmp = temp->next;
     delete temp;
     temp= tmp;
-  }
-}
-
-void listHeader::insertItemTemp(int* i){
-  if(start == NULL){
-    List *new_item = new List(i);
-    start = new_item;
-    pl++;
-  }else if(*(start->item) > *i){
-    List *new_item = new List(i, start);
-    start = new_item;
-    pl++;
-  }else{
-    List* temp = start;
-    while(temp->next != NULL){
-      if(*i < *(temp->next->item)){
-        List *new_item = new List(i, temp->next);
-        temp->next = new_item;
-        pl++;
-        return;
-      }
-      temp = temp->next;
-    }
-    List *new_item = new List(i);
-    temp->next = new_item;
-    pl++;
-  }
-}
-
-void listHeader::insertItem(List* i){
-  if(start == NULL){
-    List *new_item = new List(i);
-    start = new_item;
-    pl++;
-  }else if(*(start->item) > *(i->item)){
-    List *new_item = new List(i, start);
-    start = new_item;
-    pl++;
-  }else{
-    List* temp = start;
-    while(temp->next != NULL){
-      if(*(i->item) < *(temp->next->item)){
-        List *new_item = new List(i, temp->next);
-        temp->next = new_item;
-        pl++;
-        return;
-      }
-      temp = temp->next;
-    }
-    List *new_item = new List(i);
-    temp->next = new_item;
-    pl++;
   }
 }
 
@@ -282,35 +230,10 @@ void listHeader::testPrint(){
   }
 }
 
-listHeader* listHeader::forNextLayer(){
-  listHeader* to_return = new listHeader();
-  List* temp = start;
-  while(temp != NULL){
-    if((random() % 100 + 0) > 35){//might also need to make it more flip a coin like
-      to_return->insertItem(temp);
-    }
-    temp = temp->next;
-  }
-  return to_return;
-}
-
-
 //////////////////////////////////////// skipNode
-// skipNode::skipNode(listHeader* i){
-//   item= i;
-//   next= NULL;
-//   prev= NULL;
-// }
-
 skipNode::skipNode(){
   item= new listHeader();
   next= NULL;
-  prev= NULL;
-}
-
-skipNode::skipNode(listHeader* i, skipNode* n){
-  item= i;
-  next= n;
   prev= NULL;
 }
 
@@ -333,16 +256,8 @@ skipHeader::skipHeader(){
   end = temp;
   lvlnum = 1;
   max_lvl = MAXIMUM; //TODO might need to change here something
-  for(int i=0;i<max_lvl;i++){
+  for(int i=0;i<max_lvl;i++){//create all the layers
     addLayer();
-  }
-
-  {
-    skipNode* temp= start;
-    while(temp->next != NULL){
-      temp->next->item = temp->item->forNextLayer();
-      temp = temp->next;
-    }
   }
 }
 
@@ -365,44 +280,37 @@ void skipHeader::addLayer(){
 
 bool skipHeader::searchItem(int i){
   skipNode* temp = end;
-  while(temp->item->pl == 0){
+  while(temp->item->pl == 0){//case no items in lists
     temp = temp->prev;
-    if(temp == NULL){
+    if(temp == NULL){//case no items in skip list
       return false;
     }
   }
-  List* tmp = temp->item->searchItem(i);
-  if(tmp != NULL){ //TODO: re-check the not found from if != NULL
-      while(*(tmp->item) > i && temp->prev != NULL){//
+  List* tmp = temp->item->searchItem(i);//start searching from the first list with items
+  if(tmp != NULL){//if it found something
+      while(*(tmp->item) > i && temp->prev != NULL){//if tmp->item > i that means that we need to start searching from lower level
         temp = temp->prev;
-        tmp = temp->item->searchItem(i);
-        if(tmp == NULL){
-          break;
+        tmp = temp->item->searchItem(i);//search lower level
+        if(tmp == NULL){//item not found
+          return false;
         }
       }
-      if(temp->prev == NULL && tmp != NULL && *(tmp->item) != i){
-        tmp = NULL;
-      }
-      if(tmp == NULL){
-        // cout << "NOT FOUND" << endl;
+      if(temp->prev == NULL && tmp != NULL && *(tmp->item) != i){//case every first item of each level is > i
         return false;
       }
-      // cout << "FOUND" << endl;
       return true;
   }else{
-    // cout << "NOT FOUND" << endl;
     return false;
   }
 }
 
-
 bool skipHeader::insertItem(int* i){
-  int top_lvl = rand() % max_lvl + 0;
-  // cout << "top level: " << top_lvl << endl;
-  int skiped_layers =0;
-  skipNode* temp = end;
-  while(temp->item->pl == 0){
-    if(temp->prev == NULL){
+  int top_lvl = rand() % max_lvl + 0;//calculate in how many levels the item will go to
+  // cout << "top level: " << top_lvl << endl; //TODO: clean
+  int skiped_layers =0;//used to see how many layers was skiped because first item is > i
+  skipNode* temp = end;//use of dual linked list, start == list with all the items. with that in mind, we start our search with the list with the less amount of items
+  while(temp->item->pl == 0){//same with search
+    if(temp->prev == NULL){//if for example list with all the items is empty, need to add it there
       break;
     }
     temp = temp->prev;
@@ -411,37 +319,32 @@ bool skipHeader::insertItem(int* i){
   List* tmp = temp->item->insertItem(i, top_lvl);
   bool final;
   bool final_tmp= false;
-  if(tmp != NULL){ //TODO: re-check the not found from if != NULL
+  if(tmp != NULL){
     if(*(tmp->item) == *i){//case inserted
-      // return true;
       final= true;
     }
-    while(*(tmp->item) > *i && temp->prev != NULL){//case first first's level is >i
+    while(*(tmp->item) > *i && temp->prev != NULL){
       skiped_layers++;
       temp = temp->prev;
       tmp = temp->item->insertItem(i, top_lvl);
-      if(tmp == NULL){
-        // return false;
+      if(tmp == NULL){//item couldnt be inserted, already exists
         final = false;
         final_tmp = true;
         break;
       }
     }
-
-    // return true;
     if(!final_tmp){
       final = true;
     }
-  }else{
-    // return false;
+  }else{//item couldnt be inserted, already exists
     final = false;
   }
-  if(final){
+  if(final){//insert the item to every level that it needs to
     int t= max_lvl-skiped_layers;
     t= top_lvl-t;
     while(t>0 && temp->next != NULL){
       temp = temp->next;
-      tmp = temp->insertAtStart(tmp);
+      tmp = temp->insertAtStart(tmp);//the first item of every skiped list is >i so insert i as first
       t--;
     }
     return true;

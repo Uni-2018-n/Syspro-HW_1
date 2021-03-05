@@ -4,30 +4,7 @@
 
 int main(){
   srand(time(NULL));
-  // listHeader* t = new listHeader();
-  // int numa= 15;
-  // t->insertItemTemp(&numa);
-  // int numb= 20;
-  // t->insertItemTemp(&numb);
-  // int numc= 18;
-  // t->insertItemTemp(&numc);
-  // int numd= 8;
-  // t->insertItemTemp(&numd);
-  // int nume= 5;
-  // t->insertItemTemp(&nume);
-  // int numf= 22;
-  // t->insertItemTemp(&numf);
-  // int numg= 10;
-  // t->insertItemTemp(&numg);
-  // int numh= 2;
-  // t->insertItemTemp(&numh);
-  // int numi= 40;
-  // t->insertItemTemp(&numi);
-  // int numj= 14;
-  // t->insertItemTemp(&numj);
-
   skipHeader* s= new skipHeader();
-  // s->testPrint();
 
   std::cout << "3: ";
   if(s->searchItem(3)){
@@ -65,6 +42,8 @@ int main(){
   }else{
     std::cout << "NOT FOUND" << std::endl;
   }
+
+
 
   std::cout << "INSERTS: " << std::endl;
   std::cout << "0:" << std::endl;
@@ -133,8 +112,8 @@ int main(){
   }else{
     std::cout << "NOT FOUND" << std::endl;
   }
-  std::cout << "41: ";
-  if(s->searchItem(0)){
+  std::cout << "15: ";
+  if(s->searchItem(15)){
     std::cout << "FOUND" << std::endl;
   }else{
     std::cout << "NOT FOUND" << std::endl;
