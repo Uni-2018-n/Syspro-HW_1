@@ -1,6 +1,6 @@
 #include <iostream>
 #include <time.h>
-#include "skipList.hpp"
+#include "../Structures/skipList.hpp"
 
 int main(){
   srand(time(NULL));

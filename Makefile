@@ -1,9 +1,9 @@
 FLAGS = -std=c++11 -Wall -g -o
-SOURCE = main.cpp classes.cpp
+SOURCE = main.cpp Structures/skipList.cpp Structures/bloomFilter.cpp classes.cpp
 ITEM = vaccineMonitor
 
 run : compile
-	./$(ITEM) -c records.txt -b 100000
+	./$(ITEM) -c Data/records.txt -b 100000
 
 debug : $(ITEM)
 	gdb $(ITEM)

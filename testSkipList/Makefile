@@ -1,5 +1,5 @@
 FLAGS = -std=c++11 -Wall -g -o
-SOURCE = main.cpp skipList.cpp
+SOURCE = main.cpp ../Structures/skipList.cpp
 ITEM = main
 
 run : compile
