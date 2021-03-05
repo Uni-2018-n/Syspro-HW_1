@@ -25,8 +25,8 @@ bool citizenRecord::check_error(){
 }
 
 //////////////////////////////////////// vaccinateRecord
-vaccinateRecord::vaccinateRecord(citizenRecord* c, string vn, string v, string dv){
-  citizen = c;
+vaccinateRecord::vaccinateRecord(string vn, string v, string dv){
+  // citizen = c;
   virusName= vn;
   if(v == "YES"){
     vaccinated =1;
@@ -42,11 +42,11 @@ vaccinateRecord::vaccinateRecord(citizenRecord* c, string vn, string v, string d
 }
 
 vaccinateRecord::~vaccinateRecord(){
-  delete citizen;
+  // delete citizen;
 }
 
 void vaccinateRecord::testPrint(){
-  citizen->testPrint();
+  // citizen->testPrint();
   cout << virusName << endl;
   cout << vaccinated << endl;
   cout << dateVaccinated << endl;

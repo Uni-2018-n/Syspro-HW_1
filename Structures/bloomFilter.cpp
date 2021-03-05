@@ -50,7 +50,7 @@ bool bloomFilter::is_inside(int s){
 unsigned long bloomFilter::djb2(unsigned char *str) {
 	unsigned long hash = 5381;
 	int c;
-	while (c = *str++) {
+	while ((c = *str++)) {
 		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 	}
 	return hash;
@@ -61,7 +61,7 @@ unsigned long bloomFilter::sdbm(unsigned char *str) {
 	unsigned long hash = 0;
 	int c;
 
-	while (c = *str++) {
+	while ((c = *str++)) {
 		hash = c + (hash << 6) + (hash << 16) - hash;
 	}
 

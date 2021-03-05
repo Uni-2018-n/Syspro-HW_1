@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include "classes.hpp"
+#include "generalList.hpp"
 
 using namespace std;
 
@@ -23,44 +24,20 @@ int main(int argc, char* argv[]){
     }
   }
   cout << "Input: " << pathToRecords << " " << bloomSize << endl;
-
+  GlistHeader* main_list = new GlistHeader();
   ifstream records(pathToRecords);
   {
     string line;
     while(getline(records, line)){
-      string temp[8];
-      int i=0;
-      string word = "";
-      for(auto x : line){
-        if( x== ' '){
-          temp[i] = word;
-          i++;
-          word ="";
-        }else{
-          word = word + x;
-        }
-      }
-      temp[i] = word;
-      citizenRecord*  temp_citizen = new citizenRecord(temp[0], temp[1], temp[2], temp[3], temp[4]);
-      if(temp_citizen->check_error()){
-        cout << "ERROR citizen" << endl << endl;
-      }
-
-      vaccinateRecord* temp_vaccinate = new vaccinateRecord(temp_citizen, temp[5], temp[6], temp[7]);
-      if(temp_vaccinate->check_error()){
-        cout << "ERROR vaccinate" << endl << endl;
-      }else{
-        temp_vaccinate->testPrint();
-      }
-
-      delete temp_vaccinate;
+      main_list->insertRecord(line);
     }
+    main_list->testPrint();
   }
 
 
 
 
-
+  delete main_list;
   delete[] pathToRecords;
   records.close();
 	return 0;
