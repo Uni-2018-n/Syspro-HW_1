@@ -4,13 +4,14 @@
 ////////////////////////////listNode
 listNode::listNode(citizenRecord* c, vaccinateRecord* v){
   citizen = c;
-  vacc=  v;
+  vaccs= new VlistHeader();
+  vaccs->insertItem(v);
   next = NULL;
 }
 
 listNode::~listNode(){
-  // delete citizen;
-  // delete vacc;
+  delete citizen;
+  delete vaccs;
 }
 
 
@@ -68,7 +69,7 @@ void GlistHeader::insertRecord(string line){
       tmp->citizen->lastName.compare(temp_citizen->lastName) !=0 ||
       tmp->citizen->country.compare(temp_citizen->country) !=0 ||
       tmp->citizen->age != temp_citizen->age){
-        cout << "ERROR: found record with same id but diffrent data " << line << endl << endl;
+        cout << "ERROR: found record with same id but different data " << line << endl << endl;
         delete temp_citizen;
         return;
     }
@@ -84,7 +85,7 @@ void GlistHeader::insertRecord(string line){
 
   if(tmp == NULL){//first time we see this citizen
     listNode* new_node = new listNode(temp_citizen, temp_vaccinate);
-    if(start == NULL){//case citizen is first in list
+    if(start == NULL){//case citizen is first to be inserted
       start = new_node;
       end = new_node;
     }else{//if not, just insert citizen at end of list
@@ -95,41 +96,26 @@ void GlistHeader::insertRecord(string line){
   }
 
   {
-    listNode* temp = tmp;
-    while(temp->next != NULL &&temp->next->citizen->citizenId == temp->citizen->citizenId){
-      if(temp->vacc->virusName.compare(temp_vaccinate->virusName) ==0){
+    VlistNode* temp = tmp->vaccs->start;
+    while(temp != NULL){
+      if(temp->item->virusName.compare(temp_vaccinate->virusName) ==0){
         cout << "ERROR record already inside " << line << endl << endl;
         delete temp_vaccinate;
         return;
       }
-      // if(temp->next == NULL){
-      //   break;
-      // }
-      temp = temp->next;
+      temp =temp->next;
     }
-    if(temp->vacc->virusName.compare(temp_vaccinate->virusName) ==0){
-      cout << "ERROR record already inside " << line << endl << endl;
-      delete temp_vaccinate;
-      return;
-    }
-    //here temp has the last vaccination that the citizenId has done.
-    listNode* new_node = new listNode(tmp->citizen, temp_vaccinate);
-    new_node->next = temp->next;
-    temp->next = new_node;
-    if(new_node->next == NULL){
-      end = new_node;
-    }
+    tmp->vaccs->insertItem(temp_vaccinate);
     return;
   }
-
-
-  // delete temp_vaccinate;
 }
 
 void GlistHeader::testPrint(){
   listNode* temp = start;
   while(temp != NULL){
-    cout << temp->citizen->citizenId << ", " << temp->vacc->virusName <<  " -> ";
+    cout << temp->citizen->citizenId;
+    temp->vaccs->testPrint();
+    cout << "-> ";
     temp = temp->next;
   }
   cout << endl;

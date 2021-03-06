@@ -3,13 +3,14 @@
 #include <iostream>
 
 #include "classes.hpp"
+#include "Structures/vacList.hpp"
 
 using namespace std;
 
 class listNode{
 public:
   citizenRecord* citizen;
-  vaccinateRecord* vacc;
+  VlistHeader* vaccs;
   listNode* next;
   listNode(citizenRecord*, vaccinateRecord*);
   ~listNode();
