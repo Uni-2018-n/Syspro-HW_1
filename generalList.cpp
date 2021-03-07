@@ -19,6 +19,7 @@ listNode::~listNode(){
 GlistHeader::GlistHeader(){
   start = NULL;
   end = NULL;
+  countries = new ClistHeader();
 }
 
 GlistHeader::~GlistHeader(){
@@ -29,6 +30,7 @@ GlistHeader::~GlistHeader(){
     temp = temp->next;
     delete tmp;
   }
+  delete countries;
 }
 
 listNode* GlistHeader::searchCitizen(int id){
@@ -56,7 +58,12 @@ void GlistHeader::insertRecord(string line){
     }
   }
   temp[i] = word;
-  citizenRecord*  temp_citizen = new citizenRecord(temp[0], temp[1], temp[2], temp[3], temp[4]);
+  string* temp_country = countries->searchItem(temp[3]);
+  if(temp_country == NULL){
+    temp_country = new string(temp[3]);
+    countries->insertItem(temp_country);
+  }
+  citizenRecord*  temp_citizen = new citizenRecord(temp[0], temp[1], temp[2], temp_country, temp[4]);
   if(temp_citizen->check_error()){
     cout << "ERROR citizen: " << line << endl << endl;
     delete temp_citizen;
@@ -67,7 +74,7 @@ void GlistHeader::insertRecord(string line){
   if(tmp != NULL){
     if(tmp->citizen->firstName.compare(temp_citizen->firstName) !=0 ||
       tmp->citizen->lastName.compare(temp_citizen->lastName) !=0 ||
-      tmp->citizen->country.compare(temp_citizen->country) !=0 ||
+      tmp->citizen->country->compare(*(temp_citizen->country)) !=0 ||
       tmp->citizen->age != temp_citizen->age){
         cout << "ERROR: found record with same id but different data " << line << endl << endl;
         delete temp_citizen;
@@ -99,7 +106,15 @@ void GlistHeader::insertRecord(string line){
     VlistNode* temp = tmp->vaccs->start;
     while(temp != NULL){
       if(temp->item->virusName.compare(temp_vaccinate->virusName) ==0){
-        cout << "ERROR record already inside " << line << endl << endl;
+        if(temp->item->vaccinated){
+          cout << "ERROR record already vaccinated " << line << endl << endl;
+        }else{
+          if(temp_vaccinate->vaccinated){
+            //do things when someone gets vaccinated from already not vaccinated
+          }else{
+            cout << "ERROR record already inside " << line << endl << endl;
+          }
+        }
         delete temp_vaccinate;
         return;
       }
@@ -119,6 +134,7 @@ void GlistHeader::testPrint(){
     temp = temp->next;
   }
   cout << endl;
+  countries->testPrint();
 }
 
 

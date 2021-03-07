@@ -1,15 +1,15 @@
 #include <cstring>
 
 #include "classes.hpp"
-citizenRecord::citizenRecord(string id, string fn, string ln, string ct, string a){
-  ERROR =0;
+citizenRecord::citizenRecord(string id, string fn, string ln, string* ct, string a){
+  error = 0;
   citizenId = stoi(id);
   firstName = fn;
   lastName= ln;
   country= ct;
   age = stoi(a);
   if(age < 1 || age > 120){
-    ERROR = 1;
+    error = 1;
   }
 }
 
@@ -21,12 +21,12 @@ void citizenRecord::testPrint(){
   cout << age << endl;
 }
 bool citizenRecord::check_error(){
-  return (ERROR == 0) ? 0 : 1;
+  return (error == 0) ? false : true;
 }
 
 //////////////////////////////////////// vaccinateRecord
 vaccinateRecord::vaccinateRecord(string vn, string v, string dv){
-  // citizen = c;
+  error = 0;
   virusName= vn;
   if(v == "YES"){
     vaccinated =1;
@@ -34,7 +34,7 @@ vaccinateRecord::vaccinateRecord(string vn, string v, string dv){
   }else if(v == "NO"){
     vaccinated =0;
     if(dv != ""){
-      ERROR =1;
+      error =1;
     }else{
       dateVaccinated = "-";
     }
@@ -42,11 +42,10 @@ vaccinateRecord::vaccinateRecord(string vn, string v, string dv){
 }
 
 vaccinateRecord::~vaccinateRecord(){
-  // delete citizen;
+
 }
 
 void vaccinateRecord::testPrint(){
-  // citizen->testPrint();
   cout << virusName << endl;
   cout << vaccinated << endl;
   cout << dateVaccinated << endl;
@@ -54,5 +53,5 @@ void vaccinateRecord::testPrint(){
 }
 
 bool vaccinateRecord::check_error(){
-  return (ERROR == 0) ? 0 : 1;
+  return (error == 0) ? false : true;
 }

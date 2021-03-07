@@ -4,6 +4,7 @@
 
 #include "classes.hpp"
 #include "Structures/vacList.hpp"
+#include "Structures/countryList.hpp"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ public:
 class GlistHeader{
   listNode* start;
   listNode* end;
+  ClistHeader* countries;
 public:
   GlistHeader();
   ~GlistHeader();
