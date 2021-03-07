@@ -2,16 +2,13 @@
 
 
 ////////////////////////////listNode
-listNode::listNode(citizenRecord* c, string* v){
+listNode::listNode(citizenRecord* c){
   citizen = c;
-  vaccs= new SlistHeader();
-  vaccs->insertItem(v);
   next = NULL;
 }
 
 listNode::~listNode(){
   delete citizen;
-  delete vaccs;
 }
 
 
@@ -38,7 +35,7 @@ GlistHeader::~GlistHeader(){
 listNode* GlistHeader::searchCitizen(int id){
   listNode* temp = start;
   while(temp != NULL){
-    if(temp->citizen->citizenId == id){
+    if(*(temp->citizen->citizenId) == id){
       return temp;
     }
     temp = temp->next;
@@ -83,36 +80,19 @@ void GlistHeader::insertRecord(string line){
         return;
     }
 
-    SlistNode* tvac = tmp->vaccs->start;
-    while(tvac != NULL){
-      if(tvac->item->compare(temp[5]) ==0){
-        cout << "ERROR record already inside " << line << endl;
-        return;
-      }
-      tvac =tvac->next;
-    }
-
-    string* temp_virus = viruses->searchVirus(temp[5]);
+    VarlistNode* temp_virus = viruses->searchVirus(temp[5]);
     if(temp_virus == NULL){
-      temp_virus = new string(temp[5]);
-      viruses->insertVirus(temp_virus);
+      temp_virus = viruses->insertVirus(temp[5]);
     }
-    tmp->vaccs->insertItem(temp_virus);
+    temp_virus->insertRecord(tmp->citizen->citizenId, temp[6], temp[7]);
   }else{//first time we see this citizen
     string* temp_country = countries->searchItem(temp[3]);
     if(temp_country == NULL){
-      temp_country = new string(temp[3]);
-      countries->insertItem(temp_country);
+      temp_country = countries->insertItem(temp[3]);
     }
     citizenRecord*  temp_citizen = new citizenRecord(temp[0], temp[1], temp[2], temp_country, temp[4]);
 
-    string* temp_virus = viruses->searchVirus(temp[5]);
-    if(temp_virus == NULL){
-      temp_virus = new string(temp[5]);
-      viruses->insertVirus(temp_virus);
-    }
-
-    listNode* new_node = new listNode(temp_citizen, temp_virus);
+    listNode* new_node = new listNode(temp_citizen);
     if(start == NULL){//case citizen is first to be inserted
       start = new_node;
       end = new_node;
@@ -120,15 +100,19 @@ void GlistHeader::insertRecord(string line){
       end->next = new_node;
       end = new_node;
     }
+
+    VarlistNode* temp_virus = viruses->searchVirus(temp[5]);
+    if(temp_virus == NULL){
+      temp_virus = viruses->insertVirus(temp[5]);
+    }
+    temp_virus->insertRecord(new_node->citizen->citizenId, temp[6], temp[7]);
   }
 }
 
 void GlistHeader::testPrint(){
   listNode* temp = start;
   while(temp != NULL){
-    cout << temp->citizen->citizenId;
-    temp->vaccs->testPrint();
-    cout << "-> ";
+    cout << *(temp->citizen->citizenId) << "-> ";
     temp = temp->next;
   }
   cout << endl;

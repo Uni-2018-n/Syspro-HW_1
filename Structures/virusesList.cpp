@@ -2,17 +2,25 @@
 #include "virusesList.hpp"
 
 
-VarlistNode::VarlistNode(string* i, int l){
+VarlistNode::VarlistNode(string i, int l){
   item = i;
   bloom = new bloomFilter(l);
   next = NULL;
 }
 
 VarlistNode::~VarlistNode(){
-  delete item;
   delete bloom;
 }
 
+void VarlistNode::insertRecord(int* id, string v, string dv){
+  if(bloom->is_inside(*id)){
+    //check if is trully inside
+    cout << "ERROR record already inside " << endl;
+  }else{
+    bloom->insert(*id);
+    //add to the correct skip list
+  }
+}
 
 VarlistHeader::VarlistHeader(int i):
 bloom_len(i){
@@ -30,7 +38,7 @@ VarlistHeader::~VarlistHeader(){
   }
 }
 
-void VarlistHeader::insertVirus(string* i){
+VarlistNode* VarlistHeader::insertVirus(string i){
   VarlistNode* new_node = new VarlistNode(i, bloom_len);
   if(start == NULL){
     start = new_node;
@@ -39,14 +47,14 @@ void VarlistHeader::insertVirus(string* i){
     end->next = new_node;
     end = new_node;
   }
-  return;
+  return new_node;
 }
 
-string* VarlistHeader::searchVirus(string i){
+VarlistNode* VarlistHeader::searchVirus(string i){
   VarlistNode* temp = start;
   while(temp != NULL){
-    if(temp->item->compare(i) ==0){
-      return temp->item;
+    if(temp->item.compare(i) ==0){
+      return temp;
     }
     temp = temp->next;
   }
@@ -56,7 +64,7 @@ string* VarlistHeader::searchVirus(string i){
 void VarlistHeader::testPrint(){
   VarlistNode* temp = start;
   while(temp != NULL){
-    cout << *(temp->item) << "-> ";
+    cout << temp->item << "-> ";
     temp = temp->next;
   }
   cout << endl;

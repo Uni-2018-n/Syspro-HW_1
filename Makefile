@@ -1,15 +1,20 @@
 FLAGS = -std=c++11 -Wall -g -o
-SOURCE = main.cpp Structures/skipList.cpp Structures/bloomFilter.cpp classes.cpp generalList.cpp Structures/countryList.cpp Structures/virusesList.cpp Structures/STRList.cpp
+SOURCE = main.cpp Structures/skipList.cpp Structures/bloomFilter.cpp classes.cpp generalList.cpp Structures/countryList.cpp Structures/virusesList.cpp
 ITEM = vaccineMonitor
+ARGS = -c Data/records.txt -b 100000
 
 run : compile
-	./$(ITEM) -c Data/records.txt -b 100000
+	./$(ITEM) $(ARGS)
+
+mem: compile
+	valgrind --leak-check=full ./$(ITEM) $(ARGS)
 
 debug : $(ITEM)
 	gdb $(ITEM)
 
 compile : $(SOURCE)
 	g++ $(FLAGS) $(ITEM) $(SOURCE)
+
 
 clean :
 	-rm $(ITEM)

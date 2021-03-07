@@ -9,7 +9,7 @@ public:
   string* item;
   ClistNode* next;
 
-  ClistNode(string*);
+  ClistNode(string);
   ~ClistNode();
 };
 
@@ -20,7 +20,7 @@ public:
   ClistHeader();
   ~ClistHeader();
   string* searchItem(string);
-  void insertItem(string* i);
+  string* insertItem(string i);
   void testPrint();
 };
 #endif

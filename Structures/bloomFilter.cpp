@@ -25,7 +25,7 @@ void bloomFilter::insert(int s){
     int bit_index = bit % 8;
     array[array_index] |= 1 << bit_index;
   }
-  delete s_char;
+  delete[] s_char;
 }
 
 bool bloomFilter::is_inside(int s){
@@ -36,11 +36,11 @@ bool bloomFilter::is_inside(int s){
     int array_index = bit / 8;
     int bit_index = bit % 8;
     if((array[array_index] & (1 << bit_index)) ==0){
-      delete s_char;
+      delete[] s_char;
       return false;
     }
   }
-  delete s_char;
+  delete[] s_char;
   return true;
 }
 

@@ -8,14 +8,14 @@ using namespace std;
 
 class VarlistNode{
 public:
-  string* item;
+  string item;
   bloomFilter* bloom;
   //vaccinated skip list
   //not vaccinated skip list
   VarlistNode* next;
-  VarlistNode(string* i, int l);
+  VarlistNode(string i, int l);
   ~VarlistNode();
-  void insertRecord();
+  void insertRecord(int* id, string v, string dv);
 };
 
 class VarlistHeader{
@@ -25,8 +25,8 @@ class VarlistHeader{
 public:
   VarlistHeader(int);
   ~VarlistHeader();
-  void insertVirus(string* i);
-  string* searchVirus(string);
+  VarlistNode* insertVirus(string i);
+  VarlistNode* searchVirus(string);
   void testPrint();
 };
 

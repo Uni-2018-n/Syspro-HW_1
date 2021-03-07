@@ -2,8 +2,8 @@
 #include "countryList.hpp"
 
 
-ClistNode::ClistNode(string* i){
-  item = i;
+ClistNode::ClistNode(string i){
+  item = new string(i);
   next = NULL;
 }
 
@@ -38,7 +38,7 @@ string* ClistHeader::searchItem(string i){
   return NULL;
 }
 
-void ClistHeader::insertItem(string* i){
+string* ClistHeader::insertItem(string i){
   ClistNode* new_node = new ClistNode(i);
   if(start == NULL){
     start = new_node;
@@ -47,7 +47,7 @@ void ClistHeader::insertItem(string* i){
     end->next = new_node;
     end = new_node;
   }
-  return;
+  return new_node->item;
 }
 
 void ClistHeader::testPrint(){

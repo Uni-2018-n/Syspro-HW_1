@@ -6,12 +6,13 @@ using namespace std;
 
 class citizenRecord{
 public:
-  int citizenId;
+  int* citizenId;
   string firstName;
   string lastName;
   string* country;
   int age;
   citizenRecord(string, string, string, string*, string);
+  ~citizenRecord();
   void testPrint();
 };
 
