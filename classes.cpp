@@ -25,7 +25,7 @@ bool citizenRecord::check_error(){
 }
 
 //////////////////////////////////////// vaccinateRecord
-vaccinateRecord::vaccinateRecord(string vn, string v, string dv){
+vaccinateRecord::vaccinateRecord(string* vn, string v, string dv){
   error = 0;
   virusName= vn;
   if(v == "YES"){

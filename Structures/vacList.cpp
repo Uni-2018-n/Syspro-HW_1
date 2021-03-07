@@ -43,7 +43,7 @@ void VlistHeader::testPrint(){
   VlistNode* temp = start;
   cout << "(";
   while(temp != NULL){
-    cout << temp->item->virusName << "-> ";
+    cout << *(temp->item->virusName) << "-> ";
     temp = temp->next;
   }
   cout << ")";

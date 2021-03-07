@@ -19,11 +19,11 @@ public:
 
 class vaccinateRecord{
 public:
-  string virusName;
+  string* virusName;
   int vaccinated;
   string dateVaccinated;
   int error;
-  vaccinateRecord(string, string, string);
+  vaccinateRecord(string*, string, string);
   ~vaccinateRecord();
   void testPrint();
   bool check_error();

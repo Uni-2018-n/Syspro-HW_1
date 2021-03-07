@@ -1,5 +1,5 @@
 FLAGS = -std=c++11 -Wall -g -o
-SOURCE = main.cpp Structures/skipList.cpp Structures/bloomFilter.cpp classes.cpp generalList.cpp Structures/vacList.cpp Structures/countryList.cpp
+SOURCE = main.cpp Structures/skipList.cpp Structures/bloomFilter.cpp classes.cpp generalList.cpp Structures/vacList.cpp Structures/countryList.cpp Structures/virusesList.cpp Structures/STRList.cpp
 ITEM = vaccineMonitor
 
 run : compile

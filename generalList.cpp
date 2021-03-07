@@ -2,9 +2,9 @@
 
 
 ////////////////////////////listNode
-listNode::listNode(citizenRecord* c, vaccinateRecord* v){
+listNode::listNode(citizenRecord* c, string* v){
   citizen = c;
-  vaccs= new VlistHeader();
+  vaccs= new SlistHeader();
   vaccs->insertItem(v);
   next = NULL;
 }
@@ -20,6 +20,7 @@ GlistHeader::GlistHeader(){
   start = NULL;
   end = NULL;
   countries = new ClistHeader();
+  viruses = new VarlistHeader();
 }
 
 GlistHeader::~GlistHeader(){
@@ -31,6 +32,7 @@ GlistHeader::~GlistHeader(){
     delete tmp;
   }
   delete countries;
+  delete viruses;
 }
 
 listNode* GlistHeader::searchCitizen(int id){
@@ -65,7 +67,7 @@ void GlistHeader::insertRecord(string line){
   }
   citizenRecord*  temp_citizen = new citizenRecord(temp[0], temp[1], temp[2], temp_country, temp[4]);
   if(temp_citizen->check_error()){
-    cout << "ERROR citizen: " << line << endl << endl;
+    cout << "ERROR found record with age out of boundaries " << line << endl;
     delete temp_citizen;
     return;
   }
@@ -76,22 +78,27 @@ void GlistHeader::insertRecord(string line){
       tmp->citizen->lastName.compare(temp_citizen->lastName) !=0 ||
       tmp->citizen->country->compare(*(temp_citizen->country)) !=0 ||
       tmp->citizen->age != temp_citizen->age){
-        cout << "ERROR: found record with same id but different data " << line << endl << endl;
+        cout << "ERROR found record with same id but different data " << line << endl;
         delete temp_citizen;
         return;
     }
     delete temp_citizen;//tmp->citizen has our data, no need for temp_citizen
   }
 
-  vaccinateRecord* temp_vaccinate = new vaccinateRecord(temp[5], temp[6], temp[7]);
+  string* temp_virus = viruses->searchVirus(temp[5]);
+  if(temp_virus == NULL){
+    temp_virus = new string(temp[5]);
+    viruses->insertVirus(temp_virus);
+  }
+  vaccinateRecord* temp_vaccinate = new vaccinateRecord(temp_virus, temp[6], temp[7]);
   if(temp_vaccinate->check_error()){
-    cout << "ERROR vaccinate: " << line << endl << endl;
+    cout << "ERROR found record with \"NO\" and date " << line << endl;
     delete temp_vaccinate;
     return;
   }
 
   if(tmp == NULL){//first time we see this citizen
-    listNode* new_node = new listNode(temp_citizen, temp_vaccinate);
+    listNode* new_node = new listNode(temp_citizen, temp_vaccinate->virusName);
     if(start == NULL){//case citizen is first to be inserted
       start = new_node;
       end = new_node;
@@ -99,28 +106,22 @@ void GlistHeader::insertRecord(string line){
       end->next = new_node;
       end = new_node;
     }
+    delete temp_vaccinate;
     return;
   }
 
   {
-    VlistNode* temp = tmp->vaccs->start;
+    SlistNode* temp = tmp->vaccs->start;
     while(temp != NULL){
-      if(temp->item->virusName.compare(temp_vaccinate->virusName) ==0){
-        if(temp->item->vaccinated){
-          cout << "ERROR record already vaccinated " << line << endl << endl;
-        }else{
-          if(temp_vaccinate->vaccinated){
-            //do things when someone gets vaccinated from already not vaccinated
-          }else{
-            cout << "ERROR record already inside " << line << endl << endl;
-          }
-        }
+      if(temp->item->compare(*(temp_vaccinate->virusName)) ==0){
+        cout << "ERROR record already inside " << line << endl;
         delete temp_vaccinate;
         return;
       }
       temp =temp->next;
     }
-    tmp->vaccs->insertItem(temp_vaccinate);
+    tmp->vaccs->insertItem(temp_vaccinate->virusName);
+    delete temp_vaccinate;
     return;
   }
 }
@@ -135,6 +136,7 @@ void GlistHeader::testPrint(){
   }
   cout << endl;
   countries->testPrint();
+  viruses->testPrint();
 }
 
 
