@@ -15,6 +15,7 @@ public:
   VarlistNode* next;
   VarlistNode(string* i, int l);
   ~VarlistNode();
+  void insertRecord();
 };
 
 class VarlistHeader{
@@ -25,7 +26,6 @@ public:
   VarlistHeader(int);
   ~VarlistHeader();
   void insertVirus(string* i);
-  void insertRecord();
   string* searchVirus(string);
   void testPrint();
 };

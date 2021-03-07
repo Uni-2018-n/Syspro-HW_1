@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "classes.hpp"
-#include "Structures/vacList.hpp"
 #include "Structures/countryList.hpp"
 #include "Structures/virusesList.hpp"
 #include "Structures/STRList.hpp"
