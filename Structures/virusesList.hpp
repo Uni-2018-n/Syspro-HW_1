@@ -2,24 +2,27 @@
 #define _VIRUSESLIST_HPP_
 #include <iostream>
 
+#include "bloomFilter.hpp"
+
 using namespace std;
 
 class VarlistNode{
 public:
   string* item;
-  //bloom
+  bloomFilter* bloom;
   //vaccinated skip list
   //not vaccinated skip list
   VarlistNode* next;
-  VarlistNode(string* i);
+  VarlistNode(string* i, int l);
   ~VarlistNode();
 };
 
 class VarlistHeader{
   VarlistNode* start;
   VarlistNode* end;
+  int bloom_len;//TODO: make this without dublicates
 public:
-  VarlistHeader();
+  VarlistHeader(int);
   ~VarlistHeader();
   void insertVirus(string* i);
   void insertRecord();

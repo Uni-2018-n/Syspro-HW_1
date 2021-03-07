@@ -2,17 +2,20 @@
 #include "virusesList.hpp"
 
 
-VarlistNode::VarlistNode(string* i){
+VarlistNode::VarlistNode(string* i, int l){
   item = i;
+  bloom = new bloomFilter(l);
   next = NULL;
 }
 
 VarlistNode::~VarlistNode(){
   delete item;
+  delete bloom;
 }
 
 
-VarlistHeader::VarlistHeader(){
+VarlistHeader::VarlistHeader(int i):
+bloom_len(i){
   start = NULL;
   end = NULL;
 }
@@ -28,7 +31,7 @@ VarlistHeader::~VarlistHeader(){
 }
 
 void VarlistHeader::insertVirus(string* i){
-  VarlistNode* new_node = new VarlistNode(i);
+  VarlistNode* new_node = new VarlistNode(i, bloom_len);
   if(start == NULL){
     start = new_node;
     end = new_node;

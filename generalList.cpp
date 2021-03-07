@@ -16,11 +16,11 @@ listNode::~listNode(){
 
 
 ////////////////////////////GlistHeader
-GlistHeader::GlistHeader(){
+GlistHeader::GlistHeader(int bloom){
   start = NULL;
   end = NULL;
   countries = new ClistHeader();
-  viruses = new VarlistHeader();
+  viruses = new VarlistHeader(bloom);
 }
 
 GlistHeader::~GlistHeader(){

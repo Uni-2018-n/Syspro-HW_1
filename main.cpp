@@ -24,7 +24,7 @@ int main(int argc, char* argv[]){
     }
   }
   cout << "Input: " << pathToRecords << " " << bloomSize << endl;
-  GlistHeader* main_list = new GlistHeader();
+  GlistHeader* main_list = new GlistHeader(bloomSize);
   ifstream records(pathToRecords);
   {
     string line;

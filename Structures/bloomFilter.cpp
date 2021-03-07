@@ -13,7 +13,7 @@ len(l){
 }
 
 bloomFilter::~bloomFilter(){
-  delete array;
+  delete[] array;
 }
 
 void bloomFilter::insert(int s){

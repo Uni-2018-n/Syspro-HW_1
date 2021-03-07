@@ -25,7 +25,7 @@ class GlistHeader{
   ClistHeader* countries;
   VarlistHeader* viruses;
 public:
-  GlistHeader();
+  GlistHeader(int bloom);
   ~GlistHeader();
   listNode* searchCitizen(int);
   void insertRecord(string line);
