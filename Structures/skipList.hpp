@@ -1,44 +1,50 @@
 #ifndef _SKIPLIST_HPP_
 #define _SKIPLIST_HPP_
 
+#include <iostream>
+#include "../classes.hpp"
+using namespace std;
+
 #define MAXIMUM 3
 
-class List{//nodes
-  int* item;
-  List* next;
-  List* lower_level;
+class SkiplistNode{//nodes
+  int* item;//id
+  citizenRecord* citizen;
+  string* date_vaccinated;
+  SkiplistNode* next;
+  SkiplistNode* lower_level;
 public:
-  List(int* i);
-  List(List* i);
-  List(List* i, List* n);
-  List(int* i, List* n);
-  ~List();
+  SkiplistNode(int* i, citizenRecord* c, string* dv);
+  SkiplistNode(SkiplistNode* i);
+  SkiplistNode(SkiplistNode* i, SkiplistNode* n);
+  SkiplistNode(int* i, citizenRecord* c, string* dv, SkiplistNode* n);
+  ~SkiplistNode();
 
   int getItem(){
     return *item;
   }
-  List* getNext(){
+  SkiplistNode* getNext(){
     return next;
   }
-  void setNext(List* n){
+  void setNext(SkiplistNode* n){
     next = n;
   }
-  List* getLowerLevel(){
+  SkiplistNode* getLowerLevel(){
     return lower_level;
   }
 
   void testPrint();
 };
 
-class listHeader{//list
-  List* start;
+class SkiplistHeader{//list
+  SkiplistNode* start;
   int pl;
 public:
-  listHeader();
-  ~listHeader();
-  List* insertAtStart(List* i);
-  List* insertItem(int* i, int top_lvl);
-  List* searchItem(int i);
+  SkiplistHeader();
+  ~SkiplistHeader();
+  SkiplistNode* insertAtStart(SkiplistNode* i);
+  SkiplistNode* insertItem(int* i, citizenRecord* c, string* dv, int top_lvl);
+  SkiplistNode* searchItem(int i);
 
   int getPl(){
     return pl;
@@ -50,19 +56,19 @@ public:
 class skipNode{//nodes of lists
   skipNode* prev;
   skipNode* next;
-  listHeader* item;
+  SkiplistHeader* item;
 public:
   skipNode();
   ~skipNode();
-  List* insertAtStart(List* i);
-  
+  SkiplistNode* insertAtStart(SkiplistNode* i);
+
   skipNode* getNext(){
     return next;
   }
   skipNode* getPrev(){
     return prev;
   }
-  listHeader* getItem(){
+  SkiplistHeader* getItem(){
     return item;
   }
   void setNext(skipNode* n){
@@ -85,7 +91,7 @@ public:
   skipHeader();
   ~skipHeader();
   bool searchItem(int i);
-  bool insertItem(int* i);
+  bool insertItem(int* i, citizenRecord* c, string* dv);
   void testPrint();
 };
 #endif

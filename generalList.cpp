@@ -84,7 +84,7 @@ void GlistHeader::insertRecord(string line){
     if(temp_virus == NULL){
       temp_virus = viruses->insertVirus(temp[5]);
     }
-    temp_virus->insertRecord(tmp->citizen->citizenId, temp[6], temp[7]);
+    temp_virus->insertRecord(tmp->citizen->citizenId, tmp->citizen, temp[6], temp[7]);
   }else{//first time we see this citizen
     string* temp_country = countries->searchItem(temp[3]);
     if(temp_country == NULL){
@@ -105,7 +105,7 @@ void GlistHeader::insertRecord(string line){
     if(temp_virus == NULL){
       temp_virus = viruses->insertVirus(temp[5]);
     }
-    temp_virus->insertRecord(new_node->citizen->citizenId, temp[6], temp[7]);
+    temp_virus->insertRecord(new_node->citizen->citizenId, new_node->citizen, temp[6], temp[7]);
   }
 }
 

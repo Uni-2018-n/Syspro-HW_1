@@ -5,20 +5,37 @@
 VarlistNode::VarlistNode(string i, int l){
   item = i;
   bloom = new bloomFilter(l);
+  vaccinated = new skipHeader();
+  notVaccinated = new skipHeader();
   next = NULL;
 }
 
 VarlistNode::~VarlistNode(){
   delete bloom;
+  delete vaccinated;
+  delete notVaccinated;
 }
 
-void VarlistNode::insertRecord(int* id, string v, string dv){
-  if(bloom->is_inside(*id)){
-    //check if is trully inside
-    cout << "ERROR record already inside " << endl;
+void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv){
+  if(v == "YES"){
+    if(notVaccinated->searchItem(*id)){
+      //remove from notVaccinated and add to vaccinated
+    }else{
+      string* dateV = new string(dv);
+      if(vaccinated->insertItem(id, c, dateV)){
+        bloom->insert(*id);
+      }else{
+        cout << "ERROR record already inside " << endl;
+      }
+    }
   }else{
-    bloom->insert(*id);
-    //add to the correct skip list
+    if(vaccinated->searchItem(*id)){
+      cout << "ERROR record already vaccinated " << endl;
+    }else{
+      if(!(notVaccinated->insertItem(id, c, NULL))){
+        cout << "ERROR record already inside " << endl;
+      }
+    }
   }
 }
 

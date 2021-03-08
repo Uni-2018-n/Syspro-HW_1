@@ -3,25 +3,26 @@
 #include <iostream>
 
 #include "bloomFilter.hpp"
-
+#include "skipList.hpp"
+#include "../classes.hpp"
 using namespace std;
 
 class VarlistNode{
 public:
   string item;
   bloomFilter* bloom;
-  //vaccinated skip list
-  //not vaccinated skip list
+  skipHeader* vaccinated;
+  skipHeader* notVaccinated;
   VarlistNode* next;
   VarlistNode(string i, int l);
   ~VarlistNode();
-  void insertRecord(int* id, string v, string dv);
+  void insertRecord(int* id, citizenRecord* c, string v, string dv);
 };
 
 class VarlistHeader{
   VarlistNode* start;
   VarlistNode* end;
-  int bloom_len;//TODO: make this without dublicates
+  int bloom_len;
 public:
   VarlistHeader(int);
   ~VarlistHeader();

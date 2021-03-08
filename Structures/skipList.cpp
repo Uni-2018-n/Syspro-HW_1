@@ -3,48 +3,58 @@
 #include <math.h>
 using namespace std;
 
-//////////////////////////// List
-List::List(int* i){//initialize i
+//////////////////////////// SkiplistNode
+SkiplistNode::SkiplistNode(int* i, citizenRecord* c, string* dv){//initialize i
   item = i;
+  citizen = c;
+  date_vaccinated = dv;
   lower_level = NULL;
   next = NULL;
 }
 
-List::List(List* i){//copy i and set lower_level
+SkiplistNode::SkiplistNode(SkiplistNode* i){//copy i and set lower_level
   item = i->item;
+  date_vaccinated = NULL;
+  citizen = NULL;
   lower_level = i;
   next = NULL;
 }
 
-List::List(List* i, List* n){//copy i and set it to lower lever also add next node
+SkiplistNode::SkiplistNode(SkiplistNode* i, SkiplistNode* n){//copy i and set it to lower lever also add next node
   item = i->item;
+  date_vaccinated = NULL;
+  citizen = NULL;
   next = n;
   lower_level= i;
 }
 
-List::List(int* i, List* n){//initialize i and set next node
+SkiplistNode::SkiplistNode(int* i, citizenRecord* c, string* dv, SkiplistNode* n){//initialize i and set next node
   item = i;
+  date_vaccinated = dv;
+  citizen = c;
   next = n;
   lower_level = NULL;
 }
 
-List::~List(){
-  //dont need to free anything cause we are taking things from stack
+SkiplistNode::~SkiplistNode(){
+  if(date_vaccinated != NULL){
+    delete date_vaccinated;
+  }
 }
 
-void List::testPrint(){
+void SkiplistNode::testPrint(){
   cout << *item << " ";
 }
 
-//////////////////////////// listHeader
-listHeader::listHeader(){
+//////////////////////////// SkiplistHeader
+SkiplistHeader::SkiplistHeader(){
   start = NULL;
   pl =0;
 }
 
-listHeader::~listHeader(){
-  List* temp = start;
-  List* tmp = NULL;
+SkiplistHeader::~SkiplistHeader(){
+  SkiplistNode* temp = start;
+  SkiplistNode* tmp = NULL;
   while(temp != NULL){
     tmp = temp->getNext();
     delete temp;
@@ -52,15 +62,15 @@ listHeader::~listHeader(){
   }
 }
 
-List* listHeader::insertAtStart(List* i){
-  List* new_item = new List(i, start);
+SkiplistNode* SkiplistHeader::insertAtStart(SkiplistNode* i){
+  SkiplistNode* new_item = new SkiplistNode(i, start);
   start = new_item;
   pl++;
   return new_item;
 }
 
-List* listHeader::searchItem(int i){
-  List* temp = start;
+SkiplistNode* SkiplistHeader::searchItem(int i){
+  SkiplistNode* temp = start;
   if(temp == NULL){
     return NULL;
   }
@@ -103,16 +113,16 @@ List* listHeader::searchItem(int i){
       }
     }
   }
-  cout << "listheader::searchItem gone here im illegal" << endl; //TODO: remove this
+  cout << "SkiplistHeader::searchItem gone here im illegal" << endl; //TODO: remove this
   return NULL;
 }
 
-List* listHeader::insertItem(int* i, int top_lvl){
-  List** level_array = new List*[3];//TODO: set this as max_lvl
+SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, int top_lvl){
+  SkiplistNode** level_array = new SkiplistNode*[MAXIMUM];//TODO: set this as max_lvl
   int lvl_counter=0;
-  List* temp = start;
+  SkiplistNode* temp = start;
   if(temp == NULL){
-    List* new_node = new List(i, start);
+    SkiplistNode* new_node = new SkiplistNode(i, c, dv, start);
     start = new_node;
     pl++;
     delete[] level_array;
@@ -126,7 +136,7 @@ List* listHeader::insertItem(int* i, int top_lvl){
     return NULL;//found
   }else if(temp->getItem() > *i){
     if(temp->getLowerLevel() == NULL && temp->getItem() > *i){//case this is needs to be the first node of last layer
-      List* new_node = new List(i, start);
+      SkiplistNode* new_node = new SkiplistNode(i, c, dv, start);
       start = new_node;
       pl++;
       delete[] level_array;
@@ -140,12 +150,12 @@ List* listHeader::insertItem(int* i, int top_lvl){
     if(temp->getItem() < *i){
       while(temp->getNext() == NULL){
         if(temp->getLowerLevel() == NULL){//case we are in lowest level and the item needs to be in the end
-          List* new_node = new List(i, NULL);
+          SkiplistNode* new_node = new SkiplistNode(i, c, NULL);
           temp->setNext(new_node);
           {
             while(lvl_counter> 0 && top_lvl>0){
               lvl_counter--;
-              List* tmp = new List(new_node, level_array[lvl_counter]->getNext());
+              SkiplistNode* tmp = new SkiplistNode(new_node, level_array[lvl_counter]->getNext());
               level_array[lvl_counter]->setNext(tmp);
               new_node = tmp;
               top_lvl--;
@@ -174,12 +184,12 @@ List* listHeader::insertItem(int* i, int top_lvl){
     if(temp->getNext()->getItem() > *i){
       if(temp->getLowerLevel() == NULL){
         //dosent exist
-        List* new_node = new List(i, temp->getNext());
+        SkiplistNode* new_node = new SkiplistNode(i, c, dv, temp->getNext());
         temp->setNext(new_node);
         {
           while(lvl_counter> 0 && top_lvl > 0){
             lvl_counter--;
-            List* tmp = new List(new_node, level_array[lvl_counter]->getNext());
+            SkiplistNode* tmp = new SkiplistNode(new_node, level_array[lvl_counter]->getNext());
             level_array[lvl_counter]->setNext(tmp);
             new_node = tmp;
             top_lvl--;
@@ -196,13 +206,13 @@ List* listHeader::insertItem(int* i, int top_lvl){
       temp= temp->getNext();
       while(temp->getNext() == NULL){
         if(temp->getLowerLevel() == NULL){
-          //dosent exist, case: last item in list.
-          List* new_node = new List(i);
+          //dosent exist, case: last item in SkiplistNode.
+          SkiplistNode* new_node = new SkiplistNode(i, c, dv);
           temp->setNext(new_node);
           {
             while(lvl_counter> 0 && top_lvl>0){
               lvl_counter--;
-              List* tmp = new List(new_node, level_array[lvl_counter]->getNext());
+              SkiplistNode* tmp = new SkiplistNode(new_node, level_array[lvl_counter]->getNext());
               level_array[lvl_counter]->setNext(tmp);
               new_node = tmp;
               top_lvl--;
@@ -218,12 +228,12 @@ List* listHeader::insertItem(int* i, int top_lvl){
       }
     }
   }
-  cout << "listheader::insertItem gone here im illegal" << endl; //TODO: remove this
+  cout << "SkiplistHeader::insertItem gone here im illegal" << endl; //TODO: remove this
   return NULL;
 }
 
-void listHeader::testPrint(){
-  List* temp = start;
+void SkiplistHeader::testPrint(){
+  SkiplistNode* temp = start;
   while(temp != NULL){
     temp->testPrint();
     temp = temp->getNext();
@@ -232,12 +242,12 @@ void listHeader::testPrint(){
 
 //////////////////////////////////////// skipNode
 skipNode::skipNode(){
-  item= new listHeader();
+  item= new SkiplistHeader();
   next= NULL;
   prev= NULL;
 }
 
-List* skipNode::insertAtStart(List* i){
+SkiplistNode* skipNode::insertAtStart(SkiplistNode* i){
   return item->insertAtStart(i);
 }
 
@@ -280,13 +290,13 @@ void skipHeader::addLayer(){
 
 bool skipHeader::searchItem(int i){
   skipNode* temp = end;
-  while(temp->getItem()->getPl() == 0){//case no items in lists
+  while(temp->getItem()->getPl() == 0){//case no items in SkiplistNodes
     temp = temp->getPrev();
-    if(temp == NULL){//case no items in skip list
+    if(temp == NULL){//case no items in skip SkiplistNode
       return false;
     }
   }
-  List* tmp = temp->getItem()->searchItem(i);//start searching from the first list with items
+  SkiplistNode* tmp = temp->getItem()->searchItem(i);//start searching from the first SkiplistNode with items
   if(tmp != NULL){//if it found something
       while(tmp->getItem() > i && temp->getPrev() != NULL){//if tmp->item > i that means that we need to start searching from lower level
         temp = temp->getPrev();
@@ -304,7 +314,7 @@ bool skipHeader::searchItem(int i){
   }
 }
 
-bool skipHeader::insertItem(int* i){
+bool skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
   // int top_lvl = rand() % max_lvl + 0;
   int top_lvl =0;//calculate in how many levels the item will go to
   {
@@ -320,15 +330,15 @@ bool skipHeader::insertItem(int* i){
   }
   // cout << "top level: " << top_lvl << endl; //TODO: clean
   int skiped_layers =0;//used to see how many layers was skiped because first item is > i
-  skipNode* temp = end;//use of dual linked list, start == list with all the items. with that in mind, we start our search with the list with the less amount of items
+  skipNode* temp = end;//use of dual linked SkiplistNode, start == SkiplistNode with all the items. with that in mind, we start our search with the SkiplistNode with the less amount of items
   while(temp->getItem()->getPl() == 0){//same with search
-    if(temp->getPrev() == NULL){//if for example list with all the items is empty, need to add it there
+    if(temp->getPrev() == NULL){//if for example SkiplistNode with all the items is empty, need to add it there
       break;
     }
     temp = temp->getPrev();
     skiped_layers++;
   }
-  List* tmp = temp->getItem()->insertItem(i, top_lvl);
+  SkiplistNode* tmp = temp->getItem()->insertItem(i, c, dv, top_lvl);
   bool final;
   bool final_tmp= false;
   if(tmp != NULL){
@@ -338,7 +348,7 @@ bool skipHeader::insertItem(int* i){
     while(tmp->getItem() > *i && temp->getPrev() != NULL){
       skiped_layers++;
       temp = temp->getPrev();
-      tmp = temp->getItem()->insertItem(i, top_lvl);
+      tmp = temp->getItem()->insertItem(i, c, dv, top_lvl);
       if(tmp == NULL){//item couldnt be inserted, already exists
         final = false;
         final_tmp = true;
@@ -356,11 +366,12 @@ bool skipHeader::insertItem(int* i){
     t= top_lvl-t;
     while(t>0 && temp->getNext() != NULL){
       temp = temp->getNext();
-      tmp = temp->insertAtStart(tmp);//the first item of every skiped list is >i so insert i as first
+      tmp = temp->insertAtStart(tmp);//the first item of every skiped SkiplistNode is >i so insert i as first
       t--;
     }
     return true;
   }else{
+    delete dv;
     return false;
   }
 }
