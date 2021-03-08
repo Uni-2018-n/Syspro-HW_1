@@ -13,7 +13,7 @@ public:
   int age;
   citizenRecord(string, string, string, string*, string);
   ~citizenRecord();
-  void testPrint();
+  void print();
 };
 
 #endif

@@ -13,10 +13,10 @@ citizenRecord::~citizenRecord(){
   delete citizenId;
 }
 
-void citizenRecord::testPrint(){
-  cout << citizenId << endl;
-  cout << firstName << endl;
-  cout << lastName << endl;
-  cout << country << endl;
-  cout << age << endl;
+void citizenRecord::print(){
+  cout << *citizenId << " " <<
+  firstName << " " <<
+  lastName << " " <<
+  *country << " " <<
+  age << endl;
 }

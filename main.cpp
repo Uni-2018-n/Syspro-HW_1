@@ -33,7 +33,17 @@ int main(int argc, char* argv[]){
     }
     main_list->testPrint();
   }
+  cout << endl;
 
+  cout << endl;
+  main_list->vaccineStatusBloom(889, "H1N1");
+  cout << endl;
+  main_list->vaccineStatus(889);
+  cout << endl;
+  main_list->vaccineStatus(889, "H1N1");
+  cout << endl;
+  main_list->listNonVaccinatedPersons("H1N1");
+  cout << endl;
 
 
 

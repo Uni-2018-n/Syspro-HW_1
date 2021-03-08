@@ -28,6 +28,11 @@ public:
   ~VarlistHeader();
   VarlistNode* insertVirus(string i);
   VarlistNode* searchVirus(string);
+  void vaccineStatusBloom(int i, string v);
+  void vaccineStatus(int i, string v);
+  void vaccineStatus(int i);
+  void listNonVaccinatedPersons(string v);
+
   void testPrint();
 };
 

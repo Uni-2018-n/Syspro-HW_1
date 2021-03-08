@@ -8,7 +8,7 @@ using namespace std;
 #define MAXIMUM 3
 
 class SkiplistNode{//nodes
-  int* item;//id
+  int* item;//id TODO use citizens id not diffrent variable
   citizenRecord* citizen;
   string* date_vaccinated;
   SkiplistNode* next;
@@ -33,6 +33,7 @@ public:
     return lower_level;
   }
 
+  void print();
   void testPrint();
 };
 
@@ -49,14 +50,14 @@ public:
   int getPl(){
     return pl;
   }
-
+  void print();
   void testPrint();
 };
 /////////////////////////////////////
 class skipNode{//nodes of lists
+  SkiplistHeader* item;
   skipNode* prev;
   skipNode* next;
-  SkiplistHeader* item;
 public:
   skipNode();
   ~skipNode();
@@ -78,6 +79,7 @@ public:
     prev = p;
   }
 
+  void print();
   void testPrint();
 };
 
@@ -92,6 +94,7 @@ public:
   ~skipHeader();
   bool searchItem(int i);
   bool insertItem(int* i, citizenRecord* c, string* dv);
+  void print();
   void testPrint();
 };
 #endif

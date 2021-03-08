@@ -19,7 +19,8 @@ VarlistNode::~VarlistNode(){
 void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv){
   if(v == "YES"){
     if(notVaccinated->searchItem(*id)){
-      //remove from notVaccinated and add to vaccinated
+      //TODO: remove from notVaccinated and add to vaccinated
+      cout << "ERROR record was not vaccinated but not vaccinated dont know what to do" << endl;
     }else{
       string* dateV = new string(dv);
       if(vaccinated->insertItem(id, c, dateV)){
@@ -76,6 +77,73 @@ VarlistNode* VarlistHeader::searchVirus(string i){
     temp = temp->next;
   }
   return NULL;
+}
+
+void VarlistHeader::vaccineStatusBloom(int i, string v){
+  VarlistNode* temp = start;
+  while(temp != NULL){
+    if(temp->item == v){
+      break;
+    }
+    temp = temp->next;
+  }
+  if(temp == NULL){
+    cout << "Virus not found" << endl;
+  }else{
+    if(temp->bloom->is_inside(i)){
+      cout << "MAYBE" << endl;
+    }else{
+      cout << "NOT VACCINATED" << endl;
+    }
+  }
+}
+
+void VarlistHeader::vaccineStatus(int i, string v){
+  VarlistNode* temp = start;
+  while(temp != NULL){
+    if(temp->item == v){
+      break;
+    }
+    temp = temp->next;
+  }
+  if(temp == NULL){
+    cout << "Virus not found" << endl;
+    return;
+  }else{
+    if(temp->vaccinated->searchItem(i)){
+      cout << "VACCINATED ON " << endl; //TODO: add date
+      return;
+    }
+    cout << "NOT VACCINATED" << endl;
+  }
+}
+
+void VarlistHeader::vaccineStatus(int i){
+  VarlistNode* temp = start;
+  while(temp != NULL){
+    if(temp->vaccinated->searchItem(i)){
+      cout << temp->item << " YES " << endl; //TODO: add date
+    }else{
+      cout << temp->item << " NO" << endl;
+    }
+    temp = temp->next;
+  }
+}
+
+void VarlistHeader::listNonVaccinatedPersons(string v){
+  VarlistNode* temp = start;
+  while(temp != NULL){
+    if(temp->item == v){
+      break;
+    }
+    temp = temp->next;
+  }
+  if(temp == NULL){
+    cout << "Virus not found" << endl;
+    return;
+  }else{
+    temp->notVaccinated->print();
+  }
 }
 
 void VarlistHeader::testPrint(){

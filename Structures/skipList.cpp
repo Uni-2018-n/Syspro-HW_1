@@ -42,6 +42,10 @@ SkiplistNode::~SkiplistNode(){
   }
 }
 
+void SkiplistNode::print(){
+  citizen->print();
+}
+
 void SkiplistNode::testPrint(){
   cout << *item << " ";
 }
@@ -86,6 +90,9 @@ SkiplistNode* SkiplistHeader::searchItem(int i){
     if(temp->getItem() < i){
       while(temp->getNext() == NULL){
         temp = temp->getLowerLevel();
+        if(temp == NULL){
+          return NULL;
+        }
       }
     }
   }
@@ -232,6 +239,14 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
   return NULL;
 }
 
+void SkiplistHeader::print(){
+  SkiplistNode* temp = start;
+  while(temp != NULL){
+    temp->print();
+    temp = temp->getNext();
+  }
+}
+
 void SkiplistHeader::testPrint(){
   SkiplistNode* temp = start;
   while(temp != NULL){
@@ -253,6 +268,10 @@ SkiplistNode* skipNode::insertAtStart(SkiplistNode* i){
 
 skipNode::~skipNode(){
   delete item;
+}
+
+void skipNode::print(){
+  item->print();
 }
 
 void skipNode::testPrint(){
@@ -374,6 +393,10 @@ bool skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
     delete dv;
     return false;
   }
+}
+
+void skipHeader::print(){
+  start->print();
 }
 
 void skipHeader::testPrint(){

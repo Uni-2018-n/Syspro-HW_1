@@ -26,6 +26,10 @@ public:
   ~GlistHeader();
   listNode* searchCitizen(int);
   void insertRecord(string line);
+  void vaccineStatusBloom(int i, string v);
+  void vaccineStatus(int i, string v);
+  void vaccineStatus(int i);
+  void listNonVaccinatedPersons(string v);
   void testPrint();
 };
 

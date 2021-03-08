@@ -109,6 +109,22 @@ void GlistHeader::insertRecord(string line){
   }
 }
 
+void GlistHeader::vaccineStatusBloom(int i, string v){
+  viruses->vaccineStatusBloom(i,v);
+}
+
+void GlistHeader::vaccineStatus(int i, string v){
+  viruses->vaccineStatus(i, v);
+}
+
+void GlistHeader::vaccineStatus(int i){
+  viruses->vaccineStatus(i);
+}
+
+void GlistHeader::listNonVaccinatedPersons(string v){
+  viruses->listNonVaccinatedPersons(v);
+}
+
 void GlistHeader::testPrint(){
   listNode* temp = start;
   while(temp != NULL){
