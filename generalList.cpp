@@ -125,6 +125,16 @@ void GlistHeader::insertCitizenRecord(string line){
   insertRecord(line);
 }
 
+void GlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, string v){
+  if(!viruses->vaccinateNow(i, fn, ln, c, a, v)){
+    cout << "im here" << endl;
+    time_t t= time(0);
+    tm* n = localtime(&t);
+    string dv = to_string(n->tm_mday) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_year + 1900);
+    insertRecord(i + " " + fn + " " + ln + " " + a + " " + v + "YES " + dv);
+  }
+}
+
 void GlistHeader::listNonVaccinatedPersons(string v){
   viruses->listNonVaccinatedPersons(v);
 }

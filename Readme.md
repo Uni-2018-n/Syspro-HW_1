@@ -1,4 +1,4 @@
 TODO: VarlistHeader -> VirlistHeader...
 
-for insert into virus node:
-needs citizen id, vac or not, date vacced(- if not vacced or make new structure)
+skip list delete: set -- the pl of nodes in each SkiplistHeader
+check if not doing it in insert

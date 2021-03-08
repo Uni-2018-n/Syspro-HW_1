@@ -12,6 +12,7 @@ class SkiplistNode{//nodes
   citizenRecord* citizen;
   string* date_vaccinated;
   SkiplistNode* next;
+  SkiplistNode* prev;
   SkiplistNode* lower_level;
 public:
   SkiplistNode(int* i, citizenRecord* c, string* dv);
@@ -23,6 +24,9 @@ public:
   int getItem(){
     return *item;
   }
+  citizenRecord* getCitizen(){
+    return citizen;
+  }
   SkiplistNode* getNext(){
     return next;
   }
@@ -32,6 +36,12 @@ public:
   SkiplistNode* getLowerLevel(){
     return lower_level;
   }
+  void setPrev(SkiplistNode* p){
+    prev = p;
+  }
+  SkiplistNode* getPrev(){
+    return prev;
+  }
 
   void print();
   void testPrint();
@@ -39,16 +49,24 @@ public:
 
 class SkiplistHeader{//list
   SkiplistNode* start;
-  int pl;
 public:
   SkiplistHeader();
   ~SkiplistHeader();
   SkiplistNode* insertAtStart(SkiplistNode* i);
   SkiplistNode* insertItem(int* i, citizenRecord* c, string* dv, int top_lvl);
   SkiplistNode* searchItem(int i);
-
-  int getPl(){
-    return pl;
+  SkiplistNode* deleteItem(int i);
+  SkiplistNode* getFirst(){
+    return start;
+  }
+  void removeFirst(){
+    if(start->getLowerLevel() == NULL){
+      start= start->getNext();
+      return;
+    }
+    SkiplistNode* temp = start->getNext();
+    delete start;
+    start= temp;
   }
   void print();
   void testPrint();
@@ -79,6 +97,10 @@ public:
     prev = p;
   }
 
+  void removeFirst(){
+    item->removeFirst();
+  }
+
   void print();
   void testPrint();
 };
@@ -94,6 +116,7 @@ public:
   ~skipHeader();
   bool searchItem(int i);
   bool insertItem(int* i, citizenRecord* c, string* dv);
+  SkiplistNode* deleteItem(int i);
   void print();
   void testPrint();
 };

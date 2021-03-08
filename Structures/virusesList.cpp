@@ -1,7 +1,6 @@
 #include <iostream>
 #include "virusesList.hpp"
 
-
 VarlistNode::VarlistNode(string i, int l){
   item = i;
   bloom = new bloomFilter(l);
@@ -127,6 +126,35 @@ void VarlistHeader::vaccineStatus(int i){
       cout << temp->item << " NO" << endl;
     }
     temp = temp->next;
+  }
+}
+
+bool VarlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, string v){
+  VarlistNode* temp = start;
+  while(temp != NULL){
+    if(temp->item == v){
+      break;
+    }
+    temp = temp->next;
+  }
+  if(temp == NULL){
+    return false;
+  }
+  if(temp->vaccinated->searchItem(i)){
+    cout << "ERROR: CITIZEN " << i << " ALREADY VACCINATED ON " << endl; //TODO: add date
+    return true;
+  }
+
+  SkiplistNode* tmp = temp->notVaccinated->deleteItem(i);
+  if(tmp == NULL){
+    return false;
+  }else{
+    time_t t= time(0);
+    tm* n = localtime(&t);
+    string* tt = new string(to_string(n->tm_mday) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_year + 1900));
+    temp->vaccinated->insertItem(tmp->getCitizen()->citizenId, tmp->getCitizen(), tt);
+    delete tmp;
+    return true;
   }
 }
 

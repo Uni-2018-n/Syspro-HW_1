@@ -1,13 +1,14 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
-
+#include <time.h>
 #include "classes.hpp"
 #include "generalList.hpp"
 
 using namespace std;
 
 int main(int argc, char* argv[]){
+  srand(time(NULL));
   char* pathToRecords;
   int bloomSize;
   if(argc != 5){
@@ -46,6 +47,7 @@ int main(int argc, char* argv[]){
   "/vaccinateNow citizenID firstName lastName country age virusName" << endl <<
   "/list-nonVaccinated-Persons virusName" << endl <<
   "/exit" << endl << endl;
+
   while(true){
     string command;
     cin >> command;
@@ -85,7 +87,7 @@ int main(int argc, char* argv[]){
     }else if(command == "/insertCitizenRecord"){
       main_list->insertCitizenRecord(line);
     }else if(command == "/vaccinateNow"){
-
+      main_list->vaccinateNow(stoi(temp[0]), temp[1], temp[2], temp[3], temp[4], temp[5]);
     }else if(command == "/list-nonVaccinated-Persons"){
       main_list->listNonVaccinatedPersons(temp[0]);
     }

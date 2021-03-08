@@ -31,6 +31,7 @@ public:
   void vaccineStatusBloom(int i, string v);
   void vaccineStatus(int i, string v);
   void vaccineStatus(int i);
+  bool vaccinateNow(int i, string fn, string ln, string c, string a, string v);
   void listNonVaccinatedPersons(string v);
 
   void testPrint();
