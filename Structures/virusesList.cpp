@@ -19,19 +19,18 @@ VarlistNode::~VarlistNode(){
 void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv){
   if(v == "YES"){
     if(notVaccinated->searchItem(*id)){
-      //TODO: remove from notVaccinated and add to vaccinated
-      cout << "ERROR record was not vaccinated but not vaccinated dont know what to do" << endl;
+      cout << "ERROR record cant be vaccinated now because already been not vaccinated" << endl;
     }else{
       string* dateV = new string(dv);
       if(vaccinated->insertItem(id, c, dateV)){
         bloom->insert(*id);
       }else{
-        cout << "ERROR record already inside " << endl;
+        cout << "ERROR: citizen " << *id << " ALREADY VACCINATED ON " << endl; //TODO: add date
       }
     }
   }else{
     if(vaccinated->searchItem(*id)){
-      cout << "ERROR record already vaccinated " << endl;
+      cout << "ERROR: citizen " << id << "ALREADY VACCINATED ON " << endl; //TODO: add date
     }else{
       if(!(notVaccinated->insertItem(id, c, NULL))){
         cout << "ERROR record already inside " << endl;
@@ -110,6 +109,7 @@ void VarlistHeader::vaccineStatus(int i, string v){
     cout << "Virus not found" << endl;
     return;
   }else{
+
     if(temp->vaccinated->searchItem(i)){
       cout << "VACCINATED ON " << endl; //TODO: add date
       return;

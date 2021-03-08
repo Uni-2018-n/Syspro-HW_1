@@ -121,6 +121,10 @@ void GlistHeader::vaccineStatus(int i){
   viruses->vaccineStatus(i);
 }
 
+void GlistHeader::insertCitizenRecord(string line){
+  insertRecord(line);
+}
+
 void GlistHeader::listNonVaccinatedPersons(string v){
   viruses->listNonVaccinatedPersons(v);
 }

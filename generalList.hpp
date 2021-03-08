@@ -29,6 +29,7 @@ public:
   void vaccineStatusBloom(int i, string v);
   void vaccineStatus(int i, string v);
   void vaccineStatus(int i);
+  void insertCitizenRecord(string line);
   void listNonVaccinatedPersons(string v);
   void testPrint();
 };
