@@ -44,6 +44,10 @@ public:
     return prev;
   }
 
+  string getDateVaccinated(){
+    return *date_vaccinated;
+  }
+
   void print();
   void testPrint();
 };
@@ -116,8 +120,8 @@ class skipHeader{//list of lists
 public:
   skipHeader();
   ~skipHeader();
-  bool searchItem(int i);
-  bool insertItem(int* i, citizenRecord* c, string* dv);
+  SkiplistNode* searchItem(int i);
+  SkiplistNode* insertItem(int* i, citizenRecord* c, string* dv);
   SkiplistNode* deleteItem(int i);
   void print();
   void testPrint();

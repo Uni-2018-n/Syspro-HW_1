@@ -22,20 +22,20 @@ void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv){
     }else{
       string* dateV = new string(dv);
       // cout << "test: " << *dateV << endl;
-      if(vaccinated->insertItem(id, c, dateV)){
+      SkiplistNode* t= vaccinated->insertItem(id, c, dateV);
+      if(t->getDateVaccinated() == dv){
         bloom->insert(*id);
       }else{
-        cout << "ERROR: citizen " << *id << " ALREADY VACCINATED ON " << endl; //TODO: add date
+        cout << "ERROR: citizen " << *id << " ALREADY VACCINATED ON " << t->getDateVaccinated() << endl;
         delete dateV;
       }
     }
   }else{
-    if(vaccinated->searchItem(*id)){
-      cout << "ERROR: citizen " << id << "ALREADY VACCINATED ON " << endl; //TODO: add date
+    SkiplistNode* t= vaccinated->searchItem(*id);
+    if(t != NULL){
+      cout << "ERROR: citizen " << id << "ALREADY VACCINATED ON " << t->getDateVaccinated() << endl;
     }else{
-      if(!(notVaccinated->insertItem(id, c, NULL))){
-        cout << "ERROR record already inside " << endl;
-      }
+      notVaccinated->insertItem(id, c, NULL);
     }
   }
 }
@@ -110,9 +110,9 @@ void VarlistHeader::vaccineStatus(int i, string v){
     cout << "Virus not found" << endl;
     return;
   }else{
-
-    if(temp->vaccinated->searchItem(i)){
-      cout << "VACCINATED ON " << endl; //TODO: add date
+    SkiplistNode* t = temp->vaccinated->searchItem(i);
+    if(t != NULL){
+      cout << "VACCINATED ON " << t->getDateVaccinated() << endl;
       return;
     }
     cout << "NOT VACCINATED" << endl;
@@ -122,10 +122,11 @@ void VarlistHeader::vaccineStatus(int i, string v){
 void VarlistHeader::vaccineStatus(int i){
   VarlistNode* temp = start;
   while(temp != NULL){
-    if(temp->vaccinated->searchItem(i)){
-      cout << temp->item << " YES " << endl; //TODO: add date
+    SkiplistNode* t = temp->vaccinated->searchItem(i);
+    if(t != NULL){
+      cout << temp->item << " YES " << t->getDateVaccinated() << endl;
     }else{
-      cout << temp->item << " NO" << endl;
+      cout << temp->item << " NO " << endl;
     }
     temp = temp->next;
   }
@@ -142,8 +143,9 @@ bool VarlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a
   if(temp == NULL){
     return false;
   }
-  if(temp->vaccinated->searchItem(i)){
-    cout << "ERROR: CITIZEN " << i << " ALREADY VACCINATED ON " << endl; //TODO: add date
+  SkiplistNode* t = temp->vaccinated->searchItem(i);
+  if(t != NULL){
+    cout << "ERROR: CITIZEN " << i << " ALREADY VACCINATED ON " << t->getDateVaccinated() << endl;
     return true;
   }
 

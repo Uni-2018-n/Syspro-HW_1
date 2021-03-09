@@ -170,9 +170,10 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
     if(temp->getItem() < *i){
       while(temp->getNext() == NULL){
         if(temp->getLowerLevel() == NULL){//case we are in lowest level and the item needs to be in the end
-          SkiplistNode* new_node = new SkiplistNode(i, c, NULL);
+          SkiplistNode* new_node = new SkiplistNode(i, c, dv);
           temp->setNext(new_node);
           new_node->setPrev(temp);
+          SkiplistNode* to_return = new_node;
           {
             while(lvl_counter> 0 && top_lvl>0){
               lvl_counter--;
@@ -187,7 +188,7 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
             }
           }
           delete[] level_array;
-          return new_node;
+          return to_return;
         }
         level_array[lvl_counter] = temp;
         lvl_counter++;
@@ -214,6 +215,7 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
         }
         temp->setNext(new_node);
         new_node->setPrev(temp);
+        SkiplistNode* to_return = new_node;
         {
           while(lvl_counter> 0 && top_lvl > 0){
             lvl_counter--;
@@ -228,7 +230,7 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
           }
         }
         delete[] level_array;
-        return new_node;
+        return to_return;
       }
       level_array[lvl_counter] = temp;
       lvl_counter++;
@@ -241,6 +243,7 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
           SkiplistNode* new_node = new SkiplistNode(i, c, dv);
           temp->setNext(new_node);
           new_node->setPrev(temp);
+          SkiplistNode* to_return = new_node;
           {
             while(lvl_counter> 0 && top_lvl>0){
               lvl_counter--;
@@ -255,7 +258,7 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
             }
           }
           delete[] level_array;
-          return new_node;
+          return to_return;
         }
         level_array[lvl_counter] = temp;
         lvl_counter++;
@@ -418,12 +421,12 @@ void skipHeader::addLayer(){
   end = end->getNext();
 }
 
-bool skipHeader::searchItem(int i){
+SkiplistNode* skipHeader::searchItem(int i){
   skipNode* temp = end;
   while(temp->getItem()->getFirst() == NULL){//case no items in SkiplistNodes
     temp = temp->getPrev();
     if(temp == NULL){//case no items in skip SkiplistNode
-      return false;
+      return NULL;
     }
   }
   SkiplistNode* tmp = temp->getItem()->searchItem(i);//start searching from the first SkiplistNode with items
@@ -432,19 +435,19 @@ bool skipHeader::searchItem(int i){
         temp = temp->getPrev();
         tmp = temp->getItem()->searchItem(i);//search lower level
         if(tmp == NULL){//item not found
-          return false;
+          return NULL;
         }
       }
       if(temp->getPrev() == NULL && tmp != NULL && tmp->getItem() != i){//case every first item of each level is > i
-        return false;
+        return NULL;
       }
-      return true;
+      return tmp;
   }else{
-    return false;
+    return NULL;
   }
 }
 
-bool skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
+SkiplistNode* skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
   // int top_lvl = rand() % max_lvl + 0;
   int top_lvl =0;//calculate in how many levels the item will go to
   {
@@ -491,6 +494,7 @@ bool skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
   }else{//item couldnt be inserted, already exists
     final = false;
   }
+  SkiplistNode* to_return = tmp;
   if(final){//insert the item to every level that it needs to
     int t= max_lvl-skiped_layers;
     t= top_lvl-t;
@@ -499,10 +503,10 @@ bool skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
       tmp = temp->insertAtStart(tmp);//the first item of every skiped SkiplistNode is >i so insert i as first
       t--;
     }
-    return true;
+    return to_return;
   }else{
     delete dv;
-    return false;
+    return NULL;
   }
 }
 

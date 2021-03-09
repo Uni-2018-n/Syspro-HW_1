@@ -32,7 +32,7 @@ int main(int argc, char* argv[]){
     while(getline(records, line)){
       main_list->insertRecord(line);
     }
-    main_list->testPrint();
+    // main_list->testPrint();
   }
   delete[] pathToRecords;
   records.close();
