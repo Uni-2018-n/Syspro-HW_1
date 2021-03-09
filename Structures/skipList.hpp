@@ -2,17 +2,10 @@
 #define _SKIPLIST_HPP_
 
 #include <iostream>
-// #include "../classes.hpp"
+#include "../classes.hpp"
 using namespace std;
 
 #define MAXIMUM 3
-
-class citizenRecord {
-public:
-  void print(){
-
-  }
-};
 
 
 class SkiplistNode{//nodes
