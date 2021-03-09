@@ -48,6 +48,11 @@ int main(int argc, char* argv[]){
   "/list-nonVaccinated-Persons virusName" << endl <<
   "/exit" << endl << endl;
 
+  // main_list->vaccinateNow(776, "Maria", "Tortellini", "Italy", "36", "H1N1");
+  // main_list->listNonVaccinatedPersons("H1N1");
+  // delete main_list;
+  // return 0;
+
   while(true){
     string command;
     cin >> command;

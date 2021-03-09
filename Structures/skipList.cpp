@@ -41,6 +41,11 @@ SkiplistNode::SkiplistNode(int* i, citizenRecord* c, string* dv, SkiplistNode* n
 }
 
 SkiplistNode::~SkiplistNode(){
+  // if(date_vaccinated== NULL){
+  //   cout << "NULL" << endl;
+  // }else{
+  //   cout << *date_vaccinated << endl;
+  // }
   if(date_vaccinated != NULL){
     delete date_vaccinated;
   }
