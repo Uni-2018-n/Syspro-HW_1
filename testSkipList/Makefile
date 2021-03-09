@@ -1,9 +1,12 @@
 FLAGS = -std=c++11 -Wall -g -o
-SOURCE = main.cpp ../Structures/skipList.cpp
+SOURCE = main.cpp skipList.cpp
 ITEM = main
 
 run : compile
 	./$(ITEM)
+
+mem : compile
+	valgrind --leak-check=full ./$(ITEM)
 
 debug : $(ITEM)
 	gdb $(ITEM)
