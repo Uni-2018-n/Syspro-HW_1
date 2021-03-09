@@ -23,11 +23,13 @@ void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv){
       string* dateV = new string(dv);
       // cout << "test: " << *dateV << endl;
       SkiplistNode* t= vaccinated->insertItem(id, c, dateV);
-      if(t->getDateVaccinated() == dv){
-        bloom->insert(*id);
-      }else{
-        cout << "ERROR: citizen " << *id << " ALREADY VACCINATED ON " << t->getDateVaccinated() << endl;
-        delete dateV;
+      if(t != NULL){
+        if(t->getDateVaccinated() == dv){
+          bloom->insert(*id);
+        }else{
+          cout << "ERROR: citizen " << *id << " ALREADY VACCINATED ON " << t->getDateVaccinated() << endl;
+          delete dateV;
+        }
       }
     }
   }else{

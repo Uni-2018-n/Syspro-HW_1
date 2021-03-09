@@ -1,0 +1,3 @@
+/vaccinateNow 4812 qAbzC NLvyuZpZmD Monaco 85 Smallpox
+/vaccineStatus 4812 Smallpox
+/exit
