@@ -1,6 +1,5 @@
 #include "generalList.hpp"
 
-
 ////////////////////////////listNode
 listNode::listNode(citizenRecord* c){
   citizen = c;
@@ -11,6 +10,15 @@ listNode::~listNode(){
   delete citizen;
 }
 
+citizenRecord* listNode::getCitizen(){
+  return citizen;
+}
+void listNode::setNext(listNode* n){
+  next = n;
+}
+listNode* listNode::getNext(){
+  return next;
+}
 
 ////////////////////////////GlistHeader
 GlistHeader::GlistHeader(int bloom){
@@ -25,7 +33,7 @@ GlistHeader::~GlistHeader(){
   listNode* tmp = NULL;
   while(temp != NULL){
     tmp = temp;
-    temp = temp->next;
+    temp = temp->getNext();
     delete tmp;
   }
   delete countries;
@@ -35,10 +43,10 @@ GlistHeader::~GlistHeader(){
 listNode* GlistHeader::searchCitizen(int id){
   listNode* temp = start;
   while(temp != NULL){
-    if(*(temp->citizen->citizenId) == id){
+    if(*(temp->getCitizen()->citizenId) == id){
       return temp;
     }
-    temp = temp->next;
+    temp = temp->getNext();
   }
   return NULL;
 }
@@ -72,10 +80,10 @@ void GlistHeader::insertRecord(string line){
 
   listNode* tmp = searchCitizen(stoi(temp[0]));
   if(tmp != NULL){
-    if(tmp->citizen->firstName.compare(temp[1]) !=0 ||
-      tmp->citizen->lastName.compare(temp[2]) !=0 ||
-      tmp->citizen->country->compare(temp[3]) !=0 ||
-      tmp->citizen->age != stoi(temp[4])){
+    if(tmp->getCitizen()->firstName.compare(temp[1]) !=0 ||
+      tmp->getCitizen()->lastName.compare(temp[2]) !=0 ||
+      tmp->getCitizen()->country->compare(temp[3]) !=0 ||
+      tmp->getCitizen()->age != stoi(temp[4])){
         cout << "ERROR found record with same id but different data " << line << endl;
         return;
     }
@@ -84,7 +92,7 @@ void GlistHeader::insertRecord(string line){
     if(temp_virus == NULL){
       temp_virus = viruses->insertVirus(temp[5]);
     }
-    temp_virus->insertRecord(tmp->citizen->citizenId, tmp->citizen, temp[6], temp[7]);
+    temp_virus->insertRecord(tmp->getCitizen()->citizenId, tmp->getCitizen(), temp[6], temp[7]);
   }else{//first time we see this citizen
     string* temp_country = countries->searchItem(temp[3]);
     if(temp_country == NULL){
@@ -97,7 +105,7 @@ void GlistHeader::insertRecord(string line){
       start = new_node;
       end = new_node;
     }else{//if not, just insert citizen at end of list
-      end->next = new_node;
+      end->setNext(new_node);
       end = new_node;
     }
 
@@ -105,7 +113,7 @@ void GlistHeader::insertRecord(string line){
     if(temp_virus == NULL){
       temp_virus = viruses->insertVirus(temp[5]);
     }
-    temp_virus->insertRecord(new_node->citizen->citizenId, new_node->citizen, temp[6], temp[7]);
+    temp_virus->insertRecord(new_node->getCitizen()->citizenId, new_node->getCitizen(), temp[6], temp[7]);
   }
 }
 
@@ -130,8 +138,8 @@ void GlistHeader::populationStatus(string vn, string don, string dt, string c){/
   if(temp == NULL){
     cout << "ERROR VIRUS NOT FOUND" << endl;
   }else{
-    countryStatsNode* stats = temp->vaccinated->populationStatus(don, dt, c);
-    stats = temp->notVaccinated->populationStatus(stats, c);
+    countryStatsNode* stats = temp->getVacced()->populationStatus(don, dt, c);
+    stats = temp->getNotVacced()->populationStatus(stats, c);
     stats->print();
     delete stats;
   }
@@ -142,8 +150,8 @@ void GlistHeader::populationStatus(string vn, string don, string dt){//without c
   if(temp == NULL){
     cout << "ERROR VIRUS NOT FOUND" << endl;
   }else{
-    countryStatsHeader* stats = temp->vaccinated->populationStatus(don, dt);
-    stats = temp->notVaccinated->populationStatus(stats);
+    countryStatsHeader* stats = temp->getVacced()->populationStatus(don, dt);
+    stats = temp->getNotVacced()->populationStatus(stats);
     stats->print();
     delete stats;
   }
@@ -165,25 +173,10 @@ void GlistHeader::listNonVaccinatedPersons(string v){
 void GlistHeader::testPrint(){
   listNode* temp = start;
   while(temp != NULL){
-    cout << *(temp->citizen->citizenId) << "-> ";
-    temp = temp->next;
+    cout << *(temp->getCitizen()->citizenId) << "-> ";
+    temp = temp->getNext();
   }
   cout << endl;
   countries->testPrint();
   viruses->testPrint();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//

@@ -180,7 +180,7 @@ int main(int argc, char* argv[]){
         }
         main_list->populationStatus(temp[0], temp[1], temp[2]);
       }else{
-        cout << "ERROR WRONG FORMAT" << endl;//TODO: do it correctly
+        cout << "ERROR WRONG FORMAT" << endl;
       }
     }else if(command == "/popStatusByAge"){
 

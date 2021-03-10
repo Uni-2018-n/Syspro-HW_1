@@ -58,6 +58,32 @@ void SkiplistNode::testPrint(){
   cout << ") -> ";
 }
 
+int SkiplistNode::getItem(){
+  return *item;
+}
+citizenRecord* SkiplistNode::getCitizen(){
+  return citizen;
+}
+SkiplistNode* SkiplistNode::getNext(){
+  return next;
+}
+void SkiplistNode::setNext(SkiplistNode* n){
+  next = n;
+}
+SkiplistNode* SkiplistNode::getLowerLevel(){
+  return lower_level;
+}
+void SkiplistNode::setPrev(SkiplistNode* p){
+  prev = p;
+}
+SkiplistNode* SkiplistNode::getPrev(){
+  return prev;
+}
+
+string SkiplistNode::getDateVaccinated(){
+  return *date_vaccinated;
+}
+
 //////////////////////////// SkiplistHeader
 SkiplistHeader::SkiplistHeader(){
   start = NULL;
@@ -130,7 +156,6 @@ SkiplistNode* SkiplistHeader::searchItem(int i){
       }
     }
   }
-  cout << "SkiplistHeader::searchItem gone here im illegal" << endl; //TODO: remove this
   return NULL;
 }
 
@@ -261,7 +286,6 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
       }
     }
   }
-  cout << "SkiplistHeader::insertItem gone here im illegal" << endl; //TODO: remove this
   return NULL;
 }
 
@@ -344,7 +368,6 @@ SkiplistNode* SkiplistHeader::deleteItem(int i){
       }
     }
   }
-  cout << "SkiplistHeader::searchItem gone here im illegal" << endl; //TODO: remove this
   return NULL;
 }
 
@@ -361,6 +384,21 @@ void SkiplistHeader::testPrint(){
   while(temp != NULL){
     temp->testPrint();
     temp = temp->getNext();
+  }
+}
+
+SkiplistNode* SkiplistHeader::getFirst(){
+  return start;
+}
+
+void SkiplistHeader::removeFirst(){
+  SkiplistNode* temp = start->getNext();
+  if(start != NULL && start->getLowerLevel() != NULL){
+    delete start;
+  }
+  start= temp;
+  if(start != NULL){
+    start->setPrev(NULL);
   }
 }
 
@@ -385,6 +423,26 @@ void skipNode::print(){
 
 void skipNode::testPrint(){
   item->testPrint();
+}
+
+skipNode* skipNode::getNext(){
+  return next;
+}
+skipNode* skipNode::getPrev(){
+  return prev;
+}
+SkiplistHeader* skipNode::getItem(){
+  return item;
+}
+void skipNode::setNext(skipNode* n){
+  next = n;
+}
+void skipNode::setPrev(skipNode* p){
+  prev = p;
+}
+
+void skipNode::removeFirst(){
+  item->removeFirst();
 }
 
 ///////////////////////////////////// skipHeader
@@ -456,7 +514,6 @@ SkiplistNode* skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
     }
 
   }
-  // cout << "top level: " << top_lvl << endl; //TODO: clean
   int skiped_layers =0;//used to see how many layers was skiped because first item is > i
   skipNode* temp = end;//use of dual linked SkiplistNode, start == SkiplistNode with all the items. with that in mind, we start our search with the SkiplistNode with the less amount of items
   while(temp->getItem()->getFirst() == NULL){//same with search
@@ -550,10 +607,10 @@ countryStatsNode* skipHeader::populationStatus(string don, string dt, string c){
   while(temp != NULL){
     if(temp->getCitizen()->getCountry() == c){
       if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
-        stats->Datevacced++;
+        stats->topDateVacced();
       }
-      stats->v++;
-      stats->pl++;
+      stats->topV();
+      stats->topPl();
     }
     temp = temp->getNext();
   }
@@ -564,7 +621,7 @@ countryStatsNode* skipHeader::populationStatus(countryStatsNode* stats, string c
   SkiplistNode* temp = start->getItem()->getFirst();
   while(temp != NULL){
     if(temp->getCitizen()->getCountry() == c){
-      stats->pl++;
+      stats->topPl();
     }
     temp = temp->getNext();
   }

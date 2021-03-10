@@ -6,14 +6,20 @@
 using namespace std;
 
 class countryStatsNode{
-public:
   string item;
   int Datevacced;
   int v;
   int pl;
   countryStatsNode* next;
+public:
   countryStatsNode(string n);
   countryStatsNode(string n, int b);
+  string getItem();
+  void topDateVacced();
+  void topV();
+  void topPl();
+  countryStatsNode* getNext();
+  void setNext(countryStatsNode* n);
   void print();
 };
 

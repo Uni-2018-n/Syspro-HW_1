@@ -10,7 +10,7 @@ using namespace std;
 
 
 class SkiplistNode{//nodes
-  int* item;//id TODO use citizens id not diffrent variable
+  int* item;
   citizenRecord* citizen;
   string* date_vaccinated;
   SkiplistNode* next;
@@ -23,31 +23,14 @@ public:
   SkiplistNode(int* i, citizenRecord* c, string* dv, SkiplistNode* n);
   ~SkiplistNode();
 
-  int getItem(){
-    return *item;
-  }
-  citizenRecord* getCitizen(){
-    return citizen;
-  }
-  SkiplistNode* getNext(){
-    return next;
-  }
-  void setNext(SkiplistNode* n){
-    next = n;
-  }
-  SkiplistNode* getLowerLevel(){
-    return lower_level;
-  }
-  void setPrev(SkiplistNode* p){
-    prev = p;
-  }
-  SkiplistNode* getPrev(){
-    return prev;
-  }
-
-  string getDateVaccinated(){
-    return *date_vaccinated;
-  }
+  int getItem();
+  citizenRecord* getCitizen();
+  string getDateVaccinated();
+  SkiplistNode* getNext();
+  SkiplistNode* getPrev();
+  SkiplistNode* getLowerLevel();
+  void setNext(SkiplistNode* n);
+  void setPrev(SkiplistNode* p);
 
   void print();
   void testPrint();
@@ -62,20 +45,11 @@ public:
   SkiplistNode* insertItem(int* i, citizenRecord* c, string* dv, int top_lvl);
   SkiplistNode* searchItem(int i);
   SkiplistNode* deleteItem(int i);
-  SkiplistNode* getFirst(){
-    return start;
-  }
-  void removeFirst(){
-    SkiplistNode* temp = start->getNext();
-    if(start != NULL && start->getLowerLevel() != NULL){
-      delete start;
-    }
-    start= temp;
-    if(start != NULL){
-      start->setPrev(NULL);
-    }
-  }
+
+  SkiplistNode* getFirst();
+  void removeFirst();
   void print();
+
   void testPrint();
 };
 /////////////////////////////////////
@@ -88,27 +62,15 @@ public:
   ~skipNode();
   SkiplistNode* insertAtStart(SkiplistNode* i);
 
-  skipNode* getNext(){
-    return next;
-  }
-  skipNode* getPrev(){
-    return prev;
-  }
-  SkiplistHeader* getItem(){
-    return item;
-  }
-  void setNext(skipNode* n){
-    next = n;
-  }
-  void setPrev(skipNode* p){
-    prev = p;
-  }
+  skipNode* getNext();
+  skipNode* getPrev();
+  SkiplistHeader* getItem();
+  void setNext(skipNode* n);
+  void setPrev(skipNode* p);
 
-  void removeFirst(){
-    item->removeFirst();
-  }
-
+  void removeFirst();
   void print();
+
   void testPrint();
 };
 
@@ -124,12 +86,14 @@ public:
   SkiplistNode* searchItem(int i);
   SkiplistNode* insertItem(int* i, citizenRecord* c, string* dv);
   SkiplistNode* deleteItem(int i);
+  
   countryStatsNode* populationStatus(string don, string dt, string c);//for vacced
   countryStatsNode* populationStatus(countryStatsNode* stats, string c);//for not vacced
   countryStatsHeader* populationStatus(string don, string dt);//for vacced
   countryStatsHeader* populationStatus(countryStatsHeader* stats);//for not vacced
 
   void print();
+
   void testPrint();
 };
 #endif

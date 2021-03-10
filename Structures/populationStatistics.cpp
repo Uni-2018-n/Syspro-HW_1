@@ -26,6 +26,27 @@ countryStatsNode::countryStatsNode(string n, int b){
   next = NULL;
 }
 
+string countryStatsNode::getItem(){
+  return item;
+}
+void countryStatsNode::topDateVacced(){
+  Datevacced++;
+}
+void countryStatsNode::topV(){
+  v++;
+}
+void countryStatsNode::topPl(){
+  pl++;
+}
+countryStatsNode* countryStatsNode::getNext(){
+  return next;
+}
+
+void countryStatsNode::setNext(countryStatsNode* n){
+  next = n;
+}
+
+
 void countryStatsNode::print(){
   printf("%s %d %.2f%%\n", item.c_str(), Datevacced, (v != 0) ? ((float)v/(float)pl)*100.0 : 0.0);
   // printf("%s %d %d %d%%\n", item.c_str(), Datevacced, v, pl);
@@ -43,7 +64,7 @@ countryStatsHeader::~countryStatsHeader(){
   countryStatsNode* tmp;
   while(temp != NULL){
     tmp = temp;
-    temp = temp->next;
+    temp = temp->getNext();
     delete tmp;
   }
 }
@@ -55,21 +76,21 @@ void countryStatsHeader::insertItem(string i, int b){
     return;
   }else{
     while(temp != NULL){
-      if(temp->item == i){
+      if(temp->getItem() == i){
         if(b==2){
-          temp->Datevacced++;
-          temp->v++;
+          temp->topDateVacced();
+          temp->topV();
         }else if(b==1){
-          temp->v++;
+          temp->topV();
         }
-        temp->pl++;
+        temp->topPl();
         return;
       }
-      if(temp->next == NULL){
-        temp->next = new countryStatsNode(i, b);
+      if(temp->getNext() == NULL){
+        temp->setNext(new countryStatsNode(i, b));
         return;
       }
-      temp= temp->next;
+      temp= temp->getNext();
     }
   }
 }
@@ -78,7 +99,7 @@ void countryStatsHeader::print(){
   countryStatsNode* temp = start;
   while(temp != NULL){
     temp->print();
-    temp = temp->next;
+    temp = temp->getNext();
   }
 }
 
