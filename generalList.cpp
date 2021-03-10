@@ -125,12 +125,35 @@ void GlistHeader::insertCitizenRecord(string line){
   insertRecord(line);
 }
 
+void GlistHeader::populationStatus(string vn, string don, string dt, string c){
+  VarlistNode* temp = viruses->searchVirus(vn);
+  if(temp == NULL){
+    cout << "ERROR VIRUS NOT FOUND" << endl;
+  }else{
+    countryStatsNode* stats = temp->vaccinated->populationStatus(don, dt, c);
+    stats = temp->notVaccinated->populationStatus(stats, c);
+    stats->print();
+    delete stats;
+  }
+}
+
+void GlistHeader::populationStatus(string vn, string don, string dt){
+  VarlistNode* temp = viruses->searchVirus(vn);
+  if(temp == NULL){
+    cout << "ERROR VIRUS NOT FOUND" << endl;
+  }else{
+    countryStatsHeader* stats = temp->vaccinated->populationStatus(don, dt);
+    stats = temp->notVaccinated->populationStatus(stats);
+    stats->print();
+    delete stats;
+  }
+}
+
 void GlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, string v){
   if(!viruses->vaccinateNow(i, fn, ln, c, a, v)){
-    // cout << "im here" << endl;
     time_t t= time(0);
     tm* n = localtime(&t);
-    string dv = to_string(n->tm_mday) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_year + 1900);
+    string dv = to_string(n->tm_year + 1900) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_mday);
     insertRecord(i + " " + fn + " " + ln + " " + a + " " + v + "YES " + dv);
   }
 }

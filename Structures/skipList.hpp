@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "../classes.hpp"
+#include "populationStatistics.hpp"
 using namespace std;
 
 #define MAXIMUM 3
@@ -123,6 +124,11 @@ public:
   SkiplistNode* searchItem(int i);
   SkiplistNode* insertItem(int* i, citizenRecord* c, string* dv);
   SkiplistNode* deleteItem(int i);
+  countryStatsNode* populationStatus(string don, string dt, string c);//for vacced
+  countryStatsNode* populationStatus(countryStatsNode* stats, string c);//for not vacced
+  countryStatsHeader* populationStatus(string don, string dt);//for vacced
+  countryStatsHeader* populationStatus(countryStatsHeader* stats);//for not vacced
+
   void print();
   void testPrint();
 };

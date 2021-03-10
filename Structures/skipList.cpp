@@ -41,11 +41,6 @@ SkiplistNode::SkiplistNode(int* i, citizenRecord* c, string* dv, SkiplistNode* n
 }
 
 SkiplistNode::~SkiplistNode(){
-  // if(date_vaccinated== NULL){
-  //   cout << "NULL" << endl;
-  // }else{
-  //   cout << *date_vaccinated << endl;
-  // }
   if(date_vaccinated != NULL){
     delete date_vaccinated;
   }
@@ -549,6 +544,52 @@ SkiplistNode* skipHeader::deleteItem(int i){
   }
 }
 
+countryStatsNode* skipHeader::populationStatus(string don, string dt, string c){
+  countryStatsNode* stats = new countryStatsNode(c);
+  SkiplistNode* temp = start->getItem()->getFirst();
+  while(temp != NULL){
+    if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
+      if(temp->getCitizen()->getCountry() == c){
+        stats->vacced++;
+        stats->pl++;
+      }
+    }
+    temp = temp->getNext();
+  }
+  return stats;
+}
+
+countryStatsNode* skipHeader::populationStatus(countryStatsNode* stats, string c){
+  SkiplistNode* temp = start->getItem()->getFirst();
+  while(temp != NULL){
+    if(temp->getCitizen()->getCountry() == c){
+      stats->pl++;
+    }
+    temp = temp->getNext();
+  }
+  return stats;
+}
+
+countryStatsHeader* skipHeader::populationStatus(string don, string dt){
+  countryStatsHeader* stats = new countryStatsHeader();
+  SkiplistNode* temp = start->getItem()->getFirst();
+  while(temp != NULL){
+    if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
+      stats->insertItem(temp->getCitizen()->getCountry(), true);
+    }
+    temp = temp->getNext();
+  }
+  return stats;
+}
+
+countryStatsHeader* skipHeader::populationStatus(countryStatsHeader* stats){
+  SkiplistNode* temp = start->getItem()->getFirst();
+  while(temp != NULL){
+    stats->insertItem(temp->getCitizen()->getCountry(), false);
+    temp = temp->getNext();
+  }
+  return stats;
+}
 
 void skipHeader::print(){
   start->print();

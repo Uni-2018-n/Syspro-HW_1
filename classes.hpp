@@ -13,6 +13,9 @@ public:
   int age;
   citizenRecord(string, string, string, string*, string);
   ~citizenRecord();
+  string getCountry(){
+    return *country;
+  }
   void print();
 };
 

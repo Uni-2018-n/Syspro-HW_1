@@ -48,7 +48,7 @@ int main(int argc, char* argv[]){
   "/list-nonVaccinated-Persons virusName" << endl <<
   "/exit" << endl << endl;
 
-  // main_list->vaccinateNow(776, "Maria", "Tortellini", "Italy", "36", "H1N1");
+  // main_list->populationStatus("H1N1", "2019-01-27", "2022-01-20");
   // main_list->listNonVaccinatedPersons("H1N1");
   // delete main_list;
   // return 0;
@@ -85,7 +85,14 @@ int main(int argc, char* argv[]){
       }else{
         main_list->vaccineStatus(stoi(temp[0]));
       }
-    }else if(command == "populationStatus"){
+    }else if(command == "/populationStatus"){
+      if(i == 3){
+        main_list->populationStatus(temp[1], temp[2], temp[3], temp[0]);
+      }else if(i==2){
+        main_list->populationStatus(temp[0], temp[1], temp[2]);
+      }else{
+        cout << "ERROR WRONG FORMAT" << endl;//TODO: do it correctly
+      }
 
     }else if(command == "/popStatusByAge"){
 
