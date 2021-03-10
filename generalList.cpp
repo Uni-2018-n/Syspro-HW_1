@@ -125,7 +125,7 @@ void GlistHeader::insertCitizenRecord(string line){
   insertRecord(line);
 }
 
-void GlistHeader::populationStatus(string vn, string don, string dt, string c){
+void GlistHeader::populationStatus(string vn, string don, string dt, string c){//with country
   VarlistNode* temp = viruses->searchVirus(vn);
   if(temp == NULL){
     cout << "ERROR VIRUS NOT FOUND" << endl;
@@ -137,7 +137,7 @@ void GlistHeader::populationStatus(string vn, string don, string dt, string c){
   }
 }
 
-void GlistHeader::populationStatus(string vn, string don, string dt){
+void GlistHeader::populationStatus(string vn, string don, string dt){//without country
   VarlistNode* temp = viruses->searchVirus(vn);
   if(temp == NULL){
     cout << "ERROR VIRUS NOT FOUND" << endl;

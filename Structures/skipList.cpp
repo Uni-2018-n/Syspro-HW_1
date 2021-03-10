@@ -544,22 +544,23 @@ SkiplistNode* skipHeader::deleteItem(int i){
   }
 }
 
-countryStatsNode* skipHeader::populationStatus(string don, string dt, string c){
+countryStatsNode* skipHeader::populationStatus(string don, string dt, string c){//vacced
   countryStatsNode* stats = new countryStatsNode(c);
   SkiplistNode* temp = start->getItem()->getFirst();
   while(temp != NULL){
-    if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
-      if(temp->getCitizen()->getCountry() == c){
-        stats->vacced++;
-        stats->pl++;
+    if(temp->getCitizen()->getCountry() == c){
+      if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
+        stats->Datevacced++;
       }
+      stats->v++;
+      stats->pl++;
     }
     temp = temp->getNext();
   }
   return stats;
 }
 
-countryStatsNode* skipHeader::populationStatus(countryStatsNode* stats, string c){
+countryStatsNode* skipHeader::populationStatus(countryStatsNode* stats, string c){//not vacced
   SkiplistNode* temp = start->getItem()->getFirst();
   while(temp != NULL){
     if(temp->getCitizen()->getCountry() == c){
@@ -570,22 +571,24 @@ countryStatsNode* skipHeader::populationStatus(countryStatsNode* stats, string c
   return stats;
 }
 
-countryStatsHeader* skipHeader::populationStatus(string don, string dt){
+countryStatsHeader* skipHeader::populationStatus(string don, string dt){//vacced without country
   countryStatsHeader* stats = new countryStatsHeader();
   SkiplistNode* temp = start->getItem()->getFirst();
   while(temp != NULL){
     if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
-      stats->insertItem(temp->getCitizen()->getCountry(), true);
+      stats->insertItem(temp->getCitizen()->getCountry(), 2);
+    }else{
+      stats->insertItem(temp->getCitizen()->getCountry(), 1);
     }
     temp = temp->getNext();
   }
   return stats;
 }
 
-countryStatsHeader* skipHeader::populationStatus(countryStatsHeader* stats){
+countryStatsHeader* skipHeader::populationStatus(countryStatsHeader* stats){//not vacced without country
   SkiplistNode* temp = start->getItem()->getFirst();
   while(temp != NULL){
-    stats->insertItem(temp->getCitizen()->getCountry(), false);
+    stats->insertItem(temp->getCitizen()->getCountry(), 0);
     temp = temp->getNext();
   }
   return stats;

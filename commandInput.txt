@@ -1,3 +1,6 @@
-/vaccinateNow 4812 qAbzC NLvyuZpZmD Monaco 85 Smallpox
-/vaccineStatus 4812 Smallpox
-/exit
+/populationStatus GREECE H1N1 2000-10-10 2022-10-10
+/populationStatus H1N1 2000-10-10 2022-10-10
+/populationStatus GREECE H1N1
+/populationStatus H1N1
+/populationStatus GREECE H1N1 2000-10-10
+/populationStatus H1N1 2000-10-10

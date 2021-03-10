@@ -2,13 +2,11 @@
 using namespace std;
 
 int main(){
-	string temp = "2021-3-9";
-	string don = "2021-2-10";
-	string dt = "2021-5-15";
-	if(temp >= don && temp <= dt){
-		cout << "true" << endl;
-	}else{
-		cout << "false" << endl;
-	}
+	const char date1[] = "10/10/2000";
+const char date2[] = "31/2/2012";
+struct tm tm;
+
+if (!strptime(date1, "%d/%m/%Y", &tm)) std::cout << "date1 isn't valid\n";
+if (!strptime(date2, "%d/%m/%Y", &tm)) std::cout << "date2 isn't valid\n";
 	return 0;
 }

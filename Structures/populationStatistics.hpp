@@ -8,11 +8,12 @@ using namespace std;
 class countryStatsNode{
 public:
   string item;
-  int vacced;
+  int Datevacced;
+  int v;
   int pl;
   countryStatsNode* next;
   countryStatsNode(string n);
-  countryStatsNode(string n, bool b);
+  countryStatsNode(string n, int b);
   void print();
 };
 
@@ -21,8 +22,11 @@ class countryStatsHeader{
 public:
   countryStatsHeader();
   ~countryStatsHeader();
-  void insertItem(string i, bool b);
+  void insertItem(string i, int b);
   void print();
 };
 
 #endif
+//b=2 d+v+p
+//b=1 v+p
+//b=0 p
