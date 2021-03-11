@@ -16,6 +16,9 @@ public:
   string getCountry(){
     return *country;
   }
+  int getAge(){
+    return age;
+  }
   void print();
 };
 

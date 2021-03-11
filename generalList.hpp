@@ -36,13 +36,13 @@ public:
   void vaccineStatus(int i, string v);
   void vaccineStatus(int i);
 
-  void populationStatus(string vn, string don, string dt, string c);
-  void populationStatus(string vn, string don, string dt);
+  void populationStatus(string vn, string don, string dt, string c, bool t);
+  void populationStatus(string vn, string don, string dt, bool t);
 
   void vaccinateNow(int i, string fn, string ln, string c, string a, string v);
   void insertCitizenRecord(string line);
   void listNonVaccinatedPersons(string v);
-  
+
   void testPrint();
 };
 

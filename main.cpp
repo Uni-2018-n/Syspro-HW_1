@@ -170,7 +170,7 @@ int main(int argc, char* argv[]){
           cout << "ERROR WRONG DATE FORMAT" <<endl;
           continue;
         }
-        main_list->populationStatus(temp[1], temp[2], temp[3], temp[0]);
+        main_list->populationStatus(temp[1], temp[2], temp[3], temp[0], false);
       }else if(i==3){
         temp[1] = checkAndFormatDate(temp[1]);
         temp[2] = checkAndFormatDate(temp[2]);
@@ -178,12 +178,30 @@ int main(int argc, char* argv[]){
           cout << "ERROR WRONG DATE FORMAT" <<endl;
           continue;
         }
-        main_list->populationStatus(temp[0], temp[1], temp[2]);
+        main_list->populationStatus(temp[0], temp[1], temp[2], false);
       }else{
         cout << "ERROR WRONG FORMAT" << endl;
       }
     }else if(command == "/popStatusByAge"){
-
+      if(i == 4){
+        temp[2] = checkAndFormatDate(temp[2]);
+        temp[3] = checkAndFormatDate(temp[3]);
+        if(temp[2] == "" || temp[3] == ""){
+          cout << "ERROR WRONG DATE FORMAT" <<endl;
+          continue;
+        }
+        main_list->populationStatus(temp[1], temp[2], temp[3], temp[0], true);
+      }else if(i==3){
+        temp[1] = checkAndFormatDate(temp[1]);
+        temp[2] = checkAndFormatDate(temp[2]);
+        if(temp[1] == "" || temp[2] == ""){
+          cout << "ERROR WRONG DATE FORMAT" <<endl;
+          continue;
+        }
+        main_list->populationStatus(temp[0], temp[1], temp[2], true);
+      }else{
+        cout << "ERROR WRONG FORMAT" << endl;
+      }
     }else if(command == "/insertCitizenRecord"){
       main_list->insertCitizenRecord(line);
     }else if(command == "/vaccinateNow"){

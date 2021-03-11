@@ -133,27 +133,35 @@ void GlistHeader::insertCitizenRecord(string line){
   insertRecord(line);
 }
 
-void GlistHeader::populationStatus(string vn, string don, string dt, string c){//with country
+void GlistHeader::populationStatus(string vn, string don, string dt, string c, bool t){//with country
   VarlistNode* temp = viruses->searchVirus(vn);
   if(temp == NULL){
     cout << "ERROR VIRUS NOT FOUND" << endl;
   }else{
-    countryStatsNode* stats = temp->getVacced()->populationStatus(don, dt, c);
-    stats = temp->getNotVacced()->populationStatus(stats, c);
-    stats->print();
-    delete stats;
+    if(!t){
+      countryStatsNode* stats = temp->getVacced()->populationStatus(don, dt, c);
+      stats = temp->getNotVacced()->populationStatus(stats, c);
+      stats->print();
+      delete stats;
+    }else{//case age
+
+    }
   }
 }
 
-void GlistHeader::populationStatus(string vn, string don, string dt){//without country
+void GlistHeader::populationStatus(string vn, string don, string dt, bool t){//without country
   VarlistNode* temp = viruses->searchVirus(vn);
   if(temp == NULL){
     cout << "ERROR VIRUS NOT FOUND" << endl;
   }else{
-    countryStatsHeader* stats = temp->getVacced()->populationStatus(don, dt);
-    stats = temp->getNotVacced()->populationStatus(stats);
-    stats->print();
-    delete stats;
+    if(!t){
+      countryStatsHeader* stats = temp->getVacced()->populationStatus(don, dt);
+      stats = temp->getNotVacced()->populationStatus(stats);
+      stats->print();
+      delete stats;
+    }else{//case age
+
+    }
   }
 }
 

@@ -86,11 +86,16 @@ public:
   SkiplistNode* searchItem(int i);
   SkiplistNode* insertItem(int* i, citizenRecord* c, string* dv);
   SkiplistNode* deleteItem(int i);
-  
+
   countryStatsNode* populationStatus(string don, string dt, string c);//for vacced
   countryStatsNode* populationStatus(countryStatsNode* stats, string c);//for not vacced
   countryStatsHeader* populationStatus(string don, string dt);//for vacced
   countryStatsHeader* populationStatus(countryStatsHeader* stats);//for not vacced
+
+  countryStatsNode* populationStatusAge(string don, string dt, string c);//for vacced
+  countryStatsNode* populationStatusAge(countryStatsNode* stats, string c);//for not vacced
+  countryStatsHeader* populationStatusAge(string don, string dt);//for vacced
+  countryStatsHeader* populationStatusAge(countryStatsHeader* stats);//for not vacced
 
   void print();
 

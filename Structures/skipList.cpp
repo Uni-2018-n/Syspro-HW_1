@@ -651,6 +651,61 @@ countryStatsHeader* skipHeader::populationStatus(countryStatsHeader* stats){//no
   return stats;
 }
 
+
+
+countryStatsNode* skipHeader::populationStatusAge(string don, string dt, string c){//vacced
+  countryStatsNode* stats = new countryStatsNode(c);
+  SkiplistNode* temp = start->getItem()->getFirst();
+  while(temp != NULL){
+    if(temp->getCitizen()->getCountry() == c){
+      if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
+        stats->topCorrectCat(2, temp->getCitizen()->getAge());
+        continue;
+      }
+      stats->topCorrectCat(1, temp->getCitizen()->getAge());
+    }
+    temp = temp->getNext();
+  }
+  return stats;
+}
+
+countryStatsNode* skipHeader::populationStatusAge(countryStatsNode* stats, string c){//not vacced
+  SkiplistNode* temp = start->getItem()->getFirst();
+  while(temp != NULL){
+    if(temp->getCitizen()->getCountry() == c){
+      stats->topCorrectCat(0, temp->getCitizen()->getAge());
+    }
+    temp = temp->getNext();
+  }
+  return stats;
+}
+
+countryStatsHeader* skipHeader::populationStatusAge(string don, string dt){//vacced without country
+  countryStatsHeader* stats = new countryStatsHeader();
+  SkiplistNode* temp = start->getItem()->getFirst();
+  while(temp != NULL){
+    if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
+      stats->insertItemAge(temp->getCitizen()->getCountry(), 2, temp->getCitizen()->getAge());
+    }else{
+      stats->insertItemAge(temp->getCitizen()->getCountry(), 1, temp->getCitizen()->getAge());
+    }
+    temp = temp->getNext();
+  }
+  return stats;
+}
+
+countryStatsHeader* skipHeader::populationStatusAge(countryStatsHeader* stats){//not vacced without country
+  SkiplistNode* temp = start->getItem()->getFirst();
+  while(temp != NULL){
+    stats->insertItemAge(temp->getCitizen()->getCountry(), 0, temp->getCitizen()->getAge());
+    temp = temp->getNext();
+  }
+  return stats;
+}
+
+
+
+
 void skipHeader::print(){
   start->print();
 }
