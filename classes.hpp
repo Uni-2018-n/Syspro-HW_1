@@ -22,4 +22,8 @@ public:
   void print();
 };
 
+
+string reverse(string t);
+string checkAndFormatDate(string d);
+std::string change_date_format(const std::string& date);
 #endif

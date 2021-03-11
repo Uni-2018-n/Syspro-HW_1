@@ -77,6 +77,11 @@ void GlistHeader::insertRecord(string line){
       return;
     }
   }
+  if(temp[6] == "YES"){
+    // cout << "one: " << temp[7] << endl;
+    temp[7] = change_date_format(temp[7]);
+    // cout << "two: " << temp[7] << endl;
+  }
 
   listNode* tmp = searchCitizen(stoi(temp[0]));
   if(tmp != NULL){
@@ -144,7 +149,10 @@ void GlistHeader::populationStatus(string vn, string don, string dt, string c, b
       stats->print();
       delete stats;
     }else{//case age
-
+      countryStatsNode* stats = temp->getVacced()->populationStatusAge(don, dt, c);
+      stats = temp->getNotVacced()->populationStatusAge(stats, c);
+      stats->printAge();
+      delete stats;
     }
   }
 }
@@ -160,7 +168,10 @@ void GlistHeader::populationStatus(string vn, string don, string dt, bool t){//w
       stats->print();
       delete stats;
     }else{//case age
-
+      countryStatsHeader* stats = temp->getVacced()->populationStatusAge(don, dt);
+      stats = temp->getNotVacced()->populationStatusAge(stats);
+      stats->printAge();
+      delete stats;
     }
   }
 }

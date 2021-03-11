@@ -82,6 +82,7 @@ public:
   void insertItem(string i, int b);
   void insertItemAge(string i, int b, int a);
   void print();
+  void printAge();
 };
 
 #endif

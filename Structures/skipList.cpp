@@ -660,6 +660,7 @@ countryStatsNode* skipHeader::populationStatusAge(string don, string dt, string 
     if(temp->getCitizen()->getCountry() == c){
       if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
         stats->topCorrectCat(2, temp->getCitizen()->getAge());
+        temp = temp->getNext();
         continue;
       }
       stats->topCorrectCat(1, temp->getCitizen()->getAge());

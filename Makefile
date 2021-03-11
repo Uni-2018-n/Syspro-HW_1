@@ -1,7 +1,7 @@
 FLAGS = -std=c++11 -Wall -g -o
 SOURCE = main.cpp Structures/skipList.cpp Structures/bloomFilter.cpp classes.cpp generalList.cpp Structures/countryList.cpp Structures/virusesList.cpp Structures/populationStatistics.cpp
 ITEM = vaccineMonitor
-ARGS = -c Data/records.txt -b 100000
+ARGS = -c Data/input.txt -b 100000
 
 run : compile
 	./$(ITEM) $(ARGS)

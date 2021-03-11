@@ -1,3 +1,3 @@
 TODO: VarlistHeader -> VirlistHeader...
-TODO: red mark in pdf
-TODO: populationByAge
+TODO: need to make insertCitizenRecord work like if citizen if already in the system as
+not vaccinated, vaccinate him

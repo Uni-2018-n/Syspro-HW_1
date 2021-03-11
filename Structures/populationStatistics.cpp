@@ -68,10 +68,17 @@ void countryStatsNode::print(){
 void countryStatsNode::printAge(){
   cout << item << endl;
   printf("0-20 %d %.2f%%\n", ZT, (DateZT != 0) ? ((float)DateZT/(float)plZT)*100.0 : 0.0);
-  printf("20-40 %d %.2f%%\n", ZT, (DateTF != 0) ? ((float)DateTF/(float)plTF)*100.0 : 0.0);
-  printf("40-60 %d %.2f%%\n", ZT, (DateFS != 0) ? ((float)DateFS/(float)plFS)*100.0 : 0.0);
-  printf("60++ %d %.2f%%\n", ZT, (DateS != 0) ? ((float)DateS/(float)plS)*100.0 : 0.0);
+  printf("20-40 %d %.2f%%\n", TF, (DateTF != 0) ? ((float)DateTF/(float)plTF)*100.0 : 0.0);
+  printf("40-60 %d %.2f%%\n", FS, (DateFS != 0) ? ((float)DateFS/(float)plFS)*100.0 : 0.0);
+  printf("60++ %d %.2f%%\n", S, (DateS != 0) ? ((float)DateS/(float)plS)*100.0 : 0.0);
   cout << endl;
+
+  // cout << item << endl;
+  // printf("0-20 %d %d %d\n", ZT, DateZT, plZT);
+  // printf("20-40 %d %d %d\n", TF, DateTF, plTF);
+  // printf("40-60 %d %d %d\n", FS, DateFS, plFS);
+  // printf("60++ %d %d %d\n", S, DateS, plS);
+  // cout << endl;
 }
 
 
@@ -120,7 +127,21 @@ void countryStatsHeader::insertItemAge(string i, int b, int a){
   countryStatsNode* temp = start;
   if(temp == NULL){
     start = new countryStatsNode(i);
-
+    start->topCorrectCat(b,a);
+    return;
+  }else{
+    while(temp != NULL){
+      if(temp->getItem() == i){
+        temp->topCorrectCat(b,a);
+        return;
+      }
+      if(temp->getNext() == NULL){;
+        temp->setNext(new countryStatsNode(i));
+        temp->getNext()->topCorrectCat(b,a);
+        return;
+      }
+      temp= temp->getNext();
+    }
   }
 }
 
@@ -132,6 +153,13 @@ void countryStatsHeader::print(){
   }
 }
 
+void countryStatsHeader::printAge(){
+  countryStatsNode* temp = start;
+  while(temp != NULL){
+    temp->printAge();
+    temp = temp->getNext();
+  }
+}
 
 
 
