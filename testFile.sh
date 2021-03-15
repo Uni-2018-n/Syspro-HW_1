@@ -4,24 +4,42 @@ then
   echo Wrong Input
   # exit 1
 fi
-#id
-temp=`expr 9999 - 1 + 1`;
-temp=`expr $RANDOM % $temp`;
-let id=temp+1;
-echo $id
-cnum=${1-`wc -l < Data/countries.txt`}
-echo "${cnum}"
-let mcnum=${cnum}-1+1;
 
-vnum=${1-`wc -l < Data/viruses.txt`}
-echo "${vnum}"
-let mvnum=${vnum}-1+1;
-
-for((i=0;i<=10;i++))
+for((i=0;i<=1000;i++))
 do
-  c=`expr $RANDOM % $mcnum`;
-  # get c line from Data/countries.txt
-  v=`expr $RANDOM % $mvnum`;
-  # get v line from Data/countries.txt
+  t=`expr $RANDOM % 9999`; #id
+  let id=t+1;
+  echo -n "${id} "
+
+  c=${1-`shuf -n 1 Data/countries.txt`} #country
+  echo -n "${c} "
+
+  t=`expr $RANDOM % 120`; #age
+  let a=t+1;
+  echo -n "${a} "
+
+  v=${1-`shuf -n 1 Data/viruses.txt`} #virus
+  echo -n "${v} "
+
+  t=`expr $RANDOM % 100`;
+  let tmp=t+1;
+  if [ ${tmp} -gt 50 ]
+  then
+    vacced="YES"
+    t=`expr $RANDOM % 30`;
+    let d=t+1;
+    t=`expr $RANDOM % 12`;
+    let m=t+1;
+    t=`expr $RANDOM % 601`;
+    let y=t+1700;
+    vacced="${vacced} ${d}-${m}-${y}";
+
+  else
+    vacced="NO"
+  fi
+
+  echo -n "${vacced} "
+
+  echo
 done
 # echo $fullName

@@ -46,7 +46,9 @@ void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv, b
   if(v == "YES"){
     if(notVaccinated->searchItem(*id)){
       if(flag){
-
+          SkiplistNode* tmp = notVaccinated->deleteItem(*id);
+          this->insertRecord(tmp->getCitizen()->citizenId, tmp->getCitizen(), v, dv, false);
+          delete tmp;
       }else{
         cout << "ERROR record cant get vaccinated because already been not vaccinated" << endl;
       }
