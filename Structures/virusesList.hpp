@@ -26,7 +26,7 @@ public:
   void setItem(string i);
   void setNext(VarlistNode* n);
 
-  void insertRecord(int* id, citizenRecord* c, string v, string dv);
+  void insertRecord(int* id, citizenRecord* c, string v, string dv, bool flag);
 };
 
 class VarlistHeader{
@@ -44,7 +44,7 @@ public:
   void vaccineStatus(int i);
   bool vaccinateNow(int i, string fn, string ln, string c, string a, string v);
   void listNonVaccinatedPersons(string v);
-  
+
   void testPrint();
 };
 

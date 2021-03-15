@@ -51,7 +51,7 @@ listNode* GlistHeader::searchCitizen(int id){
   return NULL;
 }
 
-void GlistHeader::insertRecord(string line){
+void GlistHeader::insertRecord(string line, bool flag){
   string temp[8];
   int i=0;
   string word = "";
@@ -79,7 +79,11 @@ void GlistHeader::insertRecord(string line){
   }
   if(temp[6] == "YES"){
     // cout << "one: " << temp[7] << endl;
-    temp[7] = change_date_format(temp[7]);
+    temp[7] = checkAndFormatDate(temp[7]);
+    if(temp[7] == ""){
+      cout << "ERROR WRONG FORMAT DATE" << endl;
+      return;
+    }
     // cout << "two: " << temp[7] << endl;
   }
 
@@ -97,7 +101,7 @@ void GlistHeader::insertRecord(string line){
     if(temp_virus == NULL){
       temp_virus = viruses->insertVirus(temp[5]);
     }
-    temp_virus->insertRecord(tmp->getCitizen()->citizenId, tmp->getCitizen(), temp[6], temp[7]);
+    temp_virus->insertRecord(tmp->getCitizen()->citizenId, tmp->getCitizen(), temp[6], temp[7], flag);
   }else{//first time we see this citizen
     string* temp_country = countries->searchItem(temp[3]);
     if(temp_country == NULL){
@@ -118,7 +122,7 @@ void GlistHeader::insertRecord(string line){
     if(temp_virus == NULL){
       temp_virus = viruses->insertVirus(temp[5]);
     }
-    temp_virus->insertRecord(new_node->getCitizen()->citizenId, new_node->getCitizen(), temp[6], temp[7]);
+    temp_virus->insertRecord(new_node->getCitizen()->citizenId, new_node->getCitizen(), temp[6], temp[7], flag);
   }
 }
 
@@ -135,7 +139,7 @@ void GlistHeader::vaccineStatus(int i){
 }
 
 void GlistHeader::insertCitizenRecord(string line){
-  insertRecord(line);
+  insertRecord(line, true);
 }
 
 void GlistHeader::populationStatus(string vn, string don, string dt, string c, bool t){//with country
@@ -181,7 +185,7 @@ void GlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, 
     time_t t= time(0);
     tm* n = localtime(&t);
     string dv = to_string(n->tm_year + 1900) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_mday);
-    insertRecord(i + " " + fn + " " + ln + " " + a + " " + v + "YES " + dv);
+    insertRecord(i + " " + fn + " " + ln + " " + a + " " + v + "YES " + dv, false);//TODO recheck this if we can save time
   }
 }
 

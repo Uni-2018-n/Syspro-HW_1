@@ -42,13 +42,16 @@ skipHeader* VarlistNode::getNotVacced(){
   return notVaccinated;
 }
 
-void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv){
+void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv, bool flag){
   if(v == "YES"){
     if(notVaccinated->searchItem(*id)){
-      cout << "ERROR record cant get vaccinated because already been not vaccinated" << endl;
+      if(flag){
+
+      }else{
+        cout << "ERROR record cant get vaccinated because already been not vaccinated" << endl;
+      }
     }else{
       string* dateV = new string(dv);
-      // cout << "test: " << *dateV << endl;
       SkiplistNode* t= vaccinated->insertItem(id, c, dateV);
       if(t != NULL){
         if(t->getDateVaccinated() == dv){
@@ -187,7 +190,7 @@ bool VarlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a
     time_t t= time(0);
     tm* n = localtime(&t);
     string tt = to_string(n->tm_mday) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_year + 1900);
-    temp->insertRecord(tmp->getCitizen()->citizenId, tmp->getCitizen(), "YES", tt);
+    temp->insertRecord(tmp->getCitizen()->citizenId, tmp->getCitizen(), "YES", tt, false);
 
     delete tmp;
     return true;

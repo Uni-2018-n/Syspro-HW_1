@@ -30,7 +30,7 @@ public:
   ~GlistHeader();
 
   listNode* searchCitizen(int);
-  void insertRecord(string line);
+  void insertRecord(string line, bool flag);
 
   void vaccineStatusBloom(int i, string v);
   void vaccineStatus(int i, string v);

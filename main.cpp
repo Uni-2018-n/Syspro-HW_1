@@ -31,7 +31,7 @@ int main(int argc, char* argv[]){
   {
     string line;
     while(getline(records, line)){
-      main_list->insertRecord(line);
+      main_list->insertRecord(line, false);
     }
     // main_list->testPrint();
   }
@@ -88,16 +88,16 @@ int main(int argc, char* argv[]){
       }
     }else if(command == "/populationStatus"){
       if(i == 4){
-        temp[2] = change_date_format(temp[2]);
-        temp[3] = change_date_format(temp[3]);
+        temp[2] = checkAndFormatDate(temp[2]);
+        temp[3] = checkAndFormatDate(temp[3]);
         if(temp[2] == "" || temp[3] == ""){
           cout << "ERROR WRONG DATE FORMAT" <<endl;
           continue;
         }
         main_list->populationStatus(temp[1], temp[2], temp[3], temp[0], false);
       }else if(i==3){
-        temp[1] = change_date_format(temp[1]);
-        temp[2] = change_date_format(temp[2]);
+        temp[1] = checkAndFormatDate(temp[1]);
+        temp[2] = checkAndFormatDate(temp[2]);
         if(temp[1] == "" || temp[2] == ""){
           cout << "ERROR WRONG DATE FORMAT" <<endl;
           continue;
@@ -108,16 +108,16 @@ int main(int argc, char* argv[]){
       }
     }else if(command == "/popStatusByAge"){
       if(i == 4){
-        temp[2] = change_date_format(temp[2]);
-        temp[3] = change_date_format(temp[3]);
+        temp[2] = checkAndFormatDate(temp[2]);
+        temp[3] = checkAndFormatDate(temp[3]);
         if(temp[2] == "" || temp[3] == ""){
           cout << "ERROR WRONG DATE FORMAT" <<endl;
           continue;
         }
         main_list->populationStatus(temp[1], temp[2], temp[3], temp[0], true);
       }else if(i==3){
-        temp[1] = change_date_format(temp[1]);
-        temp[2] = change_date_format(temp[2]);
+        temp[1] = checkAndFormatDate(temp[1]);
+        temp[2] = checkAndFormatDate(temp[2]);
         if(temp[1] == "" || temp[2] == ""){
           cout << "ERROR WRONG DATE FORMAT" <<endl;
           continue;
