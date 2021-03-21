@@ -1,7 +1,7 @@
 #include <iostream>
 #include "virusesList.hpp"
 
-VarlistNode::VarlistNode(string i, int l){
+VirlistNode::VirlistNode(string i, int l){
   item = i;
   bloom = new bloomFilter(l);
   vaccinated = new skipHeader();
@@ -9,40 +9,40 @@ VarlistNode::VarlistNode(string i, int l){
   next = NULL;
 }
 
-VarlistNode::~VarlistNode(){
+VirlistNode::~VirlistNode(){
   delete bloom;
   delete vaccinated;
   delete notVaccinated;
 }
 
-VarlistNode* VarlistNode::getNext(){
+VirlistNode* VirlistNode::getNext(){
   return next;
 }
 
-void VarlistNode::setNext(VarlistNode* n){
+void VirlistNode::setNext(VirlistNode* n){
   next = n;
 }
 
-string VarlistNode::getItem(){
+string VirlistNode::getItem(){
   return item;
 }
-void VarlistNode::setItem(string i){
+void VirlistNode::setItem(string i){
   item = i;
 }
 
-bloomFilter* VarlistNode::getBloom(){
+bloomFilter* VirlistNode::getBloom(){
   return bloom;
 }
 
-skipHeader* VarlistNode::getVacced(){
+skipHeader* VirlistNode::getVacced(){
   return vaccinated;
 }
 
-skipHeader* VarlistNode::getNotVacced(){
+skipHeader* VirlistNode::getNotVacced(){
   return notVaccinated;
 }
 
-void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv, bool flag){
+void VirlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv, bool flag){
   if(v == "YES"){
     if(notVaccinated->searchItem(*id)){
       if(flag){
@@ -59,7 +59,7 @@ void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv, b
         if(t->getDateVaccinated() == dv){
           bloom->insert(*id);
         }else{
-          cout << "ERROR: citizen " << *id << " ALREADY VACCINATED ON " << t->getDateVaccinated() << endl;
+          cout << "ERROR: citizen " << *id << " ALREADY VACCINATED ON " << flipDate(t->getDateVaccinated()) << endl;
           delete dateV;
         }
       }
@@ -67,22 +67,22 @@ void VarlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv, b
   }else{
     SkiplistNode* t= vaccinated->searchItem(*id);
     if(t != NULL){
-      cout << "ERROR: citizen " << id << "ALREADY VACCINATED ON " << t->getDateVaccinated() << endl;
+      cout << "ERROR: citizen " << *id << " ALREADY VACCINATED ON " << flipDate(t->getDateVaccinated()) << endl;
     }else{
       notVaccinated->insertItem(id, c, NULL);
     }
   }
 }
 
-VarlistHeader::VarlistHeader(int i):
+VirlistHeader::VirlistHeader(int i):
 bloom_len(i){
   start = NULL;
   end = NULL;
 }
 
-VarlistHeader::~VarlistHeader(){
-  VarlistNode* temp = start;
-  VarlistNode* tmp = NULL;
+VirlistHeader::~VirlistHeader(){
+  VirlistNode* temp = start;
+  VirlistNode* tmp = NULL;
   while(temp != NULL){
     tmp = temp;
     temp= temp->getNext();
@@ -90,8 +90,8 @@ VarlistHeader::~VarlistHeader(){
   }
 }
 
-VarlistNode* VarlistHeader::insertVirus(string i){
-  VarlistNode* new_node = new VarlistNode(i, bloom_len);
+VirlistNode* VirlistHeader::insertVirus(string i){
+  VirlistNode* new_node = new VirlistNode(i, bloom_len);
   if(start == NULL){
     start = new_node;
     end = new_node;
@@ -102,8 +102,8 @@ VarlistNode* VarlistHeader::insertVirus(string i){
   return new_node;
 }
 
-VarlistNode* VarlistHeader::searchVirus(string i){
-  VarlistNode* temp = start;
+VirlistNode* VirlistHeader::searchVirus(string i){
+  VirlistNode* temp = start;
   while(temp != NULL){
     if(temp->getItem().compare(i) ==0){
       return temp;
@@ -113,8 +113,8 @@ VarlistNode* VarlistHeader::searchVirus(string i){
   return NULL;
 }
 
-void VarlistHeader::vaccineStatusBloom(int i, string v){
-  VarlistNode* temp = start;
+void VirlistHeader::vaccineStatusBloom(int i, string v){
+  VirlistNode* temp = start;
   while(temp != NULL){
     if(temp->getItem() == v){
       break;
@@ -132,8 +132,8 @@ void VarlistHeader::vaccineStatusBloom(int i, string v){
   }
 }
 
-void VarlistHeader::vaccineStatus(int i, string v){
-  VarlistNode* temp = start;
+void VirlistHeader::vaccineStatus(int i, string v){
+  VirlistNode* temp = start;
   while(temp != NULL){
     if(temp->getItem() == v){
       break;
@@ -146,19 +146,19 @@ void VarlistHeader::vaccineStatus(int i, string v){
   }else{
     SkiplistNode* t = temp->getVacced()->searchItem(i);
     if(t != NULL){
-      cout << "VACCINATED ON " << t->getDateVaccinated() << endl;
+      cout << "VACCINATED ON " << flipDate(t->getDateVaccinated()) << endl;
       return;
     }
     cout << "NOT VACCINATED" << endl;
   }
 }
 
-void VarlistHeader::vaccineStatus(int i){
-  VarlistNode* temp = start;
+void VirlistHeader::vaccineStatus(int i){
+  VirlistNode* temp = start;
   while(temp != NULL){
     SkiplistNode* t = temp->getVacced()->searchItem(i);
     if(t != NULL){
-      cout << temp->getItem() << " YES " << t->getDateVaccinated() << endl;
+      cout << temp->getItem() << " YES " << flipDate(t->getDateVaccinated()) << endl;
     }else{
       if(temp->getNotVacced()->searchItem(i)){
         cout << temp->getItem() << " NO " << endl;
@@ -168,8 +168,8 @@ void VarlistHeader::vaccineStatus(int i){
   }
 }
 
-bool VarlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, string v){
-  VarlistNode* temp = start;
+bool VirlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, string v){
+  VirlistNode* temp = start;
   while(temp != NULL){
     if(temp->getItem() == v){
       break;
@@ -181,7 +181,7 @@ bool VarlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a
   }
   SkiplistNode* t = temp->getVacced()->searchItem(i);
   if(t != NULL){
-    cout << "ERROR: CITIZEN " << i << " ALREADY VACCINATED ON " << t->getDateVaccinated() << endl;
+    cout << "ERROR: CITIZEN " << i << " ALREADY VACCINATED ON " << flipDate(t->getDateVaccinated()) << endl;
     return true;
   }
 
@@ -199,8 +199,8 @@ bool VarlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a
   }
 }
 
-void VarlistHeader::listNonVaccinatedPersons(string v){
-  VarlistNode* temp = start;
+void VirlistHeader::listNonVaccinatedPersons(string v){
+  VirlistNode* temp = start;
   while(temp != NULL){
     if(temp->getItem() == v){
       break;
@@ -215,8 +215,8 @@ void VarlistHeader::listNonVaccinatedPersons(string v){
   }
 }
 
-void VarlistHeader::testPrint(){
-  VarlistNode* temp = start;
+void VirlistHeader::testPrint(){
+  VirlistNode* temp = start;
   while(temp != NULL){
     cout << temp->getItem() << "-> ";
     temp = temp->getNext();

@@ -20,6 +20,17 @@ void citizenRecord::print(){
   *country << " " <<
   age << endl;
 }
+
+string flipDate(string t){
+    string new_date= "";
+    new_date=t.substr(0, t.find('-'))+new_date;
+    t=t.substr(t.find('-')+1);
+    new_date=t.substr(0, t.find('-')+1)+new_date;
+    t=t.substr(t.find('-')+1);
+    new_date=t+'-'+new_date;
+    return new_date;
+}
+
 string checkAndFormatDate(string t){
   for(int i=0;i<(int)t.length();i++){
     int x = t[i];

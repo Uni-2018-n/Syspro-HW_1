@@ -7,14 +7,27 @@ fi
 #$(( (( `date+%N` / 1000) % BASE)+1))
 OUTFILE=input.txt;
 touch "${OUTFILE}"; rm "${OUTFILE}"; touch "${OUTFILE}";
+if [ $4 -eq 1 ]
+then
+  id=( `shuf -i 1-9999 -r -n$3` ) #array of id
+else
+  if [ $3 -gt 10000 ]
+  then
+    echo "ERROR: cant generate more ID's than 10000(0-9999)"
+    id=( `shuf -i 0-9999 -n10000` )
+  else
+    id=( `shuf -i 0-9999 -n$3` )
+  fi
+fi
 c=( `shuf -r -n$3 $2` ) #array of countries
 v=( `shuf -r -n$3 $1` ) #array of viruses
+a=( `shuf -i 1-120 -r -n$3` ) #array of ages
 i=0;
 while [ $i -lt "$3" ]
   do
-    t=`expr $RANDOM % 9999`; #id
-    let id=t+1;
-    echo -n "${id} "
+
+    idd=${id[$i]};
+    echo -n "${idd} "
 
     t=`expr $RANDOM % 12`;
     let nam=t+3;
@@ -29,9 +42,8 @@ while [ $i -lt "$3" ]
     cc=${c[$i]};
     echo -n "${cc} "
 
-    t=`expr $RANDOM % 120`; #age
-    let a=t+1;
-    echo -n "${a} "
+    aa=${a[$i]};
+    echo -n "${aa} "
 
     echo -n "${v[$i]} "
 
@@ -51,7 +63,7 @@ while [ $i -lt "$3" ]
       vacced="NO"
     fi
 
-    echo -n "${vacced} "
+    echo -n "${vacced}"
     echo
     i=$(($i+1))
     if [ $4 -eq 1 ] && [ $i -lt "$3" ]
@@ -60,7 +72,7 @@ while [ $i -lt "$3" ]
       let p=t+1;
       while [ $p -lt 20 ] && [ $i -lt "$3" ]
       do
-        echo -n "${id} ${fn} ${ln} ${cc} ${a} "
+        echo -n "${idd} ${fn} ${ln} ${cc} ${aa} "
         echo -n "${v[$i]} "
 
         t=`expr $RANDOM % 100`;
@@ -78,16 +90,14 @@ while [ $i -lt "$3" ]
         else
           vacced="NO"
         fi
-        echo -n "${vacced} "
+        echo -n "${vacced}"
         echo
         t=`expr $RANDOM % 100`;
         let p=t+1;
         i=$(($i+1))
       done
-
     fi
-  done > "$OUTFILE"
-# echo $fullName
+done > "$OUTFILE"
 
 
 

@@ -25,7 +25,7 @@ GlistHeader::GlistHeader(int bloom){
   start = NULL;
   end = NULL;
   countries = new ClistHeader();
-  viruses = new VarlistHeader(bloom);
+  viruses = new VirlistHeader(bloom);
 }
 
 GlistHeader::~GlistHeader(){
@@ -97,7 +97,7 @@ void GlistHeader::insertRecord(string line, bool flag){
         return;
     }
 
-    VarlistNode* temp_virus = viruses->searchVirus(temp[5]);
+    VirlistNode* temp_virus = viruses->searchVirus(temp[5]);
     if(temp_virus == NULL){
       temp_virus = viruses->insertVirus(temp[5]);
     }
@@ -118,7 +118,7 @@ void GlistHeader::insertRecord(string line, bool flag){
       end = new_node;
     }
 
-    VarlistNode* temp_virus = viruses->searchVirus(temp[5]);
+    VirlistNode* temp_virus = viruses->searchVirus(temp[5]);
     if(temp_virus == NULL){
       temp_virus = viruses->insertVirus(temp[5]);
     }
@@ -143,7 +143,7 @@ void GlistHeader::insertCitizenRecord(string line){
 }
 
 void GlistHeader::populationStatus(string vn, string don, string dt, string c, bool t){//with country
-  VarlistNode* temp = viruses->searchVirus(vn);
+  VirlistNode* temp = viruses->searchVirus(vn);
   if(temp == NULL){
     cout << "ERROR VIRUS NOT FOUND" << endl;
   }else{
@@ -162,7 +162,7 @@ void GlistHeader::populationStatus(string vn, string don, string dt, string c, b
 }
 
 void GlistHeader::populationStatus(string vn, string don, string dt, bool t){//without country
-  VarlistNode* temp = viruses->searchVirus(vn);
+  VirlistNode* temp = viruses->searchVirus(vn);
   if(temp == NULL){
     cout << "ERROR VIRUS NOT FOUND" << endl;
   }else{
@@ -185,7 +185,7 @@ void GlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, 
     time_t t= time(0);
     tm* n = localtime(&t);
     string dv = to_string(n->tm_year + 1900) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_mday);
-    insertRecord(i + " " + fn + " " + ln + " " + a + " " + v + "YES " + dv, false);//TODO recheck this if we can save time
+    insertRecord(i + " " + fn + " " + ln + " " + a + " " + v + "YES " + dv, false);
   }
 }
 

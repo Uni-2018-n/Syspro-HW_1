@@ -22,7 +22,6 @@ public:
   void print();
 };
 
-
-string reverse(string t);
+string flipDate(string t);
 string checkAndFormatDate(string t);
 #endif

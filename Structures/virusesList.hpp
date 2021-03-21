@@ -7,38 +7,38 @@
 #include "../classes.hpp"
 using namespace std;
 
-class VarlistNode{
+class VirlistNode{
   string item;
   bloomFilter* bloom;
   skipHeader* vaccinated;
   skipHeader* notVaccinated;
-  VarlistNode* next;
+  VirlistNode* next;
 public:
-  VarlistNode(string i, int l);
-  ~VarlistNode();
+  VirlistNode(string i, int l);
+  ~VirlistNode();
 
   string getItem();
   bloomFilter* getBloom();
   skipHeader* getVacced();
   skipHeader* getNotVacced();
-  VarlistNode* getNext();
+  VirlistNode* getNext();
 
   void setItem(string i);
-  void setNext(VarlistNode* n);
+  void setNext(VirlistNode* n);
 
   void insertRecord(int* id, citizenRecord* c, string v, string dv, bool flag);
 };
 
-class VarlistHeader{
-  VarlistNode* start;
-  VarlistNode* end;
+class VirlistHeader{
+  VirlistNode* start;
+  VirlistNode* end;
   int bloom_len;
 public:
-  VarlistHeader(int);
-  ~VarlistHeader();
+  VirlistHeader(int);
+  ~VirlistHeader();
 
-  VarlistNode* insertVirus(string i);
-  VarlistNode* searchVirus(string);
+  VirlistNode* insertVirus(string i);
+  VirlistNode* searchVirus(string);
   void vaccineStatusBloom(int i, string v);
   void vaccineStatus(int i, string v);
   void vaccineStatus(int i);
