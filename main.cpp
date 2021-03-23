@@ -7,7 +7,6 @@
 
 using namespace std;
 
-//0123-56-78
 int main(int argc, char* argv[]){
   srand(time(NULL));
   char* pathToRecords;
@@ -38,6 +37,7 @@ int main(int argc, char* argv[]){
   delete[] pathToRecords;
   records.close();
 
+
   cout <<
   "/vaccineStatusBloom citizenID virusName" << endl <<
   "/vaccineStatus citizenID virusName" << endl <<
@@ -49,10 +49,6 @@ int main(int argc, char* argv[]){
   "/list-nonVaccinated-Persons virusName" << endl <<
   "/exit" << endl << endl;
 
-  // main_list->populationStatus("H1N1", "2019-01-27", "2022-01-20");
-  // main_list->listNonVaccinatedPersons("H1N1");
-  // delete main_list;
-  // return 0;
 
   while(true){
     string command;

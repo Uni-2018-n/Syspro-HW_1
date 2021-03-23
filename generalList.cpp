@@ -1,4 +1,5 @@
 #include "generalList.hpp"
+#include <string>
 
 ////////////////////////////listNode
 listNode::listNode(citizenRecord* c){
@@ -184,8 +185,8 @@ void GlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, 
   if(!viruses->vaccinateNow(i, fn, ln, c, a, v)){
     time_t t= time(0);
     tm* n = localtime(&t);
-    string dv = to_string(n->tm_year + 1900) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_mday);
-    insertRecord(i + " " + fn + " " + ln + " " + a + " " + v + "YES " + dv, false);
+    string dv = to_string(n->tm_mday) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_year + 1900);
+    insertRecord(to_string(i) + " " + fn + " " + ln + " " + c + " " + a + " " + v + " YES " + dv, false);
   }
 }
 

@@ -53,6 +53,7 @@ void VirlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv, b
         cout << "ERROR record cant get vaccinated because already been not vaccinated" << endl;
       }
     }else{
+      dv = checkAndFormatDate(dv);
       string* dateV = new string(dv);
       SkiplistNode* t= vaccinated->insertItem(id, c, dateV);
       if(t != NULL){

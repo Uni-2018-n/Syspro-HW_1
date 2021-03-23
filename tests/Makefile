@@ -1,4 +1,4 @@
-FLAGS = -std=c++11 -Wall -g -o
+FLAGS = -std=c++11 -Wall -g -o -O3
 SOURCE = test.cpp
 ITEM = test
 
