@@ -1,6 +1,5 @@
 #include <iostream>
 #include "skipList.hpp"
-#include <math.h>
 using namespace std;
 
 //////////////////////////// SkiplistNode
@@ -506,7 +505,7 @@ SkiplistNode* skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
   {
     int f=1;
     while(f && top_lvl < max_lvl){
-      if((rand() % 2 + 1) == 1){
+      if((rand() % 2 + 1) == 1){//random number 1-2 to be fair toss
         top_lvl++;
       }else{
         f=0;

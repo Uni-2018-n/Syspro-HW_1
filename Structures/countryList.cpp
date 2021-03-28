@@ -50,12 +50,12 @@ string* ClistHeader::insertItem(string i){
   return new_node->item;
 }
 
-void ClistHeader::testPrint(){
-  ClistNode* temp = start;
-  while(temp != NULL){
-    cout << *(temp->item) << "-> ";
-    temp = temp->next;
-  }
-  cout << endl;
-  return;
-}
+// void ClistHeader::testPrint(){
+//   ClistNode* temp = start;
+//   while(temp != NULL){
+//     cout << *(temp->item) << "-> ";
+//     temp = temp->next;
+//   }
+//   cout << endl;
+//   return;
+// }

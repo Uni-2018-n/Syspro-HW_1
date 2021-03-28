@@ -11,12 +11,12 @@ int main(int argc, char* argv[]){
   srand(time(NULL));
   char* pathToRecords;
   int bloomSize;
-  if(argc != 5){
+  if(argc != 5){//simple input error checking
     cout << "wrong input try: \"-c citizenRecordsFile -b bloomSize\"" << endl;
     return 1;
   }
   for(int i=1;i<argc;i++){
-    if(strcmp(argv[i], "-c") ==0){
+    if(strcmp(argv[i], "-c") ==0){//used this method for possibility that the input is in wrong order etc
       pathToRecords = new char[strlen(argv[i+1])+1]();
       strcpy(pathToRecords, argv[i+1]);
     }else if(strcmp(argv[i], "-b") ==0){
@@ -24,9 +24,9 @@ int main(int argc, char* argv[]){
       break;
     }
   }
-  cout << "Input: " << pathToRecords << " " << bloomSize << endl;
-  GlistHeader* main_list = new GlistHeader(bloomSize);
-  ifstream records(pathToRecords);
+  // cout << "Input: " << pathToRecords << " " << bloomSize << endl;
+  GlistHeader* main_list = new GlistHeader(bloomSize);//initialize the general list
+  ifstream records(pathToRecords);//start reading from input file and inserting records to the general list
   {
     string line;
     while(getline(records, line)){
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
     // main_list->testPrint();
   }
   delete[] pathToRecords;
-  records.close();
+  records.close();//since we are done with reading from the file we wont be needing the file
 
 
   cout <<
@@ -50,7 +50,7 @@ int main(int argc, char* argv[]){
   "/exit" << endl << endl;
 
 
-  while(true){
+  while(true){//simple switch-case but for strings
     string command;
     cin >> command;
     if(command == "/exit"){
@@ -60,7 +60,7 @@ int main(int argc, char* argv[]){
     cin.get();
     string line;
     getline(cin, line);
-    string temp[8];
+    string temp[8];//convert the readed string to a string array for more simplicity
     int i=0;
     string word = "";
     for(auto x : line){
@@ -84,9 +84,9 @@ int main(int argc, char* argv[]){
       }
     }else if(command == "/populationStatus"){
       if(i == 4){
-        temp[2] = checkAndFormatDate(temp[2]);
-        temp[3] = checkAndFormatDate(temp[3]);
-        if(temp[2] == "" || temp[3] == ""){
+        temp[2] = checkAndFormatDate(temp[2]);//error checking and converting to programm-friendly the date
+        temp[3] = checkAndFormatDate(temp[3]);//(we need to be like yyyy-mm-dd because its comparable)
+        if(temp[2] == "" || temp[3] == ""){//if checkAndFormatDate returned an empty string we had a problem with reading the date and abandoned we command
           cout << "ERROR WRONG DATE FORMAT" <<endl;
           continue;
         }

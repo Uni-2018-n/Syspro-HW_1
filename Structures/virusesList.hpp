@@ -8,9 +8,9 @@
 using namespace std;
 
 class VirlistNode{
-  string item;
-  bloomFilter* bloom;
-  skipHeader* vaccinated;
+  string item;//name of the virus
+  bloomFilter* bloom;//bloom filter for each virus
+  skipHeader* vaccinated;//two skip lists for each virus
   skipHeader* notVaccinated;
   VirlistNode* next;
 public:
@@ -32,7 +32,7 @@ public:
 class VirlistHeader{
   VirlistNode* start;
   VirlistNode* end;
-  int bloom_len;
+  int bloom_len;//used so when we creat a new virus it gets it as argument
 public:
   VirlistHeader(int);
   ~VirlistHeader();
@@ -42,10 +42,10 @@ public:
   void vaccineStatusBloom(int i, string v);
   void vaccineStatus(int i, string v);
   void vaccineStatus(int i);
-  bool vaccinateNow(int i, string fn, string ln, string c, string a, string v);
+  bool vaccinateNow(int i, string v);
   void listNonVaccinatedPersons(string v);
 
-  void testPrint();
+  // void testPrint();
 };
 
 #endif

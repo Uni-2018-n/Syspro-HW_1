@@ -4,6 +4,8 @@
 #include <iostream>
 using namespace std;
 
+//simple linked list for strings with header
+
 class ClistNode{
 public:
   string* item;
@@ -21,6 +23,6 @@ public:
   ~ClistHeader();
   string* searchItem(string);
   string* insertItem(string i);
-  void testPrint();
+  // void testPrint();
 };
 #endif

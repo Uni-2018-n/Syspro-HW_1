@@ -26,7 +26,7 @@ GlistHeader::GlistHeader(int bloom){
   start = NULL;
   end = NULL;
   countries = new ClistHeader();
-  viruses = new VirlistHeader(bloom);
+  viruses = new VirlistHeader(bloom);//bloom is the bloom size needed for the bloom filter inside each virus
 }
 
 GlistHeader::~GlistHeader(){
@@ -41,7 +41,7 @@ GlistHeader::~GlistHeader(){
   delete viruses;
 }
 
-listNode* GlistHeader::searchCitizen(int id){
+listNode* GlistHeader::searchCitizen(int id){//simple search method for the citizend based on their id
   listNode* temp = start;
   while(temp != NULL){
     if(*(temp->getCitizen()->citizenId) == id){
@@ -53,7 +53,7 @@ listNode* GlistHeader::searchCitizen(int id){
 }
 
 void GlistHeader::insertRecord(string line, bool flag){
-  string temp[8];
+  string temp[8];//converting the line we have into a string array
   int i=0;
   string word = "";
   for(auto x : line){
@@ -68,7 +68,7 @@ void GlistHeader::insertRecord(string line, bool flag){
   temp[i] = word;
 
   {
-    int errors = stoi(temp[4]);
+    int errors = stoi(temp[4]);//error checking with all the emplementation details
     if(errors < 1 || errors > 120){
       cout << "ERROR found record with age out of boundaries " << line << endl;
       return;
@@ -79,17 +79,15 @@ void GlistHeader::insertRecord(string line, bool flag){
     }
   }
   if(temp[6] == "YES"){
-    // cout << "one: " << temp[7] << endl;
     temp[7] = checkAndFormatDate(temp[7]);
     if(temp[7] == ""){
       cout << "ERROR WRONG FORMAT DATE" << endl;
       return;
     }
-    // cout << "two: " << temp[7] << endl;
   }
 
-  listNode* tmp = searchCitizen(stoi(temp[0]));
-  if(tmp != NULL){
+  listNode* tmp = searchCitizen(stoi(temp[0]));//searching if the citizen is already inside so we wont have any dublication
+  if(tmp != NULL){//if its already inside we do a full check if its the same citizen or a citizen with the same id but diffrent data etc
     if(tmp->getCitizen()->firstName.compare(temp[1]) !=0 ||
       tmp->getCitizen()->lastName.compare(temp[2]) !=0 ||
       tmp->getCitizen()->country->compare(temp[3]) !=0 ||
@@ -98,19 +96,19 @@ void GlistHeader::insertRecord(string line, bool flag){
         return;
     }
 
-    VirlistNode* temp_virus = viruses->searchVirus(temp[5]);
+    VirlistNode* temp_virus = viruses->searchVirus(temp[5]);//checking if virus already exists in our list
     if(temp_virus == NULL){
-      temp_virus = viruses->insertVirus(temp[5]);
+      temp_virus = viruses->insertVirus(temp[5]);//if not we add the virus
     }
-    temp_virus->insertRecord(tmp->getCitizen()->citizenId, tmp->getCitizen(), temp[6], temp[7], flag);
-  }else{//first time we see this citizen
-    string* temp_country = countries->searchItem(temp[3]);
+    temp_virus->insertRecord(tmp->getCitizen()->citizenId, tmp->getCitizen(), temp[6], temp[7], flag);//and we add the citizen to the virus to be marked as vaccinated or not vaccinated
+  }else{//incase the citizen is new and we need to add to the list
+    string* temp_country = countries->searchItem(temp[3]);//we check if the country that the citizen is from already exists in the list
     if(temp_country == NULL){
       temp_country = countries->insertItem(temp[3]);
     }
-    citizenRecord*  temp_citizen = new citizenRecord(temp[0], temp[1], temp[2], temp_country, temp[4]);
+    citizenRecord*  temp_citizen = new citizenRecord(temp[0], temp[1], temp[2], temp_country, temp[4]);//create a new citizenRecord with the data of the citizen
 
-    listNode* new_node = new listNode(temp_citizen);
+    listNode* new_node = new listNode(temp_citizen);//a new listnode to be added inside the citizens list
     if(start == NULL){//case citizen is first to be inserted
       start = new_node;
       end = new_node;
@@ -119,11 +117,11 @@ void GlistHeader::insertRecord(string line, bool flag){
       end = new_node;
     }
 
-    VirlistNode* temp_virus = viruses->searchVirus(temp[5]);
+    VirlistNode* temp_virus = viruses->searchVirus(temp[5]);//search the virus and if needed create it
     if(temp_virus == NULL){
       temp_virus = viruses->insertVirus(temp[5]);
     }
-    temp_virus->insertRecord(new_node->getCitizen()->citizenId, new_node->getCitizen(), temp[6], temp[7], flag);
+    temp_virus->insertRecord(new_node->getCitizen()->citizenId, new_node->getCitizen(), temp[6], temp[7], flag);//and add the citizen to the virus to be marked vaccinated or not 
   }
 }
 
@@ -142,18 +140,19 @@ void GlistHeader::vaccineStatus(int i){
 void GlistHeader::insertCitizenRecord(string line){
   insertRecord(line, true);
 }
-
+//two types of population status methods, one that includes country and one with out
 void GlistHeader::populationStatus(string vn, string don, string dt, string c, bool t){//with country
-  VirlistNode* temp = viruses->searchVirus(vn);
+//the boolean parameter is used to see if we have popStatusByAge or simple populationStatus command
+  VirlistNode* temp = viruses->searchVirus(vn);//search the virus we need the statistics for 
   if(temp == NULL){
     cout << "ERROR VIRUS NOT FOUND" << endl;
   }else{
-    if(!t){
-      countryStatsNode* stats = temp->getVacced()->populationStatus(don, dt, c);
-      stats = temp->getNotVacced()->populationStatus(stats, c);
-      stats->print();
-      delete stats;
-    }else{//case age
+    if(!t){//case populationStatus
+      countryStatsNode* stats = temp->getVacced()->populationStatus(don, dt, c);//get statistics from vaccinated list of the virus
+      stats = temp->getNotVacced()->populationStatus(stats, c);// get statistics from not vaccinated list of the virus 
+      stats->print();//print the statistics 
+      delete stats;//and delete them as we wont be needing them anymore
+    }else{//case popStatusByAge
       countryStatsNode* stats = temp->getVacced()->populationStatusAge(don, dt, c);
       stats = temp->getNotVacced()->populationStatusAge(stats, c);
       stats->printAge();
@@ -172,7 +171,7 @@ void GlistHeader::populationStatus(string vn, string don, string dt, bool t){//w
       stats = temp->getNotVacced()->populationStatus(stats);
       stats->print();
       delete stats;
-    }else{//case age
+    }else{
       countryStatsHeader* stats = temp->getVacced()->populationStatusAge(don, dt);
       stats = temp->getNotVacced()->populationStatusAge(stats);
       stats->printAge();
@@ -182,11 +181,11 @@ void GlistHeader::populationStatus(string vn, string don, string dt, bool t){//w
 }
 
 void GlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, string v){
-  if(!viruses->vaccinateNow(i, fn, ln, c, a, v)){
-    time_t t= time(0);
+  if(!viruses->vaccinateNow(i, v)){//check if citizen already vaccinated or already not vaccinated 
+    time_t t= time(0);//if not insert citizen into the database with date vaccinated the current date
     tm* n = localtime(&t);
     string dv = to_string(n->tm_mday) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_year + 1900);
-    insertRecord(to_string(i) + " " + fn + " " + ln + " " + c + " " + a + " " + v + " YES " + dv, false);
+    insertRecord(to_string(i) + " " + fn + " " + ln + " " + c + " " + a + " " + v + " YES " + dv, false);//TODO: might need to set this to true because if we vaccinate someone already inside
   }
 }
 
@@ -194,13 +193,13 @@ void GlistHeader::listNonVaccinatedPersons(string v){
   viruses->listNonVaccinatedPersons(v);
 }
 
-void GlistHeader::testPrint(){
-  listNode* temp = start;
-  while(temp != NULL){
-    cout << *(temp->getCitizen()->citizenId) << "-> ";
-    temp = temp->getNext();
-  }
-  cout << endl;
-  countries->testPrint();
-  viruses->testPrint();
-}
+// void GlistHeader::testPrint(){
+//   listNode* temp = start;
+//   while(temp != NULL){
+//     cout << *(temp->getCitizen()->citizenId) << "-> ";
+//     temp = temp->getNext();
+//   }
+//   cout << endl;
+//   countries->testPrint();
+//   viruses->testPrint();
+// }

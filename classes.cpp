@@ -21,7 +21,7 @@ void citizenRecord::print(){
   age << endl;
 }
 
-string flipDate(string t){
+string flipDate(string t){//used to flip the date incase we need to print a date in normal form
     string new_date= "";
     new_date=t.substr(0, t.find('-'))+new_date;
     t=t.substr(t.find('-')+1);
@@ -31,8 +31,8 @@ string flipDate(string t){
     return new_date;
 }
 
-string checkAndFormatDate(string t){
-  for(int i=0;i<(int)t.length();i++){
+string checkAndFormatDate(string t){//used to format and check the date
+  for(int i=0;i<(int)t.length();i++){//for example fixes a date from beeing: 1-2-2001 -> 01-02-2001 etc
     int x = t[i];
     if(x != '-'){
       if(x < '0' || x > '9'){
@@ -109,7 +109,3 @@ string checkAndFormatDate(string t){
     return to_return;
   }
 }
-
-
-
-//

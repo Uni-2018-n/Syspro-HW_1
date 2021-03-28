@@ -8,6 +8,8 @@
 
 using namespace std;
 
+//simple linked list with a header
+
 class listNode{
   citizenRecord* citizen;
   listNode* next;
@@ -20,11 +22,11 @@ public:
   listNode* getNext();
 };
 
-class GlistHeader{
-  listNode* start;
+class GlistHeader{//for simplicity reasons in the header we have the
+  listNode* start;//start and end of the citizen list
   listNode* end;
-  ClistHeader* countries;
-  VirlistHeader* viruses;
+  ClistHeader* countries;//a list with all the countries so we wont have any data doublication
+  VirlistHeader* viruses;//and a list with all the viruses with all the implementation purposes
 public:
   GlistHeader(int bloom);
   ~GlistHeader();
@@ -43,7 +45,7 @@ public:
   void insertCitizenRecord(string line);
   void listNonVaccinatedPersons(string v);
 
-  void testPrint();
+  // void testPrint();
 };
 
 #endif

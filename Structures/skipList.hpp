@@ -6,7 +6,7 @@
 #include "populationStatistics.hpp"
 using namespace std;
 
-#define MAXIMUM 3
+#define MAXIMUM 5
 
 
 class SkiplistNode{//nodes
