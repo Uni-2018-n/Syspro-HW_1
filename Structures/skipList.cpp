@@ -49,14 +49,6 @@ void SkiplistNode::print(){
   citizen->print();
 }
 
-void SkiplistNode::testPrint(){
-  cout << *item << "(";
-  if(prev != NULL){
-    cout << *(prev->item);
-  }
-  cout << ") -> ";
-}
-
 int SkiplistNode::getItem(){
   return *item;
 }
@@ -108,73 +100,74 @@ SkiplistNode* SkiplistHeader::insertAtStart(SkiplistNode* i){
   return new_item;
 }
 
-SkiplistNode* SkiplistHeader::searchItem(int i){
+SkiplistNode* SkiplistHeader::searchItem(int i){//returns NULL or the node if found
   SkiplistNode* temp = start;
-  if(temp == NULL){
+  if(temp == NULL){//if layer empty return null
     return NULL;
   }
-  if(temp->getItem() == i){
-    while(temp->getLowerLevel() != NULL){
+  if(temp->getItem() == i){//if first item of the layer is the desired item
+    while(temp->getLowerLevel() != NULL){//go to the last layer
       temp= temp->getLowerLevel();
     }
-    return temp;//found
-  }else if(temp->getItem() > i){
-    return temp;//cant found this from this level
+    return temp;//and return the item's node
+  }else if(temp->getItem() > i){//if the layer first item of this layer is biger than the item we need to find
+    return temp;//we cant find it from here so we return the first item to tell the skipHeader to search the lower layer
   }
-  if(temp->getNext() == NULL){
+  if(temp->getNext() == NULL){//if only one item exists inside the layer
     if(temp->getItem() < i){
-      while(temp->getNext() == NULL){
+      while(temp->getNext() == NULL){//go to the lower level for every level that this item is the last on the level
         temp = temp->getLowerLevel();
-        if(temp == NULL){
+        if(temp == NULL){//if this is null then we cant find it because we've gone to the last layer(full list) and this is the last item in that list
           return NULL;
         }
       }
     }
   }
+  //if we go here we will have one node with item < than the requested item and with existing next node
 
-  while(temp->getNext() != NULL){
-    if(temp->getNext()->getItem() == i){
-      temp = temp->getNext();
-      while(temp->getLowerLevel() != NULL){
+  while(temp->getNext() != NULL){//check if next node exists(to keep the loop going or not)
+    if(temp->getNext()->getItem() == i){//if we've found the item
+      temp = temp->getNext();//go to the node with the item
+      while(temp->getLowerLevel() != NULL){//go to the original node of the item(last layer's node for the item)
         temp = temp->getLowerLevel();
       }
-      return temp;//found
+      return temp;//and return it
     }
-    if(temp->getNext()->getItem() > i){
-      if(temp->getLowerLevel() == NULL){
-        return NULL;//dosent exist
+    if(temp->getNext()->getItem() > i){//if the next item is bigger than the desired item
+      if(temp->getLowerLevel() == NULL){//check if this is the last list
+        return NULL;//if yes item dosent exist
       }
-      temp = temp->getLowerLevel();
-    }else if(temp->getNext()->getItem() < i){
-      temp= temp->getNext();
-      while(temp->getNext() == NULL){
-        if(temp->getLowerLevel() == NULL){
-          return NULL;//dosent exist
+      temp = temp->getLowerLevel();//if not go to the lower list to check if there is the node that we need to find between this node and the one that we just found > than the item
+    }else if(temp->getNext()->getItem() < i){//if the next node's item is < than the one we need to find
+      temp= temp->getNext();//we need to check the next node
+      while(temp->getNext() == NULL){//if that node dosent exist we need to go one layer down
+        if(temp->getLowerLevel() == NULL){//if we've reached the end of the layers 
+          return NULL;//couldnt find the desired item
         }
         temp =temp->getLowerLevel();
       }
     }
   }
-  return NULL;
+  return NULL;//wont go here in any case.
 }
 
 SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, int top_lvl){
-  SkiplistNode** level_array = new SkiplistNode*[MAXIMUM];//TODO: set this as max_lvl
+  SkiplistNode** level_array = new SkiplistNode*[MAXIMUM];//level array is used to keep track the possition we need to put the node in the layers (if needed)
   int lvl_counter=0;
   SkiplistNode* temp = start;
-  if(temp == NULL){
+  if(temp == NULL){//this is the case that the skiplist is empty so we need to add a new node on the last layer(adding the node to the top layers wont happen here)
     SkiplistNode* new_node = new SkiplistNode(i, c, dv, start);
     start = new_node;
     delete[] level_array;
     return new_node;
   }
-  if(temp->getItem() == *i){
-    while(temp->getLowerLevel() != NULL){
+  if(temp->getItem() == *i){//in case first item in layer is the item we have return NULL cause it already exists
+    while(temp->getLowerLevel() != NULL){//TODO: this might not be needed
       temp= temp->getLowerLevel();
     }
     delete[] level_array;
-    return NULL;//found
-  }else if(temp->getItem() > *i){
+    return NULL;
+  }else if(temp->getItem() > *i){//if first item of the layer is > than the item we need to insert
     if(temp->getLowerLevel() == NULL && temp->getItem() > *i){//case this is needs to be the first node of last layer
       SkiplistNode* new_node = new SkiplistNode(i, c, dv, start);
       start = new_node;
@@ -185,48 +178,48 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
     delete[] level_array;
     return temp;//cant found this from this level
   }
-  if(temp->getNext() == NULL){
+  if(temp->getNext() == NULL){//incase this layer only has one item we need to go to a lower level with more items and add the positions that we've gone through to the level_array
     if(temp->getItem() < *i){
       while(temp->getNext() == NULL){
-        if(temp->getLowerLevel() == NULL){//case we are in lowest level and the item needs to be in the end
+        if(temp->getLowerLevel() == NULL){//case we are in lowest level, the item needs to be in the end
           SkiplistNode* new_node = new SkiplistNode(i, c, dv);
           temp->setNext(new_node);
           new_node->setPrev(temp);
           SkiplistNode* to_return = new_node;
-          {
-            while(lvl_counter> 0 && top_lvl>0){
-              lvl_counter--;
-              SkiplistNode* tmp = new SkiplistNode(new_node, level_array[lvl_counter]->getNext());
-              if(level_array[lvl_counter]->getNext()!= NULL){
+          {//this code is used multiple times. Top_lvl is used to determine how many layers we can go up(from the coin toss)
+            while(lvl_counter> 0 && top_lvl>0){//loop untill we have put the item in every layer needed
+              lvl_counter--;//lvl_counter is used to use the level_array array in correct order so we will add the nodes in the right order
+              SkiplistNode* tmp = new SkiplistNode(new_node, level_array[lvl_counter]->getNext());//create a tmp node with data from the new node of the inserted item and lower_level the node of the level_array in that step
+              if(level_array[lvl_counter]->getNext()!= NULL){//fix the connections to the layer's linked list so we wont miss the tmp node
                 level_array[lvl_counter]->getNext()->setPrev(tmp);
               }
               level_array[lvl_counter]->setNext(tmp);
               tmp->setPrev(level_array[lvl_counter]);
               new_node = tmp;
-              top_lvl--;
+              top_lvl--;//and go to add to the next level
             }
           }
           delete[] level_array;
           return to_return;
         }
-        level_array[lvl_counter] = temp;
+        level_array[lvl_counter] = temp;//since we are going one layer down we need to save the spot in the array
         lvl_counter++;
         temp = temp->getLowerLevel();
       }
     }
   }
 
-  while(temp->getNext() != NULL){
+  while(temp->getNext() != NULL){//same technique with the search function but when we find the node with same item we return null and if we find a node with next > than the item we simply add it between them
     if(temp->getNext()->getItem() == *i){
       temp = temp->getNext();
-      while(temp->getLowerLevel() != NULL){
+      while(temp->getLowerLevel() != NULL){//TODO: might this be not nessesery
         temp = temp->getLowerLevel();
       }
       delete[] level_array;
       return NULL;//found
     }
-    if(temp->getNext()->getItem() > *i){
-      if(temp->getLowerLevel() == NULL){
+    if(temp->getNext()->getItem() > *i){//case next node's item is > than the item we need to insert
+      if(temp->getLowerLevel() == NULL){//this means that this is the layer with the full list so we need to add a new node there
         //dosent exist
         SkiplistNode* new_node = new SkiplistNode(i, c, dv, temp->getNext());
         if(temp->getNext() != NULL){
@@ -253,12 +246,11 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
       }
       level_array[lvl_counter] = temp;
       lvl_counter++;
-      temp = temp->getLowerLevel();
-    }else if(temp->getNext()->getItem() < *i){
-      temp= temp->getNext();
-      while(temp->getNext() == NULL){
-        if(temp->getLowerLevel() == NULL){
-          //dosent exist, case: last item in SkiplistNode.
+      temp = temp->getLowerLevel();//if not go one layer down and check if there is an item between the node that we are and the next node that we just checked
+    }else if(temp->getNext()->getItem() < *i){//if the next one is smaller than the item
+      temp= temp->getNext();//repeat with the next node
+      while(temp->getNext() == NULL){//if the next node dosent exist go ahead and go to the lower level untill a next node exists
+        if(temp->getLowerLevel() == NULL){//if we've reached the lower level this means that we are in the end of the last layer so we need to add it there
           SkiplistNode* new_node = new SkiplistNode(i, c, dv);
           temp->setNext(new_node);
           new_node->setPrev(temp);
@@ -288,12 +280,12 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
   return NULL;
 }
 
-SkiplistNode* SkiplistHeader::deleteItem(int i){
+SkiplistNode* SkiplistHeader::deleteItem(int i){//returns null if item couldnt be found 
   SkiplistNode* temp = start;
   if(temp == NULL){
     return NULL;
   }
-  if(temp->getItem() == i){
+  if(temp->getItem() == i){//just like before but go to the lower level and simply delete the nodes return the node from last layer
     while(temp->getLowerLevel() != NULL){
       if(temp->getPrev() != NULL){
         temp->getPrev()->setNext(temp->getNext());
@@ -319,7 +311,7 @@ SkiplistNode* SkiplistHeader::deleteItem(int i){
   }else if(temp->getItem() > i){
     return temp;//cant found this from this level
   }
-  if(temp->getNext() == NULL){
+  if(temp->getNext() == NULL){//incase only one item exists in this layer, go to the lower layer
     if(temp->getItem() < i){
       while(temp->getNext() == NULL){
         temp = temp->getLowerLevel();
@@ -330,7 +322,7 @@ SkiplistNode* SkiplistHeader::deleteItem(int i){
     }
   }
 
-  while(temp->getNext() != NULL){
+  while(temp->getNext() != NULL){//same with insert and search but remove the nodes and fix the connections inside the linked lists
     if(temp->getNext()->getItem() == i){
       temp = temp->getNext();
       while(temp->getLowerLevel() != NULL){
@@ -378,14 +370,6 @@ void SkiplistHeader::print(){
   }
 }
 
-void SkiplistHeader::testPrint(){
-  SkiplistNode* temp = start;
-  while(temp != NULL){
-    temp->testPrint();
-    temp = temp->getNext();
-  }
-}
-
 SkiplistNode* SkiplistHeader::getFirst(){
   return start;
 }
@@ -420,10 +404,6 @@ void skipNode::print(){
   item->print();
 }
 
-void skipNode::testPrint(){
-  item->testPrint();
-}
-
 skipNode* skipNode::getNext(){
   return next;
 }
@@ -450,7 +430,7 @@ skipHeader::skipHeader(){
   start = temp;
   end = temp;
   lvlnum = 1;
-  max_lvl = MAXIMUM; //TODO might need to change here something
+  max_lvl = MAXIMUM;
   for(int i=0;i<max_lvl;i++){//create all the layers
     addLayer();
   }
@@ -466,7 +446,7 @@ skipHeader::~skipHeader(){
   }
 }
 
-void skipHeader::addLayer(){
+void skipHeader::addLayer(){//simple function that adds a node at the end of the list
   skipNode* temp = new skipNode();
   temp->setPrev(end);
   end->setNext(temp);
@@ -500,8 +480,7 @@ SkiplistNode* skipHeader::searchItem(int i){
 }
 
 SkiplistNode* skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
-  // int top_lvl = rand() % max_lvl + 0;
-  int top_lvl =0;//calculate in how many levels the item will go to
+  int top_lvl = 0;//calculate in how many levels the item will go to
   {
     int f=1;
     while(f && top_lvl < max_lvl){
@@ -513,7 +492,7 @@ SkiplistNode* skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
     }
 
   }
-  int skiped_layers =0;//used to see how many layers was skiped because first item is > i
+  int skiped_layers = 0;//used to see how many layers was skiped because first item is > i
   skipNode* temp = end;//use of dual linked SkiplistNode, start == SkiplistNode with all the items. with that in mind, we start our search with the SkiplistNode with the less amount of items
   while(temp->getItem()->getFirst() == NULL){//same with search
     if(temp->getPrev() == NULL){//if for example SkiplistNode with all the items is empty, need to add it there
@@ -600,10 +579,11 @@ SkiplistNode* skipHeader::deleteItem(int i){
   }
 }
 
-countryStatsNode* skipHeader::populationStatus(string don, string dt, string c){//vacced
-  countryStatsNode* stats = new countryStatsNode(c);
+countryStatsNode* skipHeader::populationStatus(string don, string dt, string c){//for populationStatus with country specified
+//calculates statistics for the vaccinated skip list and returns it.
+  countryStatsNode* stats = new countryStatsNode(c);//only need one node because we only have one country
   SkiplistNode* temp = start->getItem()->getFirst();
-  while(temp != NULL){
+  while(temp != NULL){//go through the list and do nessesery actions
     if(temp->getCitizen()->getCountry() == c){
       if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
         stats->topDateVacced();
@@ -616,18 +596,20 @@ countryStatsNode* skipHeader::populationStatus(string don, string dt, string c){
   return stats;
 }
 
-countryStatsNode* skipHeader::populationStatus(countryStatsNode* stats, string c){//not vacced
+countryStatsNode* skipHeader::populationStatus(countryStatsNode* stats, string c){//for populationStatus but with specified country
+//gets a statistics node and does nessesary actions as before
   SkiplistNode* temp = start->getItem()->getFirst();
   while(temp != NULL){
     if(temp->getCitizen()->getCountry() == c){
-      stats->topPl();
+      stats->topPl();//because we use the not vaccinated skip list only people that arent vaccinated go through here
     }
     temp = temp->getNext();
   }
   return stats;
 }
 
-countryStatsHeader* skipHeader::populationStatus(string don, string dt){//vacced without country
+countryStatsHeader* skipHeader::populationStatus(string don, string dt){//for populationStatus but without country speficied
+//same as before but we use a list of statistics nodes for each country we go through 
   countryStatsHeader* stats = new countryStatsHeader();
   SkiplistNode* temp = start->getItem()->getFirst();
   while(temp != NULL){
@@ -641,7 +623,7 @@ countryStatsHeader* skipHeader::populationStatus(string don, string dt){//vacced
   return stats;
 }
 
-countryStatsHeader* skipHeader::populationStatus(countryStatsHeader* stats){//not vacced without country
+countryStatsHeader* skipHeader::populationStatus(countryStatsHeader* stats){//like before
   SkiplistNode* temp = start->getItem()->getFirst();
   while(temp != NULL){
     stats->insertItem(temp->getCitizen()->getCountry(), 0);
@@ -650,8 +632,7 @@ countryStatsHeader* skipHeader::populationStatus(countryStatsHeader* stats){//no
   return stats;
 }
 
-
-
+//exactly like populationStatus but we use the specific functions specified in populationStatistics files for popStatusByAge command
 countryStatsNode* skipHeader::populationStatusAge(string don, string dt, string c){//vacced
   countryStatsNode* stats = new countryStatsNode(c);
   SkiplistNode* temp = start->getItem()->getFirst();
@@ -703,21 +684,6 @@ countryStatsHeader* skipHeader::populationStatusAge(countryStatsHeader* stats){/
   return stats;
 }
 
-
-
-
 void skipHeader::print(){
   start->print();
 }
-
-void skipHeader::testPrint(){
-  skipNode* temp = end;
-  while(temp != NULL){
-    temp->getItem()->testPrint();
-    temp = temp->getPrev();
-    cout << endl;
-  }
-}
-
-
-//

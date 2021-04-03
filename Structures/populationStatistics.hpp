@@ -5,11 +5,20 @@
 
 using namespace std;
 
+/*this is used two ways, if the command is followed by a country then we just
+create an countryStatsNode object and do everything there.
+If country isnt specified we have a temporary linked list with countryStatsNode nodes
+for each country that we come accross in our database.
+*/
 class countryStatsNode{
   string item;
-  int Datevacced;
-  int v;
-  int pl;
+  //for popStatus
+  int Datevacced;//one for those who vaccinated inside the date range
+  int v;//one for those who were vaccinated in general
+  int pl;//and the count of all the people that were inside the database
+
+  //for popStatusAge
+  //for simplicity reasons used same 3 variables for each category
   int DateZT;
   int ZT;
   int plZT;
@@ -24,50 +33,15 @@ class countryStatsNode{
   int plS;
   countryStatsNode* next;
 public:
-
   countryStatsNode(string n);
   countryStatsNode(string n, int b);
   string getItem();
+
   void topDateVacced();
   void topV();
   void topPl();
 
-  void topCorrectCat(int b, int a){
-    if(a >=0 && a <=19){
-      if(b==2){
-        DateZT++;
-        ZT++;
-      }else if(b ==1){
-        ZT++;
-      }
-      plZT++;
-    }else if(a >=20 && a <=39){
-      if(b==2){
-        DateTF++;
-        TF++;
-      }else if(b ==1){
-        TF++;
-      }
-      plTF++;
-    }else if(a >=40 && a <=59){
-      if(b==2){
-        DateFS++;
-        FS++;
-      }else if(b ==1){
-        FS++;
-      }
-      plFS++;
-    }else if(a >=60){
-      if(b==2){
-        DateS++;
-        S++;
-      }else if(b ==1){
-        S++;
-      }
-      plS++;
-    }
-
-  }
+  void topCorrectCat(int b, int a);
   countryStatsNode* getNext();
   void setNext(countryStatsNode* n);
   void print();
@@ -84,8 +58,4 @@ public:
   void print();
   void printAge();
 };
-
 #endif
-//b=2 d+v+p
-//b=1 v+p
-//b=0 p

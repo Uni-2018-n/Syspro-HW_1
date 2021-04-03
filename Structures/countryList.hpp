@@ -23,6 +23,5 @@ public:
   ~ClistHeader();
   string* searchItem(string);
   string* insertItem(string i);
-  // void testPrint();
 };
 #endif

@@ -6,7 +6,7 @@ using namespace std;
 
 bloomFilter::bloomFilter(int l):
 len(l){
-  array = new char[len]();
+  array = new char[len]();//initializes an array of chars with 0 so every bit is empty
   for(int i=0;i<len;i++){
     array[i] = 0;
   }
@@ -18,7 +18,7 @@ bloomFilter::~bloomFilter(){
 
 void bloomFilter::insert(int s){
   unsigned char* s_char = new unsigned char[sizeof(s)]();
-  for(int i=0;i<k;i++){
+  for(int i=0;i<k;i++){//we need to change k bits per number
     memcpy(s_char, &s, sizeof(s));
     int bit= hash_i(s_char,i) % (len*8);
     int array_index = bit / 8;
@@ -30,7 +30,7 @@ void bloomFilter::insert(int s){
 
 bool bloomFilter::is_inside(int s){
   unsigned char* s_char = new unsigned char[sizeof(s)]();
-  for(int i=0;i<k;i++){
+  for(int i=0;i<k;i++){//hash k times the number
     memcpy(s_char, &s, sizeof(s));
     int bit= hash_i(s_char,i) % (len*8);
     int array_index = bit / 8;
@@ -46,7 +46,7 @@ bool bloomFilter::is_inside(int s){
 
 
 
-//for hash
+//given hash funcitons 
 unsigned long bloomFilter::djb2(unsigned char *str) {
 	unsigned long hash = 5381;
 	int c;

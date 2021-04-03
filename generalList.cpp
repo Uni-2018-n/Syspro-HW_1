@@ -192,14 +192,3 @@ void GlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, 
 void GlistHeader::listNonVaccinatedPersons(string v){
   viruses->listNonVaccinatedPersons(v);
 }
-
-// void GlistHeader::testPrint(){
-//   listNode* temp = start;
-//   while(temp != NULL){
-//     cout << *(temp->getCitizen()->citizenId) << "-> ";
-//     temp = temp->getNext();
-//   }
-//   cout << endl;
-//   countries->testPrint();
-//   viruses->testPrint();
-// }

@@ -9,7 +9,10 @@ using namespace std;
 #define MAXIMUM 5
 
 
-class SkiplistNode{//nodes
+//dual linked list of dual linked lists.
+//number of layers is a fixed number. If a layer is empty simply just leave it as NULL.
+
+class SkiplistNode{//layer's nodes
   int* item;
   citizenRecord* citizen;
   string* date_vaccinated;
@@ -33,10 +36,9 @@ public:
   void setPrev(SkiplistNode* p);
 
   void print();
-  void testPrint();
 };
 
-class SkiplistHeader{//list
+class SkiplistHeader{//header for each layer
   SkiplistNode* start;
 public:
   SkiplistHeader();
@@ -49,11 +51,9 @@ public:
   SkiplistNode* getFirst();
   void removeFirst();
   void print();
-
-  void testPrint();
 };
 /////////////////////////////////////
-class skipNode{//nodes of lists
+class skipNode{//node of each layer
   SkiplistHeader* item;
   skipNode* prev;
   skipNode* next;
@@ -70,11 +70,9 @@ public:
 
   void removeFirst();
   void print();
-
-  void testPrint();
 };
 
-class skipHeader{//list of lists
+class skipHeader{//header of skiplist
   skipNode* start;
   skipNode* end;
   int lvlnum;
@@ -98,7 +96,5 @@ public:
   countryStatsHeader* populationStatusAge(countryStatsHeader* stats);//for not vacced
 
   void print();
-
-  void testPrint();
 };
 #endif

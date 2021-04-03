@@ -1,7 +1,7 @@
 #ifndef _BLOOMFILTER_HPP_
 #define _BLOOMFILTER_HPP_
 
-using namespace std;
+// using namespace std;
 
 class bloomFilter{
   int len;

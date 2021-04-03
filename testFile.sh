@@ -4,7 +4,7 @@ then
   echo Wrong Input
   exit 1
 fi
-#$(( (( `date+%N` / 1000) % BASE)+1))
+
 OUTFILE=input.txt;
 touch "${OUTFILE}"; rm "${OUTFILE}"; touch "${OUTFILE}";
 if [ $4 -eq 1 ]

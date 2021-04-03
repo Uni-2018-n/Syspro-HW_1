@@ -3,7 +3,7 @@
 using namespace std;
 
 //////////////////countryStatsNode
-countryStatsNode::countryStatsNode(string n){
+countryStatsNode::countryStatsNode(string n){//simply initialize the node
   item = n;
   Datevacced = 0;
   v = 0;
@@ -23,7 +23,7 @@ countryStatsNode::countryStatsNode(string n){
   next = NULL;
 }
 
-countryStatsNode::countryStatsNode(string n, int b){
+countryStatsNode::countryStatsNode(string n, int b){//initialize a node with tops in the correct variables
   item = n;
   Datevacced = 0;
   v = 0;
@@ -61,8 +61,6 @@ void countryStatsNode::setNext(countryStatsNode* n){
 
 void countryStatsNode::print(){
   printf("%s %d %.2f%%\n", item.c_str(), Datevacced, (v != 0) ? ((float)v/(float)pl)*100.0 : 0.0);
-  // printf("%s %d %d %d%%\n", item.c_str(), Datevacced, v, pl);
-
 }
 
 void countryStatsNode::printAge(){
@@ -72,13 +70,6 @@ void countryStatsNode::printAge(){
   printf("40-60 %d %.2f%%\n", FS, (DateFS != 0) ? ((float)DateFS/(float)plFS)*100.0 : 0.0);
   printf("60++ %d %.2f%%\n", S, (DateS != 0) ? ((float)DateS/(float)plS)*100.0 : 0.0);
   cout << endl;
-
-  // cout << item << endl;
-  // printf("0-20 %d %d %d\n", ZT, DateZT, plZT);
-  // printf("20-40 %d %d %d\n", TF, DateTF, plTF);
-  // printf("40-60 %d %d %d\n", FS, DateFS, plFS);
-  // printf("60++ %d %d %d\n", S, DateS, plS);
-  // cout << endl;
 }
 
 
@@ -97,15 +88,15 @@ countryStatsHeader::~countryStatsHeader(){
   }
 }
 
-void countryStatsHeader::insertItem(string i, int b){
+void countryStatsHeader::insertItem(string i, int b){//insert for populationStatus
   countryStatsNode* temp = start;
-  if(temp == NULL){
+  if(temp == NULL){//if list empty create a node with already toped data in it
     start = new countryStatsNode(i, b);
     return;
-  }else{
-    while(temp != NULL){
-      if(temp->getItem() == i){
-        if(b==2){
+  }else{//if not
+    while(temp != NULL){//go though the list
+      if(temp->getItem() == i){//till you find the country that we need
+        if(b==2){//and top the correct variables as given from the parameters
           temp->topDateVacced();
           temp->topV();
         }else if(b==1){
@@ -114,7 +105,7 @@ void countryStatsHeader::insertItem(string i, int b){
         temp->topPl();
         return;
       }
-      if(temp->getNext() == NULL){
+      if(temp->getNext() == NULL){//if we havent found the country simply create it and add it at the end
         temp->setNext(new countryStatsNode(i, b));
         return;
       }
@@ -123,8 +114,8 @@ void countryStatsHeader::insertItem(string i, int b){
   }
 }
 
-void countryStatsHeader::insertItemAge(string i, int b, int a){
-  countryStatsNode* temp = start;
+void countryStatsHeader::insertItemAge(string i, int b, int a){//used for popStatusByAge
+  countryStatsNode* temp = start;//same thing as before but now use topCorrectCat function to top the variables
   if(temp == NULL){
     start = new countryStatsNode(i);
     start->topCorrectCat(b,a);
@@ -145,6 +136,52 @@ void countryStatsHeader::insertItemAge(string i, int b, int a){
   }
 }
 
+void countryStatsNode::topCorrectCat(int b, int a){
+    /*this function takes 2 arguments.
+    first argument is the senario we have:
+    if b==2 then we have someone who is vaccinated inside the date range
+    so we need to top all 3 variables
+    if b==1 then we have a vaccinated record but not inside the date range
+    and if b==0 the record is not vaccinated
+
+    Second argument is the age so we can add it to the desired category
+    */
+    if(a >=0 && a <=19){
+      if(b==2){
+        DateZT++;
+        ZT++;
+      }else if(b ==1){
+        ZT++;
+      }
+      plZT++;
+    }else if(a >=20 && a <=39){
+      if(b==2){
+        DateTF++;
+        TF++;
+      }else if(b ==1){
+        TF++;
+      }
+      plTF++;
+    }else if(a >=40 && a <=59){
+      if(b==2){
+        DateFS++;
+        FS++;
+      }else if(b ==1){
+        FS++;
+      }
+      plFS++;
+    }else if(a >=60){
+      if(b==2){
+        DateS++;
+        S++;
+      }else if(b ==1){
+        S++;
+      }
+      plS++;
+    }
+
+  }
+
 void countryStatsHeader::print(){
   countryStatsNode* temp = start;
   while(temp != NULL){
@@ -160,17 +197,3 @@ void countryStatsHeader::printAge(){
     temp = temp->getNext();
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
