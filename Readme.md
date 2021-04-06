@@ -214,3 +214,29 @@ item we are trying to find or insert or delete we loop to the last layer and do 
 populationStatus and popStatusByAge that we explained before, also here we see more in 
 depth the way we tell the statistics functions how to handle the information we have(with date
 compares etc). More information in the comments inside the code.
+
+<-*->
+    For the bloomFilter.cpp/.hpp we simply have the given hash functions and 2 functions for inserting 
+and searching.
+    As a logic in bloom filter we have an array of char* originally set all to 0 so its an empty 
+array, then for every insert we calculate the hash_i value of the int given(changed from 
+int to char) and do the same thing k times(set to 3). To find the index of the array we need to put 
+the bit its as simple as a division with the 8(since 8 bits are in a char in c). To find the 
+index of the specific array position we need to find the modular of the hashed value with 8 and 
+do some logical expressions to store the bit.
+    Searching is the same thing but instead of storing the bit we see if each bit found is set or not.
+
+
+
+<-*-*-*-*->
+    For the bash script, to lower the times i used the shuf function to make an array of everything 
+i can have from the beginning. For example because of the fact that we already know the len of 
+the records we can pre-create an array of ints, an array of countries(from the file given), an 
+array of viruses(from the file given) and an array of ages.
+    Generally speaking I've used the $RANDOM variable mainly to find the len of the strings so i 
+can pass it to the shuf function later and for calculating the dates.
+    If duplicates are allowed the script is putting them after the original record with only 
+different data in the virus section.
+    And finally if duplicates are allowed because of the fact that we have only from 0-9999 ids, 
+if the user sends a len line value more than 10000 it prints an error and continues with 
+creating 10000 records.
