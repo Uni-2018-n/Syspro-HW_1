@@ -2,6 +2,8 @@
 #include <cstring>
 #include <fstream>
 #include <time.h>
+#include <errno.h>
+
 #include "classes.hpp"
 #include "generalList.hpp"
 
@@ -24,15 +26,20 @@ int main(int argc, char* argv[]){
       break;
     }
   }
-  // cout << "Input: " << pathToRecords << " " << bloomSize << endl;
   GlistHeader* main_list = new GlistHeader(bloomSize);//initialize the general list
   ifstream records(pathToRecords);//start reading from input file and inserting records to the general list
+  if(records.fail()){
+    perror(pathToRecords);
+    delete main_list;
+    delete[] pathToRecords;
+    records.close();
+    return 1;
+  }
   {
     string line;
     while(getline(records, line)){
       main_list->insertRecord(line, false);
     }
-    // main_list->testPrint();
   }
   delete[] pathToRecords;
   records.close();//since we are done with reading from the file we wont be needing the file
@@ -76,11 +83,14 @@ int main(int argc, char* argv[]){
     i++;
     if(command == "/vaccineStatusBloom"){
       main_list->vaccineStatusBloom(stoi(temp[0]), temp[1]);
+      cout << "Done!" << endl;
     }else if(command == "/vaccineStatus"){
       if(i == 2){
         main_list->vaccineStatus(stoi(temp[0]), temp[1]);
+        cout << "Done!" << endl;
       }else{
         main_list->vaccineStatus(stoi(temp[0]));
+        cout << "Done!" << endl;
       }
     }else if(command == "/populationStatus"){
       if(i == 4){
@@ -91,6 +101,7 @@ int main(int argc, char* argv[]){
           continue;
         }
         main_list->populationStatus(temp[1], temp[2], temp[3], temp[0], false);
+        cout << "Done!" << endl;
       }else if(i==3){
         temp[1] = checkAndFormatDate(temp[1]);
         temp[2] = checkAndFormatDate(temp[2]);
@@ -99,6 +110,7 @@ int main(int argc, char* argv[]){
           continue;
         }
         main_list->populationStatus(temp[0], temp[1], temp[2], false);
+        cout << "Done!" << endl;
       }else{
         cout << "ERROR WRONG FORMAT" << endl;
       }
@@ -111,6 +123,7 @@ int main(int argc, char* argv[]){
           continue;
         }
         main_list->populationStatus(temp[1], temp[2], temp[3], temp[0], true);
+        cout << "Done!" << endl;
       }else if(i==3){
         temp[1] = checkAndFormatDate(temp[1]);
         temp[2] = checkAndFormatDate(temp[2]);
@@ -119,15 +132,19 @@ int main(int argc, char* argv[]){
           continue;
         }
         main_list->populationStatus(temp[0], temp[1], temp[2], true);
+        cout << "Done!" << endl;
       }else{
         cout << "ERROR WRONG FORMAT" << endl;
       }
     }else if(command == "/insertCitizenRecord"){
       main_list->insertCitizenRecord(line);
+      cout << "Done!" << endl;
     }else if(command == "/vaccinateNow"){
       main_list->vaccinateNow(stoi(temp[0]), temp[1], temp[2], temp[3], temp[4], temp[5]);
+      cout << "Done!" << endl;
     }else if(command == "/list-nonVaccinated-Persons"){
       main_list->listNonVaccinatedPersons(temp[0]);
+      cout << "Done!" << endl;
     }
     cout << endl;
   }
