@@ -1,4 +1,5 @@
 #include <iostream>
+#include "skipList.hpp"
 #include "virusesList.hpp"
 
 VirlistNode::VirlistNode(string i, int l){
@@ -47,8 +48,22 @@ void VirlistNode::insertRecord(int* id, citizenRecord* c, string v, string dv, b
   if(v == "YES"){
     if(notVaccinated->searchItem(*id)){//see if the citizen is already inside our not vaccinated skip list
       if(flag){//if its allowed
-          SkiplistNode* tmp = notVaccinated->deleteItem(*id);//remove the citizen from the not vaccinated skip list //TODO: could do this in a better way
-          this->insertRecord(tmp->getCitizen()->citizenId, tmp->getCitizen(), v, dv, false);//and repeat so we add the citizen to the vaccinated skip list
+          SkiplistNode* tmp = notVaccinated->deleteItem(*id);//remove the citizen from the not vaccinated skip list
+          dv = checkAndFormatDate(dv);                       //and do as you would if citizen wos not in the not-vaccinated skip list
+          if(dv == ""){
+            cout << "ERROR WITH DATE FROMAT" << endl;
+            return;
+          }
+          string* dateV = new string(dv);
+          SkiplistNode* t= vaccinated->insertItem(tmp->getCitizen()->citizenId, tmp->getCitizen(), dateV);
+          if(t != NULL){
+            if(t->getDateVaccinated() == dv){
+              bloom->insert(*(tmp->getCitizen()->citizenId));
+            }else{
+              cout << "ERROR: citizen " << tmp->getCitizen()->citizenId << " ALREADY VACCINATED ON " << flipDate(t->getDateVaccinated()) << endl;
+              delete dateV;
+            }
+          }
           delete tmp;
       }else{
         cout << "ERROR record cant get vaccinated because already been not vaccinated" << endl;

@@ -185,7 +185,7 @@ void GlistHeader::vaccinateNow(int i, string fn, string ln, string c, string a, 
     time_t t= time(0);//if not insert citizen into the database with date vaccinated the current date
     tm* n = localtime(&t);
     string dv = to_string(n->tm_mday) + "-" + to_string(n->tm_mon+1) + "-" + to_string(n->tm_year + 1900);
-    insertRecord(to_string(i) + " " + fn + " " + ln + " " + c + " " + a + " " + v + " YES " + dv, false);//TODO: might need to set this to true because if we vaccinate someone already inside
+    insertRecord(to_string(i) + " " + fn + " " + ln + " " + c + " " + a + " " + v + " YES " + dv, false);
   }
 }
 

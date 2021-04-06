@@ -162,9 +162,6 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
     return new_node;
   }
   if(temp->getItem() == *i){//in case first item in layer is the item we have return NULL cause it already exists
-    while(temp->getLowerLevel() != NULL){//TODO: this might not be needed
-      temp= temp->getLowerLevel();
-    }
     delete[] level_array;
     return NULL;
   }else if(temp->getItem() > *i){//if first item of the layer is > than the item we need to insert
@@ -211,10 +208,6 @@ SkiplistNode* SkiplistHeader::insertItem(int* i, citizenRecord* c, string* dv, i
 
   while(temp->getNext() != NULL){//same technique with the search function but when we find the node with same item we return null and if we find a node with next > than the item we simply add it between them
     if(temp->getNext()->getItem() == *i){
-      temp = temp->getNext();
-      while(temp->getLowerLevel() != NULL){//TODO: might this be not nessesery
-        temp = temp->getLowerLevel();
-      }
       delete[] level_array;
       return NULL;//found
     }

@@ -1,6 +1,7 @@
 Antonis Kalamakis SDI1800056
 
-TODO: add how it works
+compile with make in the root file of the project
+run with ./vaccineMonitor -c "records file" -b "bloom filter size in 100K bytes"
 
 This project is organized in 4 sections.
 <-*-*-*-*->
