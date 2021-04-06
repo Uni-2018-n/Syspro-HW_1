@@ -198,13 +198,3 @@ void VirlistHeader::listNonVaccinatedPersons(string v){
     temp->getNotVacced()->print();
   }
 }
-
-// void VirlistHeader::testPrint(){
-//   VirlistNode* temp = start;
-//   while(temp != NULL){
-//     cout << temp->getItem() << "-> ";
-//     temp = temp->getNext();
-//   }
-//   cout << endl;
-//   return;
-// }

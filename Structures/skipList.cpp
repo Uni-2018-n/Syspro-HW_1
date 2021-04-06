@@ -490,7 +490,6 @@ SkiplistNode* skipHeader::insertItem(int* i, citizenRecord* c, string* dv){
         f=0;
       }
     }
-
   }
   int skiped_layers = 0;//used to see how many layers was skiped because first item is > i
   skipNode* temp = end;//use of dual linked SkiplistNode, start == SkiplistNode with all the items. with that in mind, we start our search with the SkiplistNode with the less amount of items

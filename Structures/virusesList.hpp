@@ -44,8 +44,6 @@ public:
   void vaccineStatus(int i);
   bool vaccinateNow(int i, string v);
   void listNonVaccinatedPersons(string v);
-
-  // void testPrint();
 };
 
 #endif
