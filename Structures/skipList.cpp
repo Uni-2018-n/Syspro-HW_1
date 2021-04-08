@@ -579,9 +579,9 @@ countryStatsNode* skipHeader::populationStatus(string don, string dt, string c){
     if(temp->getCitizen()->getCountry() == c){
       if(temp->getDateVaccinated() >= don && temp->getDateVaccinated() <= dt){
         stats->topDateVacced();
+        stats->topPl();
       }
       stats->topV();
-      stats->topPl();
     }
     temp = temp->getNext();
   }

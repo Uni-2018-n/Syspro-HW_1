@@ -1,6 +1,3 @@
-/populationStatus GREECE H1N1 2000-10-10 2022-10-10
-/populationStatus H1N1 2000-10-10 2022-10-10
-/populationStatus GREECE H1N1
-/populationStatus H1N1
-/populationStatus GREECE H1N1 2000-10-10
-/populationStatus H1N1 2000-10-10
+/insertCitizenRecord 1234 bar foo Jordan 30 Cowpox YES 1-1-2015
+/populationStatus Cowpox 1-1-2000 1-1-2020
+/list-nonVaccinated-Persons Cowpox

@@ -31,10 +31,10 @@ countryStatsNode::countryStatsNode(string n, int b){//initialize a node with top
   if(b==2){
     Datevacced = 1;
     v=1;
+    pl = 1;
   }else if(b==1){
     v = 1;
   }
-  pl = 1;
   next = NULL;
 }
 
@@ -60,15 +60,15 @@ void countryStatsNode::setNext(countryStatsNode* n){
 
 
 void countryStatsNode::print(){
-  printf("%s %d %.2f%%\n", item.c_str(), Datevacced, (v != 0) ? ((float)v/(float)pl)*100.0 : 0.0);
+  printf("%s %d %.2f%%\n", item.c_str(), Datevacced, (Datevacced != 0) ? ((float)Datevacced/(float)pl)*100.0 : 0.0);
 }
 
 void countryStatsNode::printAge(){
   cout << item << endl;
-  printf("0-20 %d %.2f%%\n", ZT, (DateZT != 0) ? ((float)DateZT/(float)plZT)*100.0 : 0.0);
-  printf("20-40 %d %.2f%%\n", TF, (DateTF != 0) ? ((float)DateTF/(float)plTF)*100.0 : 0.0);
-  printf("40-60 %d %.2f%%\n", FS, (DateFS != 0) ? ((float)DateFS/(float)plFS)*100.0 : 0.0);
-  printf("60++ %d %.2f%%\n", S, (DateS != 0) ? ((float)DateS/(float)plS)*100.0 : 0.0);
+  printf("0-20 %d %.2f%%\n", DateZT, (DateZT != 0) ? ((float)DateZT/(float)plZT)*100.0 : 0.0);
+  printf("20-40 %d %.2f%%\n", DateTF, (DateTF != 0) ? ((float)DateTF/(float)plTF)*100.0 : 0.0);
+  printf("40-60 %d %.2f%%\n", DateFS, (DateFS != 0) ? ((float)DateFS/(float)plFS)*100.0 : 0.0);
+  printf("60++ %d %.2f%%\n", DateS, (DateS != 0) ? ((float)DateS/(float)plS)*100.0 : 0.0);
   cout << endl;
 }
 
@@ -99,10 +99,12 @@ void countryStatsHeader::insertItem(string i, int b){//insert for populationStat
         if(b==2){//and top the correct variables as given from the parameters
           temp->topDateVacced();
           temp->topV();
+          temp->topPl();
         }else if(b==1){
           temp->topV();
+        }else if(b==0){
+          temp->topPl();
         }
-        temp->topPl();
         return;
       }
       if(temp->getNext() == NULL){//if we havent found the country simply create it and add it at the end
